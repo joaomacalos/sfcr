@@ -2,8 +2,8 @@ Package: sfcr
 Title: Simulate Stock-Flow Consistent Models
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "João Pedro",
-           family = "Macalós",
+    person(given = "Joao Pedro",
+           family = "Macalos",
            role = c("aut", "cre"),
            email = "joaomacalos@gmail.com",
            comment = c(ORCID = "https://orcid.org/0000-0001-6050-6394"))
@@ -15,3 +15,15 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 URL: https://github.com/joaomacalos/sfcr
 BugReports: https://github.com/joaomacalos/sfcr/issues
+Imports: 
+    purrr,
+    dplyr,
+    tibble,
+    tidyr,
+    magrittr,
+    stringr,
+    catchr,
+    rlang,
+    tidyselect
+Suggests: 
+    testthat

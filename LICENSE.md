@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2020 JoÃ£o Pedro Scalco MacalÃ³s
+Copyright (c) 2020 Joao Pedro Scalco Macalos
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
