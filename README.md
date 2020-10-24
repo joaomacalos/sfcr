@@ -113,12 +113,13 @@ easily plot this model using the `ggplot2` package:
 ``` r
 sim2 %>%
   ggplot(aes(x = t, y = Y)) +
-  geom_line()
+  geom_line() +
+  labs(x = "Time", y = "Output")
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
-See the vignettes for developed examples.
+See the vignettes for more developed examples.
 
 ### References
 

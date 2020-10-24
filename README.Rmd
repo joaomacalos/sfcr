@@ -84,12 +84,13 @@ sim2
 
 The output is conveniently stored as a `tibble`. It means that we can easily plot this model using the `ggplot2` package:
 
-```{r, fig.width=4, fig.height=3}
+```{r}
 sim2 %>%
   ggplot(aes(x = t, y = Y)) +
-  geom_line()
+  geom_line() +
+  labs(x = "Time", y = "Output")
 ```
 
-See the vignettes for developed examples.
+See the vignettes for more developed examples.
 
 ### References
