@@ -30,6 +30,9 @@ This is a basic example which shows you how to simulate the steady state
 of the “SIM” model from Godley and Lavoie (2007 ch. 3) and shock this
 model with an increase in government expenditures.
 
+A more complete description of the `sfcr_sim()` and `sfcr_scenario()`
+variables can be found at the `vignette("sfcr")`.
+
 The first step is to simulate the steady state of the model with the
 `sfcr_sim()` function:
 

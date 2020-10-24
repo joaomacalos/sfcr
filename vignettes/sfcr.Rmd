@@ -1,0 +1,121 @@
+---
+title: "sfcr"
+output: rmarkdown::html_vignette
+references:
+- id: godley2007monetary
+  title: >
+       Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth
+  author:
+  - family: Godley
+    given: Wynne
+  - family: Lavoie
+    given: Marc
+  publisher: Palgrave Macmillan
+  type: book
+  issued:
+    year: 2007
+vignette: >
+  %\VignetteIndexEntry{sfcr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `sfcr` package is structured around two functions: `sfcr_sim()` and `sfcr_scenario()`.
+
+## `sfcr_sim()`
+
+The `sfcr_sim()` takes a list of equations defining a set of endogenous variables and lists of exogenous variables' values and parameters to find the steady state of the model. It can take up to six arguments:
+
+1. `equations`:
+  A list containing all the equations that define the endogenous variables in the model to be simulated. The equations must be written with standard R formula syntax where the left-hand side is separated from the right-hand side by a "~". Furthermore, the period that each item is evaluated (contemporaneously or with a lag) must be noted explicitly. Naming the items in the `equations` list is optional, but come in handy with bigger models.
+  
+2. `t`:
+  Specify the total number of periods that the simulation must run. It should contain at least two periods and the maximum allowed is 150.
+  
+3. `exogenous`:
+  A named list containing the exogenous variables' names and their values.
+  
+4. `parameters`:
+  A named list containing the parameters' names and their values.
+  
+5. `initial`:
+  Defaults to `NULL`. If specified, must be a named list containing the names and the initial values of selected endogenous variables.
+  
+6. `hidden`:
+  Defaults to `NULL`. If specified, must be a named list that defines the hidden (or left-out) equation of the model.
+
+Below is the code used to simulate the SIM model from @godley2007monetary [ch. 3]:
+
+```{r setup}
+library(sfcr)
+
+eqs <- list(
+  TX_s[t] ~ TX_d[t],
+  YD[t] ~ W[t] * N_s[t] - TX_s[t],
+  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
+  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
+  N_s[t] ~ N_d[t],
+  N_d[t] ~ Y[t] / W[t],
+  C_s[t] ~ C_d[t],
+  G_s[t] ~ G_d[t],
+  Y[t] ~ C_s[t] + G_s[t],
+  TX_d[t] ~ theta * W[t] * N_s[t],
+  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
+)
+
+exg <- list("G_d" = 20, "W" = 1)
+
+params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
+
+hidden <- list("H_s" = "H_h")
+
+sim_model <- sfcr_sim(
+  equations = eqs,
+  t = 60,
+  exogenous = exg,
+  parameters = params,
+  initial = NULL,
+  hidden = hidden
+)
+sim_model
+```
+
+## `sfcr_scenario()`
+
+The `sfc_scenario()` function takes a simulated model calculated with `sfcr_sim()` and simulate what happens when we change the values of one or more exogenous variables or parameters.
+
+It has three new arguments:
+
+1. `steady_state`:
+  The model simulated with `sfcr_sim()` (a `tibble` object)
+  
+2. `shock_exg`:
+  A named list containing the name of the exogenous variables that are going to be shocked and their values. Defaults to NULL.
+  
+3. `shock_param`:
+  A named list containing the name of the parameters that are going to be modified and their values. Defaults to NULL.
+  
+The other four arguments (`equations`, `t`, `exogenous`, and `parameters`) have the same meaning as in the `sfcr_sim()` function. Furthermore, the `equations`, `exogenous`, and `parameters` arguments should be the same as the ones used to simulate the steady state values.
+
+```{r}
+shock <- list("G_d" = 30)
+
+sim2 <- sfcr_scenario(
+  steady_state = sim_model,
+  equations = eqs, 
+  t = 60, 
+  exogenous = exg, 
+  parameters = params, 
+  shock_exg = shock
+  )
+
+sim2
+```
+## References

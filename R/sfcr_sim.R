@@ -153,6 +153,8 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, initial = NULL, 
 
   if (t < 2) stop('Required at least two time periods.')
 
+  if (t > 150) stop('Maximum time periods allowed are 150.')
+
   look_for_errors <- .collect_warnings(.gen_steady_internal(equations, t = 2, exogenous, parameters, initial))
 
   if (rlang::is_empty(look_for_errors$warning) == F) {

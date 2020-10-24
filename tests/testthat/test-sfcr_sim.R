@@ -36,6 +36,12 @@ test_that("Missing parameter returns an error", {
   expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params), "object 'theta' not found")
 })
 
+test_that("Maximum time periods allowed are 150", {
+  exg <- list("G_d" = 20, "W" = 1)
+  params <- list("alpha1" = 0.6, "alpha2" = 0.4)
+  expect_error(sfcr_sim(eqs, t = 160, exogenous = exg, parameters = params), 'Maximum time periods allowed are 150.')
+})
+
 test_that("Return an error when hidden equation condition is not fulfilled", {
   exg <- list("G_d" = 20, "W" = 1)
   params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
