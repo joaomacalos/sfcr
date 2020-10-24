@@ -55,7 +55,13 @@ exg <- list("G_d" = 20, "W" = 1)
 
 params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
 
-sim_model <- sfcr_sim(eqs, t = 60, exg, params)
+sim_model <- sfcr_sim(
+  equations = eqs, 
+  t = 60, 
+  exogenous = exg, 
+  parameters = params
+  )
+
 sim_model
 #> # A tibble: 60 x 17
 #>        t  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s   G_d
@@ -74,8 +80,9 @@ sim_model
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 
-With the steady state values at hand, we can see what happens if we
-increase government expenditures (“G\_d”) from 20 to 30:
+With the steady state values at hand, we can use the `sfcr_scenario()`
+function to see what happens if we increase government expenditures
+(“G\_d”) from 20 to 30:
 
 ``` r
 shock <- list("G_d" = 30)
