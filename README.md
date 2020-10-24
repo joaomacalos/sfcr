@@ -118,7 +118,7 @@ sim2 %>%
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
-See the vignettes for developed examples.
+See the vignettes for more developed examples.
 
 ### References
 

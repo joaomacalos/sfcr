@@ -90,6 +90,6 @@ sim2 %>%
   geom_line()
 ```
 
-See the vignettes for developed examples.
+See the vignettes for more developed examples.
 
 ### References
