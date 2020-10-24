@@ -10,8 +10,10 @@
 
 
 .lhs_names <- function(lhs_eqs) {
+  name <- NULL
+  value <- NULL
   unlist(lhs_eqs) %>%
-    tibble::enframe() %>%
+    tibble::enframe(name = "name", value = "value") %>%
     dplyr::mutate(value = stringr::str_remove(value, "\\[t\\]")) %>%
     dplyr::select(-name) %>%
     dplyr::mutate(v = 1) %>%
@@ -48,7 +50,8 @@
     dplyr::select(t, dplyr::everything())
 }
 
-
+#' @importFrom rlang :=
+#'
 .gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL) {
 
   # Get equations as a tibble
@@ -119,6 +122,10 @@
 #' @param t A number specifying the total number of periods of the model to be simulated. It should be at least 2 periods.
 #' @param exogenous,parameters,initial Named lists with exogenous, parameters, and initial values
 #' of endogenous variables as values. See details.
+#' @param hidden Named list that identify the two variables that make the hidden equality
+#' in the SFC model, e.g., \code{list("H_h" = "H_s")}. Defaults to NULL.
+#' If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.
+#' If it is not, it will throw out an error.
 #'
 #' @details The output of  \code{sfcr_sim()} will contain a tibble with the exogenous and endogenous
 #' variables, as well as the parameters, of the simulated model as columns.
@@ -150,11 +157,14 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, initial = NULL, 
 
   if (rlang::is_empty(look_for_errors$warning) == F) {
     {
+      name <- NULL
+      value <- NULL
+
       found_errors <- look_for_errors$warning %>%
         unlist() %>%
-        tibble::enframe() %>%
+        tibble::enframe(name = "name", value = "value") %>%
         dplyr::filter(name == "call") %>%
-        dplyr::mutate(value = as.character(value)) %>%
+        dplyr::mutate(value = rlang::as_label(value)) %>%
         dplyr::distinct()
 
       rlang::abort("Errors in the equations' syntax. Run `rlang::last_error()$x` to find the problematic equations.\n\n\nTip: problems are usually missing time indication (e.g. [t]) in some endogenous/exogenous variable.", x = found_errors)
@@ -165,14 +175,14 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, initial = NULL, 
   x <- .gen_steady_internal(equations, t = t, exogenous, parameters, initial)
 
   if (!is.null(hidden)) {
-    h1 <- x %>% dplyr::pull(hidden[[1]])
-    h2 <- x %>% dplyr::pull(hidden[[2]])
+    h1 <- dplyr::pull(x, names(hidden))
+    h2 <- dplyr::pull(x, hidden[[1]])
 
     is_hidden_true <- all.equal(h1, h2, tolerance = 0.01)
 
+    if (!isTRUE(is_hidden_true)) stop("Hidden equation is not fulfilled. Check again the equations in the model.")
+
   }
 
-  if (!isTRUE(is_hidden_true)) stop("Hidden equation is not fulfilled. Check again the equations in the model.")
-
-  return(is_hidden_true)
+  return(x)
 }

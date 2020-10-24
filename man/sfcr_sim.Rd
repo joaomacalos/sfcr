@@ -21,6 +21,11 @@ See details.}
 
 \item{exogenous, parameters, initial}{Named lists with exogenous, parameters, and initial values
 of endogenous variables as values. See details.}
+
+\item{hidden}{Named list that identify the two variables that make the hidden equality
+in the SFC model, e.g., \code{list("H_h" = "H_s")}. Defaults to NULL.
+If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.
+If it is not, it will throw out an error.}
 }
 \description{
 The \code{sfcr_sim} function is used to simulate a SFC model. With adequate number of

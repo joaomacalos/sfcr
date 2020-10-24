@@ -3,7 +3,7 @@
 #' The \code{sfcr_scenario} function is used to add a shock to a SFC model
 #' generated with the \code{\link{sfcr_sim}} function.
 #'
-#' @param sfcr_sim A simulated SFC model with \code{\link{sfcr_sim}} function to provide the steady
+#' @param steady_state A simulated SFC model with \code{\link{sfcr_sim}} function to provide the steady
 #' state values of the variables.
 #' @param exogenous,parameters Named lists with the initial values of the exogenous and parameters.
 #' This should be exactly the same values as supplied to \code{\link{sfcr_sim}}.
@@ -26,9 +26,11 @@
 #'
 #' @example inst/examples/example_sfcr_scenario.R
 #'
+#' @importFrom rlang :=
+#'
 #' @export
 #'
-sfcr_scenario <- function(sfcr_sim, equations, t = 100, exogenous, parameters, shock_exg = NULL, shock_param = NULL) {
+sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameters, shock_exg = NULL, shock_param = NULL) {
 
   # Get equations as a tibble
   eqs <- .eq_as_tb(equations)
@@ -43,7 +45,7 @@ sfcr_scenario <- function(sfcr_sim, equations, t = 100, exogenous, parameters, s
   lhs_names <- .lhs_names(lhs_eqs)
 
   # Load steady state values
-  steady_vals <- sfcr_sim %>%
+  steady_vals <- steady_state %>%
     dplyr::slice_tail(n = 1)
 
   # Steady state values for endogenous variables

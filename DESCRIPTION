@@ -16,14 +16,14 @@ RoxygenNote: 7.1.1
 URL: https://github.com/joaomacalos/sfcr
 BugReports: https://github.com/joaomacalos/sfcr/issues
 Imports: 
-    purrr,
-    dplyr,
-    tibble,
-    tidyr,
-    magrittr,
-    stringr,
-    catchr,
-    rlang,
-    tidyselect
+    catchr (>= 0.2.3),
+    dplyr (>= 1.0.2),
+    magrittr (>= 1.5),
+    purrr (>= 0.3.4),
+    rlang (>= 0.4.7),
+    stringr (>= 1.4.0),
+    tibble (>= 3.0.3),
+    tidyr (>= 1.1.2),
+    tidyselect (>= 1.1.0)
 Suggests: 
-    testthat
+    testthat (>= 2.3.2)

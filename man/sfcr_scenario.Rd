@@ -5,7 +5,7 @@
 \title{Add shocks to SFC models}
 \usage{
 sfcr_scenario(
-  sfcr_sim,
+  steady_state,
   equations,
   t = 100,
   exogenous,
@@ -15,7 +15,7 @@ sfcr_scenario(
 )
 }
 \arguments{
-\item{sfcr_sim}{A simulated SFC model with \code{\link{sfcr_sim}} function to provide the steady
+\item{steady_state}{A simulated SFC model with \code{\link{sfcr_sim}} function to provide the steady
 state values of the variables.}
 
 \item{equations}{A list containing all the equations of the model to be simulated.
@@ -65,7 +65,8 @@ exg <- list("G_d" = 20, "W" = 1)
 params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
 
 # t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state
-steady_state <- sfcr_sim(equations = eqs, t = 10, exogenous = exg, parameters = params, initial = NULL)
+steady_state <- sfcr_sim(equations = eqs, t = 10, exogenous = exg,
+                         parameters = params, initial = NULL)
 
 # Increase G_d from 20 to 30
 sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("G_d" = 30))
@@ -74,7 +75,8 @@ sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("G_d" = 3
 sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_param = list("alpha1" = 0.8))
 
 # Increase W to 2, alpha2 to 0.5, and decrease theta to 0.15
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("W" = 2), shock_param = list("alpha2" = 0.5, "theta" = 0.15))
+sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("W" = 2),
+              shock_param = list("alpha2" = 0.5, "theta" = 0.15))
 
 
 }

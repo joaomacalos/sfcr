@@ -39,7 +39,15 @@ test_that("Missing parameter returns an error", {
 test_that("Return an error when hidden equation condition is not fulfilled", {
   exg <- list("G_d" = 20, "W" = 1)
   params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-  hidden <- list("H_h", "C_d")
+  hidden <- list("H_h" = "C_d")
   expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params, hidden = hidden),
                "Hidden equation is not fulfilled. Check again the equations in the model.")
+})
+
+test_that("Hidden equation equality is fulfilled", {
+  exg <- list("G_d" = 20, "W" = 1)
+  params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
+  hidden <- list("H_h" = "H_s")
+  sfc <- sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params, hidden = hidden)
+  expect_equal(sfc$H_h, sfc$H_s, tolerance = 0.1)
 })
