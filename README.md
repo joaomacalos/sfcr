@@ -74,8 +74,9 @@ sim_model
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 
-With the steady state values at hand, we can see what happens if we
-increase government expenditures (“G\_d”) from 20 to 30:
+With the steady state values at hand, we can use the `sfcr_scenario()`
+function to see what happens if we increase government expenditures
+(“G\_d”) from 20 to 30:
 
 ``` r
 shock <- list("G_d" = 30)
