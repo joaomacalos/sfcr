@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 The goal of `sfcr` is to provide an intuitive and `tidy` way to estimate stock-flow consistent (SFC) models with R. 
 
-With `sfcr`, the models are written entirely with R and use the standard R syntax. Furthermore, their output is a `tibble` that are easily manipulated with the `tidyverse` tools and plotted with `ggplot2`.
+With `sfcr`, the models are written entirely with R using the standard R syntax. Furthermore, their output is a `tibble` that is easily manipulated with the `tidyverse` tools and plotted with `ggplot2`.
 
 ## Installation
 
@@ -84,7 +84,7 @@ sim2
 
 The output is conveniently stored as a `tibble`. It means that we can easily plot this model using the `ggplot2` package:
 
-```{r}
+```{r, fig.width=4, fig.height=3}
 sim2 %>%
   ggplot(aes(x = t, y = Y)) +
   geom_line()

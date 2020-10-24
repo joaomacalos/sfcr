@@ -10,8 +10,8 @@
 The goal of `sfcr` is to provide an intuitive and `tidy` way to estimate
 stock-flow consistent (SFC) models with R.
 
-With `sfcr`, the models are written entirely with R and use the standard
-R syntax. Furthermore, their output is a `tibble` that are easily
+With `sfcr`, the models are written entirely with R using the standard R
+syntax. Furthermore, their output is a `tibble` that is easily
 manipulated with the `tidyverse` tools and plotted with `ggplot2`.
 
 ## Installation
