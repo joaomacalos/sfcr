@@ -1,0 +1,7 @@
+pandoc: '2.2'
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  sfcr: sfcr.html
+last_built: 2020-10-25T10:19Z
+
