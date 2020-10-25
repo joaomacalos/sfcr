@@ -40,7 +40,6 @@ The first step is to simulate the steady state of the model with the
 
 ``` r
 library(sfcr)
-library(ggplot2)
 
 eqs <- list(
   TX_s[t] ~ TX_d[t],
@@ -119,19 +118,8 @@ sim2
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 
-The output is conveniently stored as a `tibble`. It means that we can
-easily plot this model using the `ggplot2` package:
-
-``` r
-sim2 %>%
-  ggplot(aes(x = t, y = Y)) +
-  geom_line() +
-  labs(x = "Time", y = "Output")
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
-See the vignettes for more developed examples.
+The output is a `tibble` that can be easily manipulated and plotted with
+the `tidyverse` packages.
 
 ### References
 
