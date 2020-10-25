@@ -27,6 +27,7 @@ Imports:
     tidyselect (>= 1.1.0)
 Suggests: 
     knitr,
+    pkgdown,
     rmarkdown,
     testthat (>= 2.3.2)
 VignetteBuilder: knitr
