@@ -14,7 +14,7 @@
   value <- NULL
   unlist(lhs_eqs) %>%
     tibble::enframe(name = "name", value = "value") %>%
-    dplyr::mutate(value = stringr::str_remove(value, "\\[t\\]")) %>%
+    dplyr::mutate(value = gsub("\\[t\\]", "", value)) %>%
     dplyr::select(-name) %>%
     dplyr::mutate(v = 1) %>%
     purrr::set_names("name", "value")

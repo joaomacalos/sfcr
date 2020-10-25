@@ -4,6 +4,12 @@ cache: packages
 after_success:
   - Rscript -e 'pkgdown::build_site()'
 
+addons:
+  apt:
+    packages:
+      - libharfbuzz-dev
+      - libfribidi-dev
+
 deploy:
   provider: pages
   skip-cleanup: true

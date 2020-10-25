@@ -21,7 +21,6 @@ Imports:
     magrittr (>= 1.5),
     purrr (>= 0.3.4),
     rlang (>= 0.4.7),
-    stringr (>= 1.4.0),
     tibble (>= 3.0.3),
     tidyr (>= 1.1.2),
     tidyselect (>= 1.1.0)
