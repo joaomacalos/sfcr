@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=master)](https://travis-ci.com/joaomacalos/sfcr)
 <!-- badges: end -->
 
 The goal of `sfcr` is to provide an intuitive and `tidy` way to estimate
