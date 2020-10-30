@@ -9,8 +9,10 @@ sfcr_sim(
   t = 100,
   exogenous,
   parameters,
+  random = NULL,
   initial = NULL,
-  hidden = NULL
+  hidden = NULL,
+  max_iter = 100
 )
 }
 \arguments{
@@ -22,10 +24,15 @@ See details.}
 \item{exogenous, parameters, initial}{Named lists with exogenous, parameters, and initial values
 of endogenous variables as values. See details.}
 
+\item{random}{Named list with the name of the random component as name, and the desired mean
+and standard deviation as values.}
+
 \item{hidden}{Named list that identify the two variables that make the hidden equality
 in the SFC model, e.g., \code{list("H_h" = "H_s")}. Defaults to NULL.
 If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.
 If it is not, it will throw out an error.}
+
+\item{max_iter}{Maximum iterations allowed per period.}
 }
 \description{
 The \code{sfcr_sim} function is used to simulate a SFC model. With adequate number of

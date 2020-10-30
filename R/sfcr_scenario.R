@@ -9,6 +9,8 @@
 #' This should be exactly the same values as supplied to \code{\link{sfcr_sim}}.
 #' @param shock_exg,shock_param Named lists with the new values for the exogenous and/or parameters
 #' that are being shocked to calculate a different scenario.
+#' @param one_time_shock Named list containing the name, the value, and the period in which the one
+#' time shock must take place. Currently works only with exogenous variables.
 #'
 #' @inheritParams sfcr_sim
 #'
@@ -30,7 +32,7 @@
 #'
 #' @export
 #'
-sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameters, shock_exg = NULL, shock_param = NULL) {
+sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameters, random = NULL, shock_exg = NULL, shock_param = NULL, one_time_shock = NULL, max_iter = 100) {
 
   # Get equations as a tibble
   eqs <- .eq_as_tb(equations)
@@ -52,6 +54,10 @@ sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameter
   steady_endogenous <- steady_vals %>%
     dplyr::select(lhs_names$name)
 
+  if (!is.null(random)) {
+    .ev_rand(names(random), random, t = t, n = 1)
+  }
+
 
   # Initiate endogenous variables numerically
   .initiate_vals(names(steady_endogenous), steady_endogenous, t = t, from_start = T)
@@ -67,6 +73,13 @@ sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameter
     })
   }
 
+  if (!is.null(one_time_shock)) {
+    purrr::map2(names(one_time_shock), one_time_shock, function(.x, .y) {
+      eval(str2expression(paste(.x, "[", .y[2], "] <- ", .y[1])),
+           envir = parent.frame(n = 2))
+    })
+  }
+
 
   # Define parameter values
   purrr::map2(names(parameters), parameters, function(.x, .y) {
@@ -77,23 +90,63 @@ sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameter
   # Calculate SFC model
 
 
+  # for (t in 2:t) {
+  #  if (t <= 5) {
+  #    for (iterations in 1:40) {
+  #      purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
+  #      }
+  # }
+  #    else {
+  #      if (!is.null(shock_param)) {
+  #                 purrr::map2(names(shock_param), shock_param, function(.x, .y) {
+  #                   .ev(.x, .y, 3)
+  #                 })
+  #      }
+  #      for (iterations in 1:40) {
+  #      purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
+  #      }
+  #    }
+  # }
+
   for (t in 2:t) {
-   if (t <= 5) {
-     for (iterations in 1:40) {
-       purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-       }
+    purrr::map(1:length(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- rep(0, t)")),
+                                                         parent.frame(n = 2)))
+
+    if (t <= 5) {
+      for (iterations in 1:10) {
+        purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
+      }
+    }
+
+    else {
+      if (!is.null(shock_param)) {
+        purrr::map2(names(shock_param), shock_param, function(.x, .y) {
+          .ev(.x, .y, 3)
+        })
+      }
+      for (iterations in 1:max_iter) {
+        purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
+
+        purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+          eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal(tmp',.x,',', .y, '))')),
+               parent.frame(n = 2))})
+
+
+        text_to_eval <- paste0("cdt",1:length(lhs_eqs[[1]]),collapse=",")
+        mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
+
+        if (mean_cdt == 1) {break} else {
+          purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+            eval(str2expression(paste0('tmp',.x, '<-', .y)),
+                 parent.frame(n = 2))
+          }
+          )}
+      }
+
+    }
   }
-     else {
-       if (!is.null(shock_param)) {
-                  purrr::map2(names(shock_param), shock_param, function(.x, .y) {
-                    .ev(.x, .y, 3)
-                  })
-       }
-       for (iterations in 1:40) {
-       purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-       }
-     }
-  }
+
+
 
 
   # # Tibble with params

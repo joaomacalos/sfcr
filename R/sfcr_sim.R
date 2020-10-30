@@ -1,6 +1,6 @@
 .eq_as_tb <- function(sectors) {
   suppressMessages({
-    purrr::map(unlist(sectors), ~ deparse(.x, width.cutoff = 500)) %>%
+    purrr::map(unlist(sectors), ~paste0(deparse(.x, width.cutoff = 500),collapse = "")) %>%
       dplyr::bind_cols(.name_repair = "universal") %>%
       t() %>%
       tibble::as_tibble(.name_repair = "universal") %>%
@@ -33,10 +33,21 @@
   }
 }
 
-
 .initiate_vals <- function(names, values, t = t, n = 4, from_start = F) {
   purrr::map2(names, values, function(.x, .y) {
     .ev_iv(.x, .y, n, from_start)
+  })
+}
+
+# Eval for random vars
+.ev_rand <- function(a, b, c, n) {
+  eval(str2expression(paste(a, "<- rnorm(t, mean = ", b, ", sd =", c, ')')),
+       envir = parent.frame(n = n))
+}
+
+.initiate_random <- function(random, t = t, n = 2) {
+  map2(names(random), random, function(.x, .y) {
+    .ev_rand(.x, .y[1], .y[2], n = n)
   })
 }
 
@@ -52,7 +63,7 @@
 
 #' @importFrom rlang :=
 #'
-.gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL) {
+.gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL, random = NULL, max_iter = 100) {
 
   # Get equations as a tibble
   eqs <- .eq_as_tb(equations)
@@ -76,6 +87,10 @@
     .initiate_vals(names(initial), initial, t = t, from_start = T)
   }
 
+  if (!is.null(random)) {
+    .initiate_random(random, n = 4)
+  }
+
   # Exogenous variables
   .initiate_vals(names(exogenous), exogenous, t = t)
 
@@ -87,11 +102,37 @@
   })
 
   # Calculate SFC model
+  # for (t in 2:t) {
+  #   for (iterations in 1:40) {
+  #     purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
+  #   }
+  # }
+
   for (t in 2:t) {
-    for (iterations in 1:40) {
-      purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-    }
-  }
+     purrr::map(1:length(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- rep(0, t)")),
+                                                          parent.frame(n = 2)))
+
+     for (iterations in 1:max_iter) {
+       purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
+
+       purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+         eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal(tmp',.x,',', .y, '))')),
+              parent.frame(n = 2))})
+
+
+       text_to_eval <- paste0("cdt",1:length(lhs_eqs[[1]]),collapse=",")
+       mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
+
+       if (mean_cdt == 1) {break} else {
+         purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+           eval(str2expression(paste0('tmp',.x, '<-', .y)),
+                parent.frame(n = 2))
+         }
+       )}
+     }
+
+   }
+
 
   # Endogenous and Exogenous a a list
   vars_names <- c(lhs_names$name, names(exogenous))
@@ -122,10 +163,13 @@
 #' @param t A number specifying the total number of periods of the model to be simulated. It should be at least 2 periods.
 #' @param exogenous,parameters,initial Named lists with exogenous, parameters, and initial values
 #' of endogenous variables as values. See details.
+#' @param random Named list with the name of the random component as name, and the desired mean
+#' and standard deviation as values.
 #' @param hidden Named list that identify the two variables that make the hidden equality
 #' in the SFC model, e.g., \code{list("H_h" = "H_s")}. Defaults to NULL.
 #' If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.
 #' If it is not, it will throw out an error.
+#' @param max_iter Maximum iterations allowed per period.
 #'
 #' @details The output of  \code{sfcr_sim()} will contain a tibble with the exogenous and endogenous
 #' variables, as well as the parameters, of the simulated model as columns.
@@ -144,7 +188,7 @@
 #'
 #' @export
 #'
-sfcr_sim <- function(equations, t = 100, exogenous, parameters, initial = NULL, hidden = NULL) {
+sfcr_sim <- function(equations, t = 100, exogenous, parameters, random = NULL, initial = NULL, hidden = NULL, max_iter = 100) {
   if (!is.list(exogenous)) stop("`exogenous` must be a list.")
 
   if (!is.list(parameters)) stop("`parameters` must be a list.")
@@ -155,7 +199,7 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, initial = NULL, 
 
   if (t > 150) stop('Maximum time periods allowed are 150.')
 
-  look_for_errors <- .collect_warnings(.gen_steady_internal(equations, t = 2, exogenous, parameters, initial))
+  look_for_errors <- .collect_warnings(.gen_steady_internal(equations, t = 2, exogenous, parameters, initial, random, max_iter = 2))
 
   if (rlang::is_empty(look_for_errors$warning) == F) {
     {
@@ -174,7 +218,7 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, initial = NULL, 
     return(x)
   }
 
-  x <- .gen_steady_internal(equations, t = t, exogenous, parameters, initial)
+  x <- .gen_steady_internal(equations, t = t, exogenous, parameters, initial, random, max_iter)
 
   if (!is.null(hidden)) {
     h1 <- dplyr::pull(x, names(hidden))

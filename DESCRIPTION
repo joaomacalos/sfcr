@@ -28,5 +28,7 @@ Suggests:
     knitr,
     pkgdown,
     rmarkdown,
-    testthat (>= 2.3.2)
+    testthat (>= 2.3.2),
+    tidyverse,
+    networkD3
 VignetteBuilder: knitr

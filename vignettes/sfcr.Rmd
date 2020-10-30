@@ -78,7 +78,7 @@ hidden <- list("H_s" = "H_h")
 
 sim_model <- sfcr_sim(
   equations = eqs,
-  t = 60,
+  t = 150,
   exogenous = exg,
   parameters = params,
   initial = NULL,

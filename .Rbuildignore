@@ -7,3 +7,4 @@ references.bib
 ^docs$
 ^pkgdown$
 ^\.travis\.yml$
+^vignettes/articles$

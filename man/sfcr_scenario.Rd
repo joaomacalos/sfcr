@@ -10,8 +10,11 @@ sfcr_scenario(
   t = 100,
   exogenous,
   parameters,
+  random = NULL,
   shock_exg = NULL,
-  shock_param = NULL
+  shock_param = NULL,
+  one_time_shock = NULL,
+  max_iter = 100
 )
 }
 \arguments{
@@ -26,8 +29,16 @@ See details.}
 \item{exogenous, parameters}{Named lists with the initial values of the exogenous and parameters.
 This should be exactly the same values as supplied to \code{\link{sfcr_sim}}.}
 
+\item{random}{Named list with the name of the random component as name, and the desired mean
+and standard deviation as values.}
+
 \item{shock_exg, shock_param}{Named lists with the new values for the exogenous and/or parameters
 that are being shocked to calculate a different scenario.}
+
+\item{one_time_shock}{Named list containing the name, the value, and the period in which the one
+time shock must take place. Currently works only with exogenous variables.}
+
+\item{max_iter}{Maximum iterations allowed per period.}
 }
 \description{
 The \code{sfcr_scenario} function is used to add a shock to a SFC model

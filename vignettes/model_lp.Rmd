@@ -1,0 +1,616 @@
+---
+title: "Model LP"
+output: bookdown::html_fragment2
+bibliography: references.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Model Liquidity Preference (LP)
+
+This article shows how to implement the model LP from @godley2007monetary [ch. 5].
+
+We start by loading the `sfcr` and the `tidyverse` packages:
+
+```{r setup}
+library(sfcr)
+library(tidyverse)
+```
+
+## Base LP model
+
+The first step is to write down the equations that define the endogenous variables. I will name the equations as it will make it easier to change them later when we move to models "LP2" and "LP3":
+
+```{r}
+lp_eqs <-
+  list(
+    eq1 = Y[t] ~ C[t] + G[t],
+    
+    eq2 = YD_r[t] ~ Y[t] - TX[t] + r_b[t-1] * B_h[t-1] + BL_h[t-1],
+    
+    eq3 = TX[t] ~ theta * (Y[t] + r_b[t-1] * B_h[t-1] + BL_h[t-1]),
+    
+    eq4 = V[t] ~ V[t-1] + (YD_r[t] - C[t]) + CG[t],
+    
+    eq5 = CG[t] ~ (p_bl[t] - p_bl[t-1]) * BL_h[t-1],
+    
+    eq6 = C[t] ~ alpha1 * YDE_r[t] + alpha2 * V[t-1],
+    
+    eq7 = VE[t] ~ V[t-1] + (YDE_r[t] - C[t]) + CG[t],
+    
+    eq8 = H_h[t] ~ V[t] - B_h[t] - p_bl[t] * BL_h[t],
+    
+    eq9 = H_d[t] ~ VE[t] - B_d[t] - p_bl[t] * BL_d[t],
+    
+    eq10 = B_d[t] ~ (VE[t] * lambda20) + VE[t] * (lambda22 * r_b[t] + lambda23 * ERr_bl[t]) + lambda24 * (YDE_r[t]),
+    
+    eq11 = BL_d[t] ~ VE[t] * (lambda30 + lambda32 * r_b[t] + lambda33 * ERr_bl[t] + lambda34 * (YDE_r[t]/VE[t]))/p_bl[t],
+    
+    eq12 = B_h[t] ~ B_d[t],
+    
+    eq13 = BL_h[t] ~ BL_d[t],
+    
+    eq14 = B_s[t] ~ B_s[t-1] + (G[t] + r_b[t-1] * B_s[t-1] + BL_s[t-1]) - (TX[t] + r_b[t-1] * B_cb[t-1]) - ((BL_s[t] - BL_s[t-1]) * p_bl[t]),
+    
+    eq15 = H_s[t] ~ H_s[t-1] + (B_cb[t] - B_cb[t-1]),
+    
+    eq16 = B_cb[t] ~ B_s[t] - B_h[t],
+    
+    eq17 = BL_s[t] ~ BL_h[t],
+    
+    eq18 = ERr_bl[t] ~ r_bl[t] + chi * ((pe_bl[t] - p_bl[t])/p_bl[t]),
+    
+    eq19 = r_bl[t] ~ 1/p_bl[t],
+    
+    eq20 = pe_bl[t] ~ p_bl[t],
+    
+    eq21 = CGE[t] ~ chi * (pe_bl[t] - p_bl[t]) * BL_h[t],
+    
+    eq22 = YDE_r[t] ~ YD_r[t-1]
+  )
+```
+
+Next we define the parameters and the values for the exogenous variables:
+
+```{r}
+lp_exogenous <- list('G' = 20, 'r_b' = 0.03, 'p_bl' = 20)
+
+lp_parameters = list(
+  'theta' = 0.1938,
+  'alpha1' = 0.8, 
+  'alpha2' = 0.2, 
+  'lambda20' = 0.44196, 
+  'lambda22' = 1.1, 
+  'lambda23' = -1,
+  'lambda24' = -0.03,
+  'lambda30' = .3997,
+  'lambda32' = -1,
+  'lambda33' = 1.1,
+  'lambda34' = -0.03,
+  'chi' = 0.1
+)
+```
+
+And simulate the steady state values:
+
+```{r, paged.print = F}
+lp1 <- sfcr_sim(
+  equations = lp_eqs, 
+  t = 50,
+  parameters = lp_parameters, 
+  exogenous = lp_exogenous,
+  hidden = list("H_s" = "H_h"))
+
+# We check the last values to be sure that we arrived at the steady state with 50 periods:
+lp1 %>% tail
+```
+
+
+
+With the steady state values at hand, we can start adding scenarios to analyze what would happen if we change one of the parameters or exogenous variables.
+
+We start by increasing, at the same time, the short-term and long-term interest rates.
+
+
+```{r, paged.print = F}
+shock_exg <- list("r_b" = 0.04, "p_bl" = 15)
+
+lp_mod_s1 <- sfcr_scenario(
+  steady_state = lp_mod,
+  equations = equations,
+  t = 60,
+  exogenous = exogenous,
+  parameters = parameters,
+  shock_exg = shock_exg
+)
+
+lp_mod_s1 %>% tail
+```
+
+Before plotting the variables, we need to calculate three different ratios and the total value of bonds from the simulated model:
+
+- Value of bonds $=$ Price of bonds * Bonds held
+
+- Wealth to disposable income ratio
+
+- Bonds to wealth ratio
+
+- Bills to wealth ratio
+
+
+Here we see how the `tibble` output provides a seamless integration with the `dplyr` tools that were loaded with the `tidyverse` packages:
+
+```{r, paged.print = F}
+lp_mod_s1 <-
+  lp_mod_s1 %>%
+  dplyr::mutate(
+    BL = BL_h * p_bl,
+    VYDr_r = V / YD_r,
+    BhV_r = B_h / V,
+    BLV_r = BL / V
+  )
+
+# Check the newly created columns:
+lp_mod_s1 %>%
+  dplyr::select(BL, VYDr_r, BhV_r, BLV_r)
+```
+
+We are now ready to plot the output. We use the `ggplot2` package to do so.
+
+The `ggplot2` package works better with data on the long format. Therefore, we must reshape the data before plotting the variables. We will do it with the `tidyr::pivot_longer()` function and save the `tibble` in the long format into a new object.
+
+In the long format, we have one column that store the names of all variables, and only one column for the values. The column `t` records the periods. Note that each period is now represented in 41 rows.
+
+
+```{r, paged.print = F}
+(s1_long <- lp_mod_s1 %>%
+  tidyr::pivot_longer(cols = -t, names_to = 'variable'))
+```
+We are now ready to plot the variables! Let's start with Wealth to disposable income ratio (Figure 5.2 in @godley2007monetary)
+
+The syntax is very simple:
+
+1. We `dplyr::filter` the `variable` column to select only the variables we are interested into;
+
+2. We plot using `ggplot2`. We map the x axis to `t` and the `y` axis to `value`
+
+```{r}
+s1_long %>%
+  dplyr::filter(variable == 'VYDr_r') %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line() +
+  labs(x = 'Periods', y = 'Wealth to disposable income ratio')
+```
+
+Next, we plot disposable income (YD_r) and consumption (C) (Figure 5.3):
+
+Now, instead of using `==`, we use `%in%` to select two variables. We map `linetype` to `variable` in the `geom_line()` aesthetics to have the multiple lines:
+
+```{r}
+s1_long %>%
+  filter(variable %in% c("YD_r", "C")) %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line(aes(linetype = variable))
+
+```
+
+Finally, we plot the evolution of bonds to wealth ratio and the evolution of bills to wealth ratio:
+
+```{r}
+s1_long %>%
+  filter(variable %in% c("BLV_r", "BhV_r")) %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line(aes(linetype = variable))
+```
+
+## LP2
+
+Let's move to the model LP2. This model captures the effect of household liquidity preference on long-term interest rates by changing and addin some of the equations. The reader is invited to check @godley2007monetary for further details on the models and equations
+
+The easiest way to implement make this changes is to save a copy of the `equations` list and modify this new object:
+
+```{r, paged.print = F}
+lp2_eqs <- lp_eqs
+
+lp2_eqs$eq20 = pe_bl[t] ~ pe_bl[t-1] - betae * (pe_bl[t-1] - p_bl[t]) + add[t]
+lp2_eqs$eq23 = p_bl[t] ~  (1 + zeta1[t] *beta - zeta2[t]*beta) * p_bl[t-1]
+lp2_eqs$eq24 = TP[t] ~ (BL_h[t-1] * p_bl[t-1]) / (BL_h[t-1] * p_bl[t-1] + B_h[t-1])
+lp2_eqs$eq25 = zeta1[t] ~ if (TP[t] > top) {1} else {0}
+lp2_eqs$eq26 = zeta2[t] ~ if (TP[t] < bot) {1} else {0}
+#
+```
+
+
+We also need to add the parameters $beta\_e$, $beta$, $top$, and $bot$ to the list of parameters and remove $p\_bl$ from the exogenous variables. 
+
+I also added a bunch of initial values -- taken from Gennaro Zezza's Eviews code -- to get my values as close as possible from the ones presented in the book.
+
+
+```{r}
+lp2_params <- lp_parameters
+lp2_params$betae = 0.5
+lp2_params$beta = 0.02
+lp2_params$top = 0.505
+lp2_params$bot = 0.495
+
+lp2_exogenous = list('G' = 20, 'r_b' = 0.03, "add" = 0)
+
+lp2_initial = list(
+  "YD_r" = 95.803,
+  "V" = 95.803,
+  "H_h" = 20.125,
+  "BL_d" = 1.89,
+  "B_h" = 37.839,
+  "BL_h" = 1.892,
+  "B_s" = 57.964,
+  "H_s" = 20.125,
+  "B_cb" = 20.125,
+  "BL_s" = 1.89,
+  "r_bl" = 0.05,
+  "pe_bl" = 20,
+  "p_bl" = 20
+  )
+
+```
+
+We can simulate the model:
+
+```{r}
+lp2 <- sfcr_sim(
+  lp2_eqs, 
+  t = 60, 
+  lp2_exogenous, 
+  lp2_params,
+  initial = lp2_initial,
+  hidden = list("H_h" = "H_s")
+  )
+
+lp2 %>% tail()
+```
+
+And add a shock to the short interest-rate:
+
+```{r}
+shock_exg <- list("r_b" = 0.035)
+
+lp2_s1 <- sfcr_scenario(
+  lp2,
+  lp2_eqs,
+  t = 60,
+  exogenous = list('G' = 20, 'r_b' = 0.03, "add" = 0),
+  lp2_params,
+  shock_exg = list("r_b" = 0.035),
+  )
+```
+
+As before, we create a new `tibble` with the model in long format:
+
+```{r}
+lp2_s1_long <- lp2_s1 %>%
+  pivot_longer(cols = -t, names_to = "variable")
+```
+
+And plot the variables. We start by plotting the evolution of the share of bonds in government debt held by households (TP), as in Figure 5.6:
+
+```{r}
+lp2_s1_long %>%
+  filter(variable == 'TP',
+         t < 51) %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line() +
+  geom_hline(yintercept = 0.505) +
+  geom_hline(yintercept = 0.495)
+```
+We also can visualize the evolution of interest rates (Figure 5.5):
+
+```{r}
+lp2_s1_long %>%
+  filter(variable %in% c("r_b", "r_bl"),
+         t < 51) %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line() +
+  facet_wrap(~variable, scales = "free_y")
+```
+What would happen if households anticipated a fall in the price of bonds? To see it, we need to create a new scenario adding a one-time shock to the $add$ component of equation 20.
+
+We do it by filling the `one_time_shock` argument of `sfcr_scenario()`. This argument must be a named list, with the name of the exogenous variable being shocked as the element' name, and a vector containing the one-time shock and the period that it should take place.
+
+In the example below, we add the line `one_time_shock = list("add" = c(-2.8, 6))` to the `sfcr_scenario()` call to model this shock:
+
+```{r}
+lp2_s2 <- sfcr_scenario(
+  lp2,
+  lp2_eqs,
+  t = 60,
+  exogenous = list('G' = 20, 'r_b' = 0.03, "add" = 0),
+  lp2_params,
+  one_time_shock = list("add" = c(-2.5, 6))
+  )
+```
+
+We create a "long" `tibble`:
+
+```{r}
+lp2_s2_long <- lp2_s2 %>%
+  pivot_longer(cols = -t, names_to = "variable")
+```
+
+In order to plot the variables.
+
+We start by plotting the evolution of the price of bonds ($p\_bl$) and the expected price of bonds ($pe\_bl$), as in Figure 5.8:
+
+```{r}
+lp2_s2_long %>%
+  filter(variable %in% c("p_bl", "pe_bl")) %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line(aes(linetype = variable))
+```
+This shock to the expected price of bonds cause the long-term interest rate to rise, as a consequence of the target proportion of bonds in the total government debt aimed by the government:
+
+```{r}
+lp2_s2_long %>%
+  filter(variable == "TP") %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line(linetype = 2) +
+  geom_hline(yintercept = 0.505) +
+  geom_hline(yintercept = 0.495) +
+  annotate("text", x = 15, y = 0.490, label = "Share of bonds in \ngovernemnt debt \nheld by households")
+```
+```{r}
+lp2_s2_long %>%
+  filter(variable == "r_bl") %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line(linetype = 2) +
+  annotate("text", x = 25, y = 0.05195,
+           label = "Long-term interest rate")
+```
+## LP3: Making government expenditures endogenous
+
+To simulate the model LP3, we need to add four new equations to the model LP2. Here, it is easier to find the steady state of the model keeping $G$ as a exogenous variable:
+
+```{r}
+lp3_eqs <- lp2_eqs
+
+lp3_eqs$eq27 <- PSBR[t] ~ (G[t] + r_b[t] * B_s[t-1] + BL_s[t-1]) - (TX[t] + r_b[t] * B_cb[t-1])
+lp3_eqs$eq28 <- zeta3 ~ if ( (PSBR[t-1]/Y[t-1]) > 0.03 ) {1} else {0}
+lp3_eqs$eq29 <- zeta4 ~ if ( (PSBR[t-1]/Y[t-1]) < -0.03 ) {1} else {0}
+```
+
+```{r}
+lp3_params <- lp2_params
+lp3_params$beta_g <- 1
+
+lp3_initial <- lp2_initial
+
+lp3 <- sfcr_sim(
+  lp3_eqs,
+  t = 80,
+  exogenous = list('r_b' = 0.03, "add" = 0, "add2" = 0, "G" = 20),
+  parameters = lp3_params,
+  initial = lp3_initial,
+  hidden = c("H_s" = "H_h"))
+
+lp3 %>% select(t, G, PSBR, everything())
+```
+What would happen in this model if there was a sharp reduction in the propensity to consume? That's the objective of this exercise with model LP3.
+
+First, we add the equation that endogenize $G$ to the `lp3_eqs` list, and after we calculate this scenario:
+
+```{r}
+lp3_eqs$eq30 <- G[t] ~ G[t-1] - (zeta3 + zeta4) * beta_g * PSBR[t-1] + add2[t]
+
+lp3_s1 <- sfcr_scenario(
+  lp3,
+  lp3_eqs,
+  t = 60,
+  exogenous = list("r_b" = 0.03, "add" = 0, "add2" = 0),
+  parameters = lp3_params,
+  shock_param = list("alpha1" = 0.7)
+) %>% mutate(
+  PSBR_Y = PSBR / Y
+)
+
+lp3_s1_long <- lp3_s1 %>% pivot_longer(cols = -t, names_to = "variable")
+```
+
+Here we can see that the fall in output is permanent:
+
+```{r}
+lp3_s1_long %>%
+  filter(variable == "Y") %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line()
+```
+This result contrasts with the long-run effect of a reduction in the propensity to consume arrived with the LP model:
+
+```{r}
+lp1_s2 <- sfcr_scenario(
+  lp1,
+  lp_eqs,
+  t = 60,
+  lp_exogenous,
+  lp_parameters,
+  shock_param = list("alpha1" = 0.7)
+)
+
+lp1_s2_long <- lp1_s2 %>% pivot_longer(cols = -t, names_to = "variable")
+```
+
+```{r}
+lp1_s2_long %>%
+  filter(variable == "Y") %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line()
+```
+In the LP model, the steady-state output level is higher than initially because the consumption out of the wealth ends up more than compensanting the initial fall in output.
+
+In model LP3, however, the initial fall in output increases the government deficit, and this causes the government to reduce its expenditures:
+
+```{r}
+lp3_s1_long %>%
+  filter(variable %in% c("G", "PSBR_Y"),
+         t < 51) %>%
+  ggplot(aes(x = t, y = value)) +
+  geom_line() +
+  facet_wrap(~ variable, scales = "free_y")
+```
+
+## Sankey's diagram
+
+A Sankey's diagram is used in the context of SFC models to visualize the transactions flow matrix. Hence, its important to check this matrix first before starting the diagram:
+
+```{r, paged.print = F}
+(lp_tfm <- tribble(
+  ~variable, ~hh, ~prod, ~gvt, ~cb_c, ~cb_k,
+  "Consumption", "-C", "C", NA, NA, NA,
+  "Gvt Expenditures", NA, "G", "-G", NA, NA,
+  "GDP", "Y", "-Y", NA, NA, NA,
+  "Int. on bills", "r_b-1 * B_h-1", NA, "- r_b-1 * B-1", "r_b-1 * B_cb-1", NA,
+  "Int. on bonds", "BL-1", NA, "-BL-1", NA, NA,
+  "CB profits", NA, NA, "r_b-1 * B_cb-1", "-r_b-1 * B_cb-1", NA,
+  "Taxes", "-TX", NA, "TX", NA, NA,
+  "Change money", "-delta H", NA, NA, NA, "delta H",
+  "Change bills", "-delta B_h", NA, "delta B", NA, "-delta B_cb",
+  "Change bonds", "-delta BL * p_bl", NA, "delta BL * p_bl", NA, NA,
+  "Capital Gains", "-delta p_bl * BL-1", NA, "delta p_bl * BL-1", NA, NA,
+) %>%
+  mutate(row = row_number())) #%>%
+  #knitr::kable() %>%
+  #kableExtra::kable_styling(full_width = F)
+```
+Now, we have need the entries in each row as a variable. Therefore, we need to make some new columns:
+
+```{r, paged.print = F}
+(lp_sankey <- lp1 %>%
+  mutate(
+    int_bills_h = lag(r_b) * lag(B_h),
+    int_bills_g = lag(r_b) * lag(B_s),
+    int_bills_cb = lag(r_b) * lag(B_cb),
+    int_bonds = lag(BL_h),
+    cb_profits = lag(r_b) * lag(B_cb),
+    delta_h = H_h - lag(H_h),
+    delta_b_h = B_h - lag(B_h),
+    delta_b_g = B_s - lag(B_s),
+    delta_b_cb = B_cb - lag(B_cb),
+    delta_BL = BL_h - lag(BL_h),
+    delta_BL_P = delta_BL * p_bl) %>%
+  select(t, C, G, Y, int_bills_h, int_bills_g, int_bills_cb, int_bonds, cb_profits,
+         TX, delta_h, delta_b_h, delta_b_g, delta_b_cb, delta_BL_P) %>%
+  slice_tail(n = 1))
+#
+```
+
+Next, we convert the model to the long format, and associate each entry with its row in the TFM:
+
+```{r}
+(lp_sankey2 <- lp_sankey %>% 
+  pivot_longer(cols = -t) %>%
+  mutate(row = c(1, 2, 3, 4, 4, 4, 5, 6, 7, 8, 9, 9, 9, 10)) %>%
+   select(-t))
+#
+```
+
+
+Next, we calculate two `tibble`s for each variable on the TFM. One with the positive entries and one with the negative entries, and we create a column for the sector that each of this entry corresponds. This column has the following identification:
+
+```{r}
+sector_map <-
+  tribble(
+    ~sector_name, ~sector,
+    'hh', 1,
+    'pr', 2,
+    'gvt', 3,
+    'cb_c', 4,
+    'cb_k', 5
+  )
+```
+
+
+```{r, paged.print = F}
+# Positive
+lp_sankey_plus <- lp_sankey2 %>%
+  filter(!str_detect(name, "bills_g"),
+         !str_detect(name, "b_h|b_cb")) %>%
+  mutate(sector = c(2, 2, 1, 1, 4, 1, 3, 3, 5, 3, 3)) %>%
+  mutate(name = if_else(str_detect(name, "bills"), "int_bills", name),
+         name = if_else(str_detect(name, 'delta_b'), 'delta_b', name)) %>%
+  left_join(sector_map)
+
+(lp_sankey_minus <- lp_sankey2 %>%
+  filter(!str_detect(name, "bills_h|bills_cb"),
+         !str_detect(name, "b_g")) %>%
+  mutate(sector = c(1, 3, 2, 3, 3, 4, 1, 1, 1, 5, 1)) %>%
+  mutate(name = if_else(str_detect(name, "bills"), "int_bills", name),
+         name = if_else(str_detect(name, 'delta_b'), 'delta_b', name)) %>%
+  left_join(sector_map))
+```
+
+Create nodes `tibble`:
+
+```{r}
+(lp_nodes <- tibble(
+  name = c(unique(lp_sankey_plus$name),
+           unique(lp_sankey_plus$sector_name),
+           str_c(unique(lp_sankey_plus$sector_name), 1)),
+  node = 0:19
+))
+```
+
+Create links `tibble`:
+
+```{r}
+links_lp_minus <- lp_sankey_minus %>%
+  left_join(lp_nodes, by = c('name')) %>%
+  left_join(lp_nodes, by = c("sector_name" = "name")) %>%
+  rename(source = node.y, target = node.x)
+
+links_lp_plus <- lp_sankey_plus %>%
+  mutate(sector_name = str_c(sector_name, "1")) %>%
+  left_join(lp_nodes, by = c('name')) %>%
+  left_join(lp_nodes, by = c("sector_name" = "name")) %>%
+  rename(source = node.x, target = node.y)
+```
+
+Combine the two datasets, select the relevant columns, and rename:
+
+```{r}
+links_lp <- bind_rows(links_lp_minus, links_lp_plus) %>%
+  select(source, target, value)
+```
+
+Plot the Sankey's diagram:
+
+```{r}
+lp_nodes1 <- lp_nodes %>%
+  mutate(name = case_when(
+    name == "C" ~ "Consumption",
+    name == "G" ~ "Gvt. expenditures",
+    name == "Y" ~ "Output",
+    name == "int_bills" ~ "Interest payments on bills",
+    name == "int_bonds" ~ "Interest payments on bonds",
+    name == "cb_profits" ~ "Central Bank profits",
+    name == "TX" ~ "Taxes",
+    name == "delta_h" ~ "\u0394 monetary balances",
+    name == "delta_b" ~ "\u0394 bills",
+    name == "delta_BL" ~ "\u0394 bills",
+    str_detect(name, 'pr') ~ "Firms",
+    str_detect(name, 'gvt') ~ "Government",
+    str_detect(name, 'cb_c') ~ "Central Bank current",
+    str_detect(name, 'cb_k') ~ "Central Bank capital",
+    str_detect(name, "hh") ~ "Households"
+  ))
+
+networkD3::sankeyNetwork(Links = as.data.frame(links_lp), Nodes = as.data.frame(lp_nodes1), 
+                          Source = 'source', 
+                          Target = 'target', 
+                          Value = 'value', 
+                          NodeID = 'name',
+                          units = 'dollars',
+                          fontSize = 14)
+```
+
