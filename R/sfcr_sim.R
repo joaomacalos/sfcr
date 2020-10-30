@@ -56,19 +56,31 @@
 
 
 .final_tb <- function(vars, params) {
-  dplyr::bind_cols(vars, params) %>%
-    dplyr::mutate(t = dplyr::row_number()) %>%
-    dplyr::select(t, dplyr::everything())
+  final_tb <- dplyr::bind_cols(vars, params)
+  final_tb['t'] <- 1:nrow(final_tb)
+  dplyr::select(final_tb, c(t, dplyr::everything()))
+
+  #dplyr::bind_cols(vars, params) %>%
+  #  dplyr::mutate(t = dplyr::row_number()) %>%
+  #  dplyr::select(t, dplyr::everything())
 }
 
 # Add time stamps to the variables
-.add_time_stamps <- function(eq_as_tb, pat1, pat2, pat3) {
+# .add_time_stamps <- function(eq_as_tb, pat1, pat2, pat3) {
+#   eq_as_tb %>%
+#     dplyr::mutate(lhs = gsub(pat1, "\\1\\[t\\]", lhs, perl= T)) %>%
+#     dplyr::mutate(rhs = gsub(pat1, "\\1\\[t\\]", rhs, perl= T)) %>%
+#     dplyr::mutate(rhs = gsub(pat2, "\\1\\[t\\]\\)", rhs, perl = T)) %>%
+#     dplyr::mutate(rhs = gsub(pat3, "\\1\\[t\\]\\/", rhs, perl = T)) %>%
+#     dplyr::mutate(rhs = gsub("\\[-1\\]", "\\[t-1\\]", rhs, perl = T))
+# }
+
+.add_time_stamps <- function(eq_as_tb, pend, pexg) {
   eq_as_tb %>%
-    dplyr::mutate(lhs = gsub(pat1, "\\1\\[t\\]", lhs, perl= T)) %>%
-    dplyr::mutate(rhs = gsub(pat1, "\\1\\[t\\]", rhs, perl= T)) %>%
-    dplyr::mutate(rhs = gsub(pat2, "\\1\\[t\\]\\)", rhs)) %>%
-    dplyr::mutate(rhs = gsub(pat3, "\\1\\[t\\]\\/", rhs)) %>%
-    dplyr::mutate(rhs = gsub("\\[-1\\]", "\\[t-1\\]", rhs))
+    dplyr::mutate(lhs = gsub(pend, "\\1\\[t\\]", lhs, perl= T),
+                  rhs = gsub(pend, "\\1\\[t\\]", rhs, perl = T),
+                  rhs = gsub(pexg, "\\1\\[t\\]", rhs, perl = T),
+                  rhs = gsub("\\[-1\\]", "\\[t-1\\]", rhs))
 }
 
 
@@ -90,35 +102,31 @@
 
 .midsteps <- function(m, pat) {m %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, function(.x) .x[!grepl(pat, .x)])))) %>%
+    dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, function(.x) .x[!grepl(pat, .x, perl = T)])))) %>%
     dplyr::mutate(l = length(depends))}
 
-
-#' @importFrom rlang :=
-#'
-.gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL, random = NULL, max_iter = 100) {
-
-  # Get equations as a tibble
-  #eqs <- .eq_as_tb(equations) %>%
-  #  mutate(across(c(lhs, rhs), ~.mod_str(.x)))
-
+.sfcr_order_eqs <- function(equations, exogenous, parameters) {
   eqs <- .eq_as_tb(equations)
 
-  collapsed_names <- paste0(c(names(exogenous), names(parameters), eqs$lhs), collapse = "|")
+  #collapsed_names <- paste0(c(names(exogenous), names(parameters), eqs$lhs), collapse = "|")
 
-  pat1 <- paste0("(", collapsed_names, ")($|[[:space:]])")
-  pat2 <- paste0("(", collapsed_names, ")(\\))")
-  pat3 <- paste0("(", collapsed_names, ")(\\/)")
+  # pat1 <- paste0("(", collapsed_names, ")($|[[:space:]])")
+  # pat2 <- paste0("(", collapsed_names, ")(\\))")
+  # pat3 <- paste0("(", collapsed_names, ")(\\/)")
 
-  eqs <- eqs %>% .add_time_stamps(pat1, pat2, pat3)
+  pend <- paste0("(?<![[:alnum:]])(",paste0(eqs$lhs, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
+  pexg <- paste0("(?<![[:alnum:]])(",paste0(c(names(exogenous), names(parameters)), collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
+
+  # eqs <- eqs %>% .add_time_stamps(pat1, pat2, pat3)
+  eqs <- eqs %>% .add_time_stamps(pend, pexg)
 
   # Re arrange equations for a optimal estimation
 
   # 1. Get a pattern to match out the endogenous variables on the right-hand side of the equations
   m2 <- eqs %>% dplyr::mutate(lhs = gsub("\\[t\\]", "\\\\[t\\\\]", lhs)) %>% {.[,]$lhs}
 
-  # 2. Mother tibble that will be looked upon to find an optimal order:
-  mother <- .find_dependencies(eqs, m2)
+  # 2. LookUp tibble that will be looked upon to find an optimal order:
+  look_up_tb <- .find_dependencies(eqs, m2)
 
 
   # In this loop, the code check the equations first to see all that depends only on lagged values
@@ -128,27 +136,40 @@
 
   block <- NULL
   pat <- NULL
-  for (i in seq_along(mother$lhs)) {
+  for (i in seq_along(look_up_tb$lhs)) {
     if (is.null(pat)) {
-      block <- mother[, "n"][mother[, 'l'] == 0]
+      block <- look_up_tb[, "n"][look_up_tb[, 'l'] == 0]
 
     } else {
-      new_block <- mother[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
+      new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
       block <- c(block, new_block)
     }
 
-    pat <- paste0("^(", paste0(mother[block, 'lhs']$lhs, collapse = "|"), ")$")
+    pat <- paste0("^(", paste0(look_up_tb[block, 'lhs']$lhs, collapse = "|"), ")$")
 
-    if (length(mother$lhs) == length(block)) {break}
+    if (length(look_up_tb$lhs) == length(block)) {break}
   }
 
   eqs <- eqs[block,]
+  return(eqs)
+}
+
+
+# GaussSeidel algorithm
+
+#' @importFrom rlang :=
+#'
+.gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL, random = NULL, max_iter = 100) {
+
+  # Get equations as a tibble
+  #eqs <- .eq_as_tb(equations) %>%
+  #  mutate(across(c(lhs, rhs), ~.mod_str(.x)))
 
   # Left-hand side
-  lhs_eqs <- list(eqs$lhs)
+  lhs_eqs <- list(equations$lhs)
 
   # Right-hand side
-  rhs_eqs <- list(eqs$rhs)
+  rhs_eqs <- list(equations$rhs)
 
   # Get names of endogenous variables
   lhs_names <- .lhs_names(lhs_eqs)
@@ -172,11 +193,6 @@
 
   # --
 
-  # Assign parameter values
-  #purrr::map2(names(parameters), parameters, function(.x, .y) {
-  #  .ev(.x, .y, 3)
-  #})
-
   # Initiate parameters
   .initiate_vals(names(parameters), parameters, t = t, from_start = T)
 
@@ -187,15 +203,21 @@
   #   }
   # }
 
-  for (t in 2:t) {
-    purrr::map(1:length(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- rep(0, t)")),
-                                                         parent.frame(n = 2)))
 
+  # tmp vars to check convergence
+  purrr::map(seq_along(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- 0")),
+                                                        parent.frame(n = 2)))
+
+
+  #start <- Sys.time()
+  for (t in 2:t) {
     for (iterations in 1:max_iter) {
+      # Calculate the variables
       purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
 
+      # Check
       purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-        eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal(tmp',.x,',', .y, '))')),
+        eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal.numeric(tmp',.x,',', .y, '))')),
              parent.frame(n = 2))})
 
 
@@ -206,11 +228,14 @@
         purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
           eval(str2expression(paste0('tmp',.x, '<-', .y)),
                parent.frame(n = 2))
+
         }
         )}
     }
 
   }
+  #end <- Sys.time()
+  #end - start
 
 
   # Endogenous and Exogenous a a list
@@ -219,10 +244,10 @@
   vars_tb <- purrr::map_dfc(vars_names, function(.x) tibble::tibble(!!.x := eval(str2expression(.x))))
 
   # Tibble with exogenous values
-  params_tb <- dplyr::bind_cols(parameters)
+  #params_tb <- dplyr::bind_cols(parameters)
 
   # Final output
-  final_tb <- .final_tb(vars_tb, params_tb)
+  final_tb <- .final_tb(vars_tb, parameters)
 
   return(final_tb)
 }
@@ -278,7 +303,9 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, random = NULL, i
 
   if (t > 150) stop('Maximum time periods allowed are 150.')
 
-  look_for_errors <- .collect_warnings(.gen_steady_internal(equations, t = 2, exogenous, parameters, initial, random, max_iter = 2))
+  equations <- .sfcr_order_eqs(equations, exogenous, parameters)
+
+  look_for_errors <- .collect_warnings(.gen_steady_internal(equations, t = 2, exogenous, parameters, initial, random, max_iter = 1))
 
   if (rlang::is_empty(look_for_errors$warning) == F) {
     {
