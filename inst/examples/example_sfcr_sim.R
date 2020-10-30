@@ -15,6 +15,7 @@ eqs <- list(
 exg <- list("G_d" = 20, "W" = 1)
 params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
 
-# t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state
+# t is set to 10 to run faster. A usual model should run at
+# least 50 periods to find a steady state
 sfcr_sim(equations = eqs, t = 10, exogenous = exg, parameters = params, initial = NULL)
 

@@ -59,21 +59,7 @@
   final_tb <- dplyr::bind_cols(vars, params)
   final_tb['t'] <- 1:nrow(final_tb)
   dplyr::select(final_tb, c(t, dplyr::everything()))
-
-  #dplyr::bind_cols(vars, params) %>%
-  #  dplyr::mutate(t = dplyr::row_number()) %>%
-  #  dplyr::select(t, dplyr::everything())
 }
-
-# Add time stamps to the variables
-# .add_time_stamps <- function(eq_as_tb, pat1, pat2, pat3) {
-#   eq_as_tb %>%
-#     dplyr::mutate(lhs = gsub(pat1, "\\1\\[t\\]", lhs, perl= T)) %>%
-#     dplyr::mutate(rhs = gsub(pat1, "\\1\\[t\\]", rhs, perl= T)) %>%
-#     dplyr::mutate(rhs = gsub(pat2, "\\1\\[t\\]\\)", rhs, perl = T)) %>%
-#     dplyr::mutate(rhs = gsub(pat3, "\\1\\[t\\]\\/", rhs, perl = T)) %>%
-#     dplyr::mutate(rhs = gsub("\\[-1\\]", "\\[t-1\\]", rhs, perl = T))
-# }
 
 .add_time_stamps <- function(eq_as_tb, pend, pexg) {
   eq_as_tb %>%
@@ -105,19 +91,13 @@
     dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, function(.x) .x[!grepl(pat, .x, perl = T)])))) %>%
     dplyr::mutate(l = length(depends))}
 
-.sfcr_order_eqs <- function(equations, exogenous, parameters) {
+.sfcr_order_eqs <- function(equations, exogenous, parameters, .simultaneous = FALSE) {
   eqs <- .eq_as_tb(equations)
-
-  #collapsed_names <- paste0(c(names(exogenous), names(parameters), eqs$lhs), collapse = "|")
-
-  # pat1 <- paste0("(", collapsed_names, ")($|[[:space:]])")
-  # pat2 <- paste0("(", collapsed_names, ")(\\))")
-  # pat3 <- paste0("(", collapsed_names, ")(\\/)")
 
   pend <- paste0("(?<![[:alnum:]])(",paste0(eqs$lhs, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
   pexg <- paste0("(?<![[:alnum:]])(",paste0(c(names(exogenous), names(parameters)), collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
 
-  # eqs <- eqs %>% .add_time_stamps(pat1, pat2, pat3)
+
   eqs <- eqs %>% .add_time_stamps(pend, pexg)
 
   # Re arrange equations for a optimal estimation
@@ -141,7 +121,12 @@
       block <- look_up_tb[, "n"][look_up_tb[, 'l'] == 0]
 
     } else {
-      new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
+      if (isTRUE(.simultaneous)) {
+        new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == min(.[, "l"])]}
+      } else {
+        new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
+      }
+      if (length(new_block) == 0) stop('Please set `.simultaneous = TRUE` to run models that are simultaneously determined.')
       block <- c(block, new_block)
     }
 
@@ -164,6 +149,16 @@
   # Get equations as a tibble
   #eqs <- .eq_as_tb(equations) %>%
   #  mutate(across(c(lhs, rhs), ~.mod_str(.x)))
+
+  # eqs <- .eq_as_tb(equations)
+  #
+  # pend <- paste0("(?<![[:alnum:]])(",paste0(eqs$lhs, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
+  # pexg <- paste0("(?<![[:alnum:]])(",paste0(c(names(exogenous), names(parameters)), collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
+  #
+  # equations <- eqs %>%
+  #   .add_time_stamps(pend, pexg)
+
+
 
   # Left-hand side
   lhs_eqs <- list(equations$lhs)
@@ -225,6 +220,7 @@
       mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
 
       if (mean_cdt == 1) {break} else {
+        # Dynamically create tmp vars to check convergence
         purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
           eval(str2expression(paste0('tmp',.x, '<-', .y)),
                parent.frame(n = 2))
@@ -292,7 +288,7 @@
 #'
 #' @export
 #'
-sfcr_sim <- function(equations, t = 100, exogenous, parameters, random = NULL, initial = NULL, hidden = NULL, max_iter = 100) {
+sfcr_sim <- function(equations, t = 100, exogenous, parameters, random = NULL, initial = NULL, hidden = NULL, max_iter = 100, .simultaneous = FALSE) {
   if (!is.list(exogenous)) stop("`exogenous` must be a list.")
 
   if (!is.list(parameters)) stop("`parameters` must be a list.")
@@ -301,28 +297,9 @@ sfcr_sim <- function(equations, t = 100, exogenous, parameters, random = NULL, i
 
   if (t < 2) stop('Required at least two time periods.')
 
-  if (t > 150) stop('Maximum time periods allowed are 150.')
+  if (t > 350) stop('Maximum time periods allowed are 350.')
 
-  equations <- .sfcr_order_eqs(equations, exogenous, parameters)
-
-  look_for_errors <- .collect_warnings(.gen_steady_internal(equations, t = 2, exogenous, parameters, initial, random, max_iter = 1))
-
-  if (rlang::is_empty(look_for_errors$warning) == F) {
-    {
-      name <- NULL
-      value <- NULL
-
-      found_errors <- look_for_errors$warning %>%
-        unlist() %>%
-        tibble::enframe(name = "name", value = "value") %>%
-        dplyr::filter(name == "call") %>%
-        dplyr::mutate(value = rlang::as_label(value)) %>%
-        dplyr::distinct()
-
-      rlang::abort("Errors in the equations' syntax. Run `rlang::last_error()$x` to find the problematic equations.\n\n\nTip: problems are usually missing time indication (e.g. [t]) in some endogenous/exogenous variable.", x = found_errors)
-    }
-    return(x)
-  }
+  equations <- .sfcr_order_eqs(equations, exogenous, parameters, .simultaneous)
 
   x <- .gen_steady_internal(equations, t = t, exogenous, parameters, initial, random, max_iter)
 
