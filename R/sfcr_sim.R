@@ -61,12 +61,88 @@
     dplyr::select(t, dplyr::everything())
 }
 
+# Add time stamps to the variables
+.add_time_stamps <- function(eq_as_tb) {
+  eq_as_tb %>%
+    dplyr::mutate(lhs = gsub(pat1, "\\1\\[t\\]", lhs, perl= T)) %>%
+    dplyr::mutate(rhs = gsub(pat1, "\\1\\[t\\]", rhs, perl= T)) %>%
+    dplyr::mutate(rhs = gsub(pat2, "\\1\\[t\\]\\)", rhs)) %>%
+    dplyr::mutate(rhs = gsub(pat3, "\\1\\[t\\]\\/", rhs)) %>%
+    dplyr::mutate(rhs = gsub("\\[-1\\]", "\\[t-1\\]", rhs))
+}
+
+
+# Find dependencies and order the equations
+.find_dependencies <- function(tb_eqs, pattern) {
+  tb_eqs %>%
+    mutate(lhs = fct_inorder(lhs)) %>%
+    nest_by(lhs) %>%
+    mutate(depends = str_extract_all(data, paste0("(",paste0(pattern, collapse = "|"),")"))) %>%
+    select(-data) %>%
+    mutate(depends = simplify_all(list(map(depends, ~gsub("\\[t\\]|\\[t-1\\]", "", .x))))) %>%
+    mutate(depends = list(unique(depends))) %>%
+    mutate(l = length(depends)) %>%
+    mutate(lhs = as.character.factor(lhs)) %>%
+    mutate(lhs = gsub("\\[t\\]", "", lhs)) %>%
+    ungroup() %>%
+    mutate(n = row_number())
+}
+
+.midsteps <- function(m, pat) {m %>%
+    rowwise %>%
+    mutate(depends = simplify_all(list(map(depends, function(.x) .x[!grepl(pat, .x)])))) %>%
+    mutate(l = length(depends))}
+
+
 #' @importFrom rlang :=
 #'
 .gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL, random = NULL, max_iter = 100) {
 
   # Get equations as a tibble
+  #eqs <- .eq_as_tb(equations) %>%
+  #  mutate(across(c(lhs, rhs), ~.mod_str(.x)))
+
   eqs <- .eq_as_tb(equations)
+
+  collapsed_names <- paste0(c(names(exogenous), names(parameters), eqs$lhs), collapse = "|")
+
+  pat1 <- paste0("(", collapsed_names, ")($|[[:space:]])")
+  pat2 <- paste0("(", collapsed_names, ")(\\))")
+  pat3 <- paste0("(", collapsed_names, ")(\\/)")
+
+  eqs <- eqs %>% .add_time_stamps()
+
+  # Re arrange equations for a optimal estimation
+
+  # 1. Get a pattern to match out the endogenous variables on the right-hand side of the equations
+  m2 <- eqs %>% mutate(lhs = gsub("\\[t\\]", "\\\\[t\\\\]", lhs)) %>% {.[,]$lhs}
+
+  # 2. Mother tibble that will be looked upon to find an optimal order:
+  mother <- .find_dependencies(eqs, m2)
+
+
+  # In this loop, the code check the equations first to see all that depends only on lagged values
+  # Or exogenous variables. It places these variables in the beginning of the `block` vector.
+  # It then searches for the variables that depend on the variables that were already identified.
+  # And does it successively until it finds all the variables.
+
+  block <- NULL
+  pat <- NULL
+  for (i in seq_along(mother$lhs)) {
+    if (is.null(pat)) {
+      block <- mother[, "n"][mother[, 'l'] == 0]
+
+    } else {
+      new_block <- mother[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
+      block <- c(block, new_block)
+    }
+
+    pat <- paste0("^(", paste0(mother[block, 'lhs']$lhs, collapse = "|"), ")$")
+
+    if (length(mother$lhs) == length(block)) {break}
+  }
+
+  eqs <- eqs[block,]
 
   # Left-hand side
   lhs_eqs <- list(eqs$lhs)
@@ -97,9 +173,12 @@
   # --
 
   # Assign parameter values
-  purrr::map2(names(parameters), parameters, function(.x, .y) {
-    .ev(.x, .y, 3)
-  })
+  #purrr::map2(names(parameters), parameters, function(.x, .y) {
+  #  .ev(.x, .y, 3)
+  #})
+
+  # Initiate parameters
+  .initiate_vals(names(parameters), parameters, t = t, from_start = T)
 
   # Calculate SFC model
   # for (t in 2:t) {
@@ -109,29 +188,29 @@
   # }
 
   for (t in 2:t) {
-     purrr::map(1:length(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- rep(0, t)")),
-                                                          parent.frame(n = 2)))
+    purrr::map(1:length(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- rep(0, t)")),
+                                                         parent.frame(n = 2)))
 
-     for (iterations in 1:max_iter) {
-       purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
+    for (iterations in 1:max_iter) {
+      purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
 
-       purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-         eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal(tmp',.x,',', .y, '))')),
-              parent.frame(n = 2))})
+      purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+        eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal(tmp',.x,',', .y, '))')),
+             parent.frame(n = 2))})
 
 
-       text_to_eval <- paste0("cdt",1:length(lhs_eqs[[1]]),collapse=",")
-       mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
+      text_to_eval <- paste0("cdt",1:length(lhs_eqs[[1]]),collapse=",")
+      mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
 
-       if (mean_cdt == 1) {break} else {
-         purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-           eval(str2expression(paste0('tmp',.x, '<-', .y)),
-                parent.frame(n = 2))
-         }
-       )}
-     }
+      if (mean_cdt == 1) {break} else {
+        purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+          eval(str2expression(paste0('tmp',.x, '<-', .y)),
+               parent.frame(n = 2))
+        }
+        )}
+    }
 
-   }
+  }
 
 
   # Endogenous and Exogenous a a list
