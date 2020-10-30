@@ -62,7 +62,7 @@
 }
 
 # Add time stamps to the variables
-.add_time_stamps <- function(eq_as_tb) {
+.add_time_stamps <- function(eq_as_tb, pat1, pat2, pat3) {
   eq_as_tb %>%
     dplyr::mutate(lhs = gsub(pat1, "\\1\\[t\\]", lhs, perl= T)) %>%
     dplyr::mutate(rhs = gsub(pat1, "\\1\\[t\\]", rhs, perl= T)) %>%
@@ -75,23 +75,23 @@
 # Find dependencies and order the equations
 .find_dependencies <- function(tb_eqs, pattern) {
   tb_eqs %>%
-    mutate(lhs = fct_inorder(lhs)) %>%
-    nest_by(lhs) %>%
-    mutate(depends = str_extract_all(data, paste0("(",paste0(pattern, collapse = "|"),")"))) %>%
-    select(-data) %>%
-    mutate(depends = simplify_all(list(map(depends, ~gsub("\\[t\\]|\\[t-1\\]", "", .x))))) %>%
-    mutate(depends = list(unique(depends))) %>%
-    mutate(l = length(depends)) %>%
-    mutate(lhs = as.character.factor(lhs)) %>%
-    mutate(lhs = gsub("\\[t\\]", "", lhs)) %>%
-    ungroup() %>%
-    mutate(n = row_number())
+    dplyr::mutate(lhs = forcats::fct_inorder(lhs)) %>%
+    dplyr::nest_by(lhs) %>%
+    dplyr::mutate(depends = stringr::str_extract_all(data, paste0("(",paste0(pattern, collapse = "|"),")"))) %>%
+    dplyr::select(-data) %>%
+    dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, ~gsub("\\[t\\]|\\[t-1\\]", "", .x))))) %>%
+    dplyr::mutate(depends = list(unique(depends))) %>%
+    dplyr::mutate(l = length(depends)) %>%
+    dplyr::mutate(lhs = as.character.factor(lhs)) %>%
+    dplyr::mutate(lhs = gsub("\\[t\\]", "", lhs)) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(n = dplyr::row_number())
 }
 
 .midsteps <- function(m, pat) {m %>%
-    rowwise %>%
-    mutate(depends = simplify_all(list(map(depends, function(.x) .x[!grepl(pat, .x)])))) %>%
-    mutate(l = length(depends))}
+    dplyr::rowwise() %>%
+    dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, function(.x) .x[!grepl(pat, .x)])))) %>%
+    dplyr::mutate(l = length(depends))}
 
 
 #' @importFrom rlang :=
@@ -110,12 +110,12 @@
   pat2 <- paste0("(", collapsed_names, ")(\\))")
   pat3 <- paste0("(", collapsed_names, ")(\\/)")
 
-  eqs <- eqs %>% .add_time_stamps()
+  eqs <- eqs %>% .add_time_stamps(pat1, pat2, pat3)
 
   # Re arrange equations for a optimal estimation
 
   # 1. Get a pattern to match out the endogenous variables on the right-hand side of the equations
-  m2 <- eqs %>% mutate(lhs = gsub("\\[t\\]", "\\\\[t\\\\]", lhs)) %>% {.[,]$lhs}
+  m2 <- eqs %>% dplyr::mutate(lhs = gsub("\\[t\\]", "\\\\[t\\\\]", lhs)) %>% {.[,]$lhs}
 
   # 2. Mother tibble that will be looked upon to find an optimal order:
   mother <- .find_dependencies(eqs, m2)
