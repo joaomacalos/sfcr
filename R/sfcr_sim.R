@@ -104,44 +104,44 @@
   .initiate_vals(names(parameters), parameters, t = t, from_start = T)
 
   # Calculate SFC model
-  # for (t in 2:t) {
-  #   for (iterations in 1:40) {
-  #     purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-  #   }
-  # }
+   # for (t in 2:t) {
+   #   for (iterations in 1:40) {
+   #     purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
+   #   }
+   # }
 
 
   # tmp vars to check convergence
   purrr::map(seq_along(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- 0")),
-                                                        parent.frame(n = 2)))
+                                                      parent.frame(n = 2)))
 
 
   #start <- Sys.time()
   for (t in 2:t) {
-    for (iterations in 1:max_iter) {
-      # Calculate the variables
+   for (iterations in 1:max_iter) {
+  #     # Calculate the variables
       purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
+  #
+  #     # Check
+       purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+         eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal.numeric(tmp',.x,',', .y, '))')),
+              parent.frame(n = 2))})
+  #
+  #
+       text_to_eval <- paste0("cdt",seq_along(lhs_eqs[[1]]),collapse=",")
+       mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
+  #
+       if (mean_cdt == 1) {break} else {
+         # Dynamically create tmp vars to check convergence
+         purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+           eval(str2expression(paste0('tmp',.x, '<-', .y)),
+                parent.frame(n = 2))
 
-      # Check
-      purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-        eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal.numeric(tmp',.x,',', .y, '))')),
-             parent.frame(n = 2))})
+         }
+         )}
+     }
 
-
-      text_to_eval <- paste0("cdt",seq_along(lhs_eqs[[1]]),collapse=",")
-      mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
-
-      if (mean_cdt == 1) {break} else {
-        # Dynamically create tmp vars to check convergence
-        purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-          eval(str2expression(paste0('tmp',.x, '<-', .y)),
-               parent.frame(n = 2))
-
-        }
-        )}
-    }
-
-  }
+   }
   #end <- Sys.time()
   #end - start
 
