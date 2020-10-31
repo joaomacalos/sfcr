@@ -80,6 +80,7 @@
   # Get names of endogenous variables
   lhs_names <- .lhs_names(lhs_eqs)
 
+
   # Initiate variables numerically --
 
   # Endogenous vars
