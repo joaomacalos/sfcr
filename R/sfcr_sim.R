@@ -1,14 +1,4 @@
-.eq_as_tb <- function(sectors) {
-  suppressMessages({
-    purrr::map(unlist(sectors), ~paste0(deparse(.x, width.cutoff = 500),collapse = "")) %>%
-      dplyr::bind_cols(.name_repair = "universal") %>%
-      t() %>%
-      tibble::as_tibble(.name_repair = "universal") %>%
-      tidyr::separate("...1", c("lhs", "rhs"), sep = " ~ ")
-  })
-}
-
-
+# I think I can remove this function entirely
 .lhs_names <- function(lhs_eqs) {
   name <- NULL
   value <- NULL
@@ -60,85 +50,6 @@
   final_tb['t'] <- 1:nrow(final_tb)
   dplyr::select(final_tb, c(t, dplyr::everything()))
 }
-
-.add_time_stamps <- function(eq_as_tb, pend, pexg) {
-  eq_as_tb %>%
-    dplyr::mutate(lhs = gsub(pend, "\\1\\[t\\]", lhs, perl= T),
-                  rhs = gsub(pend, "\\1\\[t\\]", rhs, perl = T),
-                  rhs = gsub(pexg, "\\1\\[t\\]", rhs, perl = T),
-                  rhs = gsub("\\[-1\\]", "\\[t-1\\]", rhs))
-}
-
-
-# Find dependencies and order the equations
-.find_dependencies <- function(tb_eqs, pattern) {
-  tb_eqs %>%
-    dplyr::mutate(lhs = forcats::fct_inorder(lhs)) %>%
-    dplyr::nest_by(lhs) %>%
-    dplyr::mutate(depends = stringr::str_extract_all(data, paste0("(",paste0(pattern, collapse = "|"),")"))) %>%
-    dplyr::select(-data) %>%
-    dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, ~gsub("\\[t\\]|\\[t-1\\]", "", .x))))) %>%
-    dplyr::mutate(depends = list(unique(depends))) %>%
-    dplyr::mutate(l = length(depends)) %>%
-    dplyr::mutate(lhs = as.character.factor(lhs)) %>%
-    dplyr::mutate(lhs = gsub("\\[t\\]", "", lhs)) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(n = dplyr::row_number())
-}
-
-.midsteps <- function(m, pat) {m %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, function(.x) .x[!grepl(pat, .x, perl = T)])))) %>%
-    dplyr::mutate(l = length(depends))}
-
-.sfcr_order_eqs <- function(equations, exogenous, parameters, .simultaneous = FALSE) {
-  eqs <- .eq_as_tb(equations)
-
-  pend <- paste0("(?<![[:alnum:]])(",paste0(eqs$lhs, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
-  pexg <- paste0("(?<![[:alnum:]])(",paste0(c(names(exogenous), names(parameters)), collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
-
-
-  eqs <- eqs %>% .add_time_stamps(pend, pexg)
-
-  # Re arrange equations for a optimal estimation
-
-  # 1. Get a pattern to match out the endogenous variables on the right-hand side of the equations
-  m2 <- eqs %>% dplyr::mutate(lhs = gsub("\\[t\\]", "\\\\[t\\\\]", lhs)) %>% {.[,]$lhs}
-
-  # 2. LookUp tibble that will be looked upon to find an optimal order:
-  look_up_tb <- .find_dependencies(eqs, m2)
-
-
-  # In this loop, the code check the equations first to see all that depends only on lagged values
-  # Or exogenous variables. It places these variables in the beginning of the `block` vector.
-  # It then searches for the variables that depend on the variables that were already identified.
-  # And does it successively until it finds all the variables.
-
-  block <- NULL
-  pat <- NULL
-  for (i in seq_along(look_up_tb$lhs)) {
-    if (is.null(pat)) {
-      block <- look_up_tb[, "n"][look_up_tb[, 'l'] == 0]
-
-    } else {
-      if (isTRUE(.simultaneous)) {
-        new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == min(.[, "l"])]}
-      } else {
-        new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
-      }
-      if (length(new_block) == 0) stop('Please set `.simultaneous = TRUE` to run models that are simultaneously determined.')
-      block <- c(block, new_block)
-    }
-
-    pat <- paste0("^(", paste0(look_up_tb[block, 'lhs']$lhs, collapse = "|"), ")$")
-
-    if (length(look_up_tb$lhs) == length(block)) {break}
-  }
-
-  eqs <- eqs[block,]
-  return(eqs)
-}
-
 
 # GaussSeidel algorithm
 
@@ -211,17 +122,17 @@
       purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
 
       # Check
-      purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+      purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
         eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal.numeric(tmp',.x,',', .y, '))')),
              parent.frame(n = 2))})
 
 
-      text_to_eval <- paste0("cdt",1:length(lhs_eqs[[1]]),collapse=",")
+      text_to_eval <- paste0("cdt",seq_along(lhs_eqs[[1]]),collapse=",")
       mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
 
       if (mean_cdt == 1) {break} else {
         # Dynamically create tmp vars to check convergence
-        purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
+        purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
           eval(str2expression(paste0('tmp',.x, '<-', .y)),
                parent.frame(n = 2))
 
