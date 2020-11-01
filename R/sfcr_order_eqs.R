@@ -33,12 +33,13 @@
     dplyr::mutate(n = dplyr::row_number())
 }
 
-.midsteps <- function(m, pat) {m %>%
+.midsteps <- function(m, pat) {
+  m %>%
     dplyr::rowwise() %>%
     dplyr::mutate(depends = purrr::simplify_all(list(purrr::map(depends, function(.x) .x[!grepl(pat, .x, perl = T)])))) %>%
     dplyr::mutate(l = vctrs::vec_size(depends))}
 
-.sfcr_order_eqs <- function(equations, exogenous, parameters, .simultaneous = FALSE) {
+.sfcr_order_eqs <- function(equations, .simultaneous = FALSE) {
   eqs <- .eq_as_tb(equations)
 
   eqs <- .add_time_stamps(eqs)
@@ -57,18 +58,21 @@
   # It then searches for the variables that depend on the variables that were already identified.
   # And does it successively until it finds all the variables.
 
+  #TODO: Remove .simultaneous option and throw a message if the model is cyclical
+
   block <- NULL
-  pat <- NULL
+  pat <- as.character()
   iter <- NULL
   for (i in seq_along(look_up_tb$lhs)) {
-    if (is.null(pat)) {
+    if (purrr::is_empty(pat)) {
       block <- look_up_tb[, "n"][look_up_tb[, 'l'] == 0]
       iter <- rep(i, vctrs::vec_size(block))
 
     } else {
       if (isTRUE(.simultaneous)) {
         new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == min(.[, "l"])]}
-      } else {
+      }
+       else {
         new_block <- look_up_tb[-block,] %>% .midsteps(pat) %>% {.[, "n"][.[, "l"] == 0]}
       }
       if (vctrs::vec_size(new_block) == 0) stop('Please set `.simultaneous = TRUE` to run models that are simultaneously determined.')

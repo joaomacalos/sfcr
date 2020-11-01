@@ -69,7 +69,7 @@
 
         m[i, paste0('block', block)] <- ite
 
-        if (all(checks < 1e-4) == TRUE) {break}
+        if (isTRUE(all(checks < 1e-4))) {break}
 
       }
     }
