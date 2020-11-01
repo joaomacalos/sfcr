@@ -161,10 +161,6 @@
 }
 
 
-# Collect warnings function
-.collect_warnings <- catchr::make_catch_fn(warning = c(collect, muffle))
-
-
 #' Simulate a stock-flow consistent model
 #'
 #' The \code{sfcr_sim} function is used to simulate a SFC model. With adequate number of
