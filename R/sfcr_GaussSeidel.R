@@ -17,7 +17,7 @@
 }
 
 
-.make_matrix <- function(equations, exogenous, parameters, t) {
+.make_matrix <- function(equations, exogenous, parameters, t, initial) {
 
   # If no initial values supplied, start with a 1
   ends <- rep(1, vctrs::vec_size(equations$lhs))
@@ -43,6 +43,14 @@
   # variable depends on lagged exogenous
 
   m1[1, ] <- 1
+
+  if (!is.null(initial)) {
+    initial_names <- names(initial)
+
+    for (var in seq_along(initial)) {
+      m1[1, initial_names[[var]]] <- initial[[var]]
+    }
+  }
 
   return(m1)
 }
