@@ -28,7 +28,7 @@
 
   # Blocks of independent equations
   blocks <- unique(equations$block)
-  blocks <- paste0("block", seq_along(blocks))
+  blocks <- paste0("block", blocks)
   lblocks <- rep(0, vctrs::vec_size(blocks))
   names(lblocks) <- blocks
 
@@ -49,6 +49,9 @@
 
 
 .sfcr_GaussSeidel <- function(m, equations, t, max_ite) {
+
+  exprs <- purrr::map(equations$rhs, function(x) parse(text=x))
+
   checks <- rep(0, vctrs::vec_size(equations$lhs))
   names(checks) <- equations$lhs
 
@@ -60,7 +63,7 @@
       for (ite in 1:max_ite) {
         for (var in equations[, 'id'][equations[, 'block'] == block]) {
 
-          m[i, equations$lhs[[var]]] <- eval(str2expression(equations$rhs[[var]]))
+          m[i, equations$lhs[[var]]] <- eval(exprs[[var]])
 
           checks[[var]] <- abs((m[[i, var]] - holdouts[[var]]) / (holdouts[[var]] + 1e-15))
 
