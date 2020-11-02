@@ -1,3 +1,17 @@
+.eq_as_tb <- function(equations) {
+  purrr::map(equations, ~paste0(deparse(.x, width.cutoff = 500), collapse = "")) %>%
+    unlist %>%
+    tibble::tibble(vars = .) %>%
+    tidyr::separate(vars, c('lhs', 'rhs'), ' ~ ')
+}
+
+# Find dependencies and order the equations
+.add_time_stamps <- function(eq_as_tb) {
+  eq_as_tb %>%
+    dplyr::mutate(rhs = gsub("\\[-1\\]", "___", rhs))
+}
+
+
 .find_blocks <- function(m) {
   # Step 4: Loop to find dependencies
   # My strategy is to isolate nodes without children and without parents recursively.

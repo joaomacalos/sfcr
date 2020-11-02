@@ -8,7 +8,7 @@
 #   })
 # }
 
-.eq_as_tb <- function(equations) {
+.eq_as_tb_dep <- function(equations) {
   purrr::map(equations, ~deparse(.x, width.cutoff = 500)) %>%
     unlist %>%
     tibble::tibble(vars = .) %>%
@@ -16,7 +16,7 @@
 }
 
 # Find dependencies and order the equations
-.add_time_stamps <- function(eq_as_tb) {
+.add_time_stamps_dep <- function(eq_as_tb) {
   eq_as_tb %>%
     dplyr::mutate(rhs = gsub("\\[-1\\]", "___", rhs))
 }
