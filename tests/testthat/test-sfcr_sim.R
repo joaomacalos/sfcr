@@ -1,59 +1,46 @@
 eqs <- list(
-  TX_s[t] ~ TX_d[t],
-  YD[t] ~ W[t] * N_s[t] - TX_s[t],
-  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
-  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
-  N_s[t] ~ N_d[t],
-  N_d[t] ~ Y[t] / W[t],
-  C_s[t] ~ C_d[t],
-  G_s[t] ~ G_d[t],
-  Y[t] ~ C_s[t] + G_s[t],
-  TX_d[t] ~ theta * W[t] * N_s[t],
-  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
+  e1 = TX_s ~ TX_d,
+  e2 = YD ~ W * N_s - TX_s,
+  e3 = C_d ~ alpha1 * YD + alpha2 * H_h[-1],
+  e4 = H_h ~ YD - C_d + H_h[-1],
+  e5 = N_s ~ N_d,
+  e6 = N_d ~ Y / W,
+  e7 = C_s ~ C_d,
+  e8 = G_s ~ G_d,
+  e9 = Y ~ C_s + G_s,
+  e10 = TX_d ~ theta * W * N_s,
+  e11 = H_s ~ G_d - TX_d + H_s[-1]
 )
 
-test_that("non-list parameters return an error", {
+exg <- list(G_d ~ 20, W ~ 1)
+params <- c(alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
+
+test_that("non R syntax exogenous throws an error", {
   exg <- list("G_d" = 20, "W" = 1)
-  params <- c("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-  expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params), "`parameters` must be a list.")
+  expect_error(sfcr_sim(eqs, exg, params, periods = 10), "Please use the R syntax to define the exogenous variables and the parameters.")
 })
 
-test_that("non-list exogenous return an error", {
-  exg <- c("G_d" = 20, "W" = 1)
-  params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-  expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params), "`exogenous` must be a list.")
+test_that("non R syntax exogenous throws an error", {
+  params <- c(alpha1 = 0.6, alpha2 = 0.4, theta ~ 0.2)
+  expect_error(sfcr_sim(eqs, exg, params, periods = 10), "Please use the R syntax to define the exogenous variables and the parameters.")
 })
 
 test_that("Missing exogenous values returns an error", {
-  exg <- list("W" = 1)
-  params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-  expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params), "object 'G_d' not found")
+  exg <- list(W ~ 1)
+  params <- list(alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
+  expect_error(sfcr_sim(eqs, exg, params, periods = 10), "object 'G_d' not found")
 })
 
-test_that("Missing parameter returns an error", {
-  exg <- list("G_d" = 20, "W" = 1)
-  params <- list("alpha1" = 0.6, "alpha2" = 0.4)
-  expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params), "object 'theta' not found")
+test_that("Number of columns equals to number of endogenous, exogenous, and parameters plus one", {
+  expect_equal(ncol(sfcr_sim(eqs, exg, params, periods = 10)), (length(eqs) + length(exg) + length(params) + 1))
 })
 
-test_that("Maximum time periods allowed are 150", {
-  exg <- list("G_d" = 20, "W" = 1)
-  params <- list("alpha1" = 0.6, "alpha2" = 0.4)
-  expect_error(sfcr_sim(eqs, t = 160, exogenous = exg, parameters = params), 'Maximum time periods allowed are 150.')
+test_that("Error if random noise is included", {
+  eqs$e11 = H_s ~ G_d + TX_d + H_s[-1] + rnorm(1)
+  expect_error(sfcr_sim(eqs, exg, params, periods = 10), 'Please define random variations as an external parameter.')
 })
 
-test_that("Return an error when hidden equation condition is not fulfilled", {
-  exg <- list("G_d" = 20, "W" = 1)
-  params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-  hidden <- list("H_h" = "C_d")
-  expect_error(sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params, hidden = hidden),
-               "Hidden equation is not fulfilled. Check again the equations in the model.")
-})
-
-test_that("Hidden equation equality is fulfilled", {
-  exg <- list("G_d" = 20, "W" = 1)
-  params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-  hidden <- list("H_h" = "H_s")
-  sfc <- sfcr_sim(eqs, t = 3, exogenous = exg, parameters = params, hidden = hidden)
-  expect_equal(sfc$H_h, sfc$H_s, tolerance = 0.1)
+test_that("Error if lag > 2 is included", {
+  eqs$e11 = H_s ~ G_d + TX_d + H_s[-2]
+  expect_error(sfcr_sim(eqs, exg, params, periods = 10))
 })

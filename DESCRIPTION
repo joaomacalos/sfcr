@@ -20,6 +20,7 @@ Imports:
     forcats,
     magrittr (>= 1.5),
     purrr (>= 0.3.4),
+    Rdpack,
     rlang (>= 0.4.7),
     tibble (>= 3.0.3),
     tidyr (>= 1.1.2),
@@ -33,3 +34,4 @@ Suggests:
     tidyverse,
     networkD3
 VignetteBuilder: knitr
+RdMacros: Rdpack

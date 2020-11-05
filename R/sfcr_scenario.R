@@ -1,178 +1,81 @@
-#' Add shocks to SFC models
+#' Make matrix for scenario calculations
 #'
-#' The \code{sfcr_scenario} function is used to add a shock to a SFC model
-#' generated with the \code{\link{sfcr_sim}} function.
+#' @param sfcr_sim a model calculated with the \code{sfcr_sim()} function
+#' @param scenario a List holding the different scenarios
+#' @param periods The total number of periods in the model
 #'
-#' @param steady_state A simulated SFC model with \code{\link{sfcr_sim}} function to provide the steady
-#' state values of the variables.
-#' @param exogenous,parameters Named lists with the initial values of the exogenous and parameters.
-#' This should be exactly the same values as supplied to \code{\link{sfcr_sim}}.
-#' @param shock_exg,shock_param Named lists with the new values for the exogenous and/or parameters
-#' that are being shocked to calculate a different scenario.
-#' @param one_time_shock Named list containing the name, the value, and the period in which the one
-#' time shock must take place. Currently works only with exogenous variables.
+#' @details This function generates the base matrix that is going to be
+#' modified in place by the \code{sfcr_gauss_seidel()} algorithm.
 #'
-#' @inheritParams sfcr_sim
+#' @author João Macalós
 #'
-#' @details The output of  \code{\link{sfcr_sim}} will contain a tibble with the exogenous and endogenous
-#' variables, as well as the parameters, of the simulated model as columns.
+.sfcr_make_scenario_matrix <- function(sfcr_sim, scenario, periods) {
+
+  steady <- tail(attributes(sfcr_sim)$matrix, n = 1)
+
+  m <- steady[rep(seq_len(nrow(steady)), periods), ]
+
+  scenario_eqs <- purrr::map(scenario, function(x) .eq_as_tb(x$variables))
+  scenario_names <- purrr::map(scenario_eqs, function(x) x$lhs)
+  scenario_exprs <- purrr::map(scenario_eqs, function(x) purrr::map(x$rhs, function(y) parse(text = y)))
+
+  scenario_start <- purrr::map(scenario, function(x) x$start)
+  scenario_end <- purrr::map(scenario, function(x) x$end)
+
+
+  for (scenario in seq_len(vctrs::vec_size(scenario_eqs))) {
+    scenario_nms <- scenario_names[[scenario]]
+    scenario_xprs <- scenario_exprs[[scenario]]
+
+    for (var in seq_along(scenario_nms)) {
+      m[scenario_start[[scenario]]:scenario_end[[scenario]], scenario_nms[[var]]] <- eval(scenario_xprs[[var]])
+    }
+  }
+
+
+  return(m)
+}
+
+#' Add scenarios to a \code{sfcr} model.
 #'
-#' The equations at the `equations` argument should take the usual R formula syntax.
-#' Also, endogenous and exogenous variables should explicitly indicate if they're
-#' to be considered contemporaneously or with lags, while parameters in should not
-#' be accompanied by period of evaluation indication.
+#' @param sfcr_sim A model generated with the \code{sfcr_sim()} function.
+#' @param scenario A list containing one or more lists that hold the information
+#' about the scenario(s). Each list must contain three information:
+#' 1. A list describing the variables that are going to be modified and their new
+#' values. This must be written with R equation syntax.
+#' 2. An integer defining the period the the scenario starts.
+#' 3. An integer defining the period when the scenario ends.
 #'
-#' On the other hand, the named lists should not include time indices.
+#' See examples for details.
+#' @param periods The total periods in the model.
+#' @param max_iter The maximum allowed iteration per period.
 #'
-#' See \code{\link{sfcr_sim}} for further information.
+#' @details Add scenario(s) to a model generated with \code{sfcr_sim()} functions.
 #'
-#' @example inst/examples/example_sfcr_scenario.R
-#'
-#' @importFrom rlang :=
+#' @seealso \code{\link{sfcr_sim}}
 #'
 #' @export
 #'
-sfcr_scenario <- function(steady_state, equations, t = 100, exogenous, parameters, random = NULL, shock_exg = NULL, shock_param = NULL, one_time_shock = NULL, max_iter = 100) {
+sfcr_scenario <- function(sfcr_sim, scenario, periods, max_iter = 350) {
+  if (class(sfcr_sim) != "sfcr_tbl") {stop("Please provide a model obtained with `sfcr_sim()` function.")}
+  if (rlang::is_null(attributes(sfcr_sim)$matrix)) {stop("Please don't modify the model")}
+  if (rlang::is_null(scenario[[1]]$variable)) {stop("Please verify the syntax of the scenarios. Is it a list? The `variables`, `start`, and `end` items were named correctly?")}
 
-  # Get equations as a tibble
-  eqs <- .eq_as_tb(equations)
+  m <- .sfcr_make_scenario_matrix(sfcr_sim, scenario, periods)
 
-  # Left-hand side
-  lhs_eqs <- list(eqs$lhs)
+  eqs <- attributes(sfcr_sim)$calls
 
-  # Right-hand side
-  rhs_eqs <- list(eqs$rhs)
+  s1 <- .sfcr_GaussSeidel(m, eqs, periods, max_iter)
 
-  # Get names of endogenous variables
-  lhs_names <- .lhs_names(lhs_eqs)
+  s2 <- tibble::tibble(data.frame(s1)) %>%
+    dplyr::mutate(period = dplyr::row_number()) %>%
+    dplyr::select(-tidyselect::contains('block')) %>%
+    dplyr::select(period, tidyselect::everything())
 
-  # Load steady state values
-  steady_vals <- steady_state %>%
-    dplyr::slice_tail(n = 1)
+  attr(s2, "matrix") <- s1
+  attr(s2, "calls") <- eqs
 
-  # Steady state values for endogenous variables
-  steady_endogenous <- steady_vals %>%
-    dplyr::select(lhs_names$name)
+  class(s2) <- c("sfcr", "tbl_df", "tbl", "data.frame")
 
-  if (!is.null(random)) {
-    .ev_rand(names(random), random, t = t, n = 1)
-  }
-
-
-  # Initiate endogenous variables numerically
-  .initiate_vals(names(steady_endogenous), steady_endogenous, t = t, from_start = T)
-
-  # Initiate exogenous variables
-  .initiate_vals(names(exogenous), exogenous, t = t, from_start = T)
-
-  # Add shock to exogenous variables
-  if (!is.null(shock_exg)) {
-    purrr::map2(names(shock_exg), shock_exg, function(.x, .y) {
-      eval(str2expression(paste(.x, "[6:t] <- ", .y)),
-           envir = parent.frame(n = 2))
-    })
-  }
-
-  if (!is.null(one_time_shock)) {
-    purrr::map2(names(one_time_shock), one_time_shock, function(.x, .y) {
-      eval(str2expression(paste(.x, "[", .y[2], "] <- ", .y[1])),
-           envir = parent.frame(n = 2))
-    })
-  }
-
-
-  # Define parameter values
-  purrr::map2(names(parameters), parameters, function(.x, .y) {
-    .ev(.x, .y, 3)
-  })
-
-
-  # Calculate SFC model
-
-
-  # for (t in 2:t) {
-  #  if (t <= 5) {
-  #    for (iterations in 1:40) {
-  #      purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-  #      }
-  # }
-  #    else {
-  #      if (!is.null(shock_param)) {
-  #                 purrr::map2(names(shock_param), shock_param, function(.x, .y) {
-  #                   .ev(.x, .y, 3)
-  #                 })
-  #      }
-  #      for (iterations in 1:40) {
-  #      purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-  #      }
-  #    }
-  # }
-
-  for (t in 2:t) {
-    purrr::map(1:length(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- rep(0, t)")),
-                                                         parent.frame(n = 2)))
-
-    if (t <= 5) {
-      for (iterations in 1:10) {
-        purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-      }
-    }
-
-    else {
-      if (!is.null(shock_param)) {
-        purrr::map2(names(shock_param), shock_param, function(.x, .y) {
-          .ev(.x, .y, 3)
-        })
-      }
-      for (iterations in 1:max_iter) {
-        purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
-
-        purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-          eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal(tmp',.x,',', .y, '))')),
-               parent.frame(n = 2))})
-
-
-        text_to_eval <- paste0("cdt",1:length(lhs_eqs[[1]]),collapse=",")
-        mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
-
-        if (mean_cdt == 1) {break} else {
-          purrr::map2(1:length(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-            eval(str2expression(paste0('tmp',.x, '<-', .y)),
-                 parent.frame(n = 2))
-          }
-          )}
-      }
-
-    }
-  }
-
-
-
-
-  # # Tibble with params
-  params_tb <- tibble::tibble(t = 1:t, dplyr::bind_cols(parameters))
-
-  if (!is.null(shock_param)) {
-     shock_params_tb <- purrr::map2(names(shock_param), shock_param, function(.x, .y)
-       params_tb %>%
-         dplyr::select(t, tidyselect::matches(.x)) %>%
-         dplyr::mutate(!!.x := dplyr::case_when(t < 6 ~ eval(str2expression(.x)),
-                                  T ~ .y))) %>%
-       purrr::reduce(dplyr::left_join, by = "t")
-
-     params_tb <- dplyr::bind_cols(shock_params_tb, dplyr::select(params_tb, -colnames(shock_params_tb))) %>%
-       dplyr::select(-t)
-
-  }
-
-  # Endogenous and Exogenous a a list
-  vars_names <- c(lhs_names$name, names(exogenous))
-
-  vars_tb <- purrr::map_dfc(vars_names, function(.x) tibble::tibble(!!.x := eval(str2expression(.x))))
-
-  # Final output
-  final_tb <- .final_tb(vars_tb, params_tb)
-
-  return(final_tb)
-
+  return(s2)
 }

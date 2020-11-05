@@ -3,5 +3,5 @@
 export("%>%")
 export(sfcr_scenario)
 export(sfcr_sim)
+importFrom(Rdpack,reprompt)
 importFrom(magrittr,"%>%")
-importFrom(rlang,":=")

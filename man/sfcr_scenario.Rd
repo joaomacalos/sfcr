@@ -2,92 +2,34 @@
 % Please edit documentation in R/sfcr_scenario.R
 \name{sfcr_scenario}
 \alias{sfcr_scenario}
-\title{Add shocks to SFC models}
+\title{Add scenarios to a \code{sfcr} model.}
 \usage{
-sfcr_scenario(
-  steady_state,
-  equations,
-  t = 100,
-  exogenous,
-  parameters,
-  random = NULL,
-  shock_exg = NULL,
-  shock_param = NULL,
-  one_time_shock = NULL,
-  max_iter = 100
-)
+sfcr_scenario(sfcr_sim, scenario, periods, max_iter = 350)
 }
 \arguments{
-\item{steady_state}{A simulated SFC model with \code{\link{sfcr_sim}} function to provide the steady
-state values of the variables.}
+\item{sfcr_sim}{A model generated with the \code{sfcr_sim()} function.}
 
-\item{equations}{A list containing all the equations of the model to be simulated.
-See details.}
+\item{scenario}{A list containing one or more lists that hold the information
+about the scenario(s). Each list must contain three information:
+\enumerate{
+\item A list describing the variables that are going to be modified and their new
+values. This must be written with R equation syntax.
+\item An integer defining the period the the scenario starts.
+\item An integer defining the period when the scenario ends.
+}
 
-\item{t}{A number specifying the total number of periods of the model to be simulated. It should be at least 2 periods.}
+See examples for details.}
 
-\item{exogenous, parameters}{Named lists with the initial values of the exogenous and parameters.
-This should be exactly the same values as supplied to \code{\link{sfcr_sim}}.}
+\item{periods}{The total periods in the model.}
 
-\item{random}{Named list with the name of the random component as name, and the desired mean
-and standard deviation as values.}
-
-\item{shock_exg, shock_param}{Named lists with the new values for the exogenous and/or parameters
-that are being shocked to calculate a different scenario.}
-
-\item{one_time_shock}{Named list containing the name, the value, and the period in which the one
-time shock must take place. Currently works only with exogenous variables.}
-
-\item{max_iter}{Maximum iterations allowed per period.}
+\item{max_iter}{The maximum allowed iteration per period.}
 }
 \description{
-The \code{sfcr_scenario} function is used to add a shock to a SFC model
-generated with the \code{\link{sfcr_sim}} function.
+Add scenarios to a \code{sfcr} model.
 }
 \details{
-The output of  \code{\link{sfcr_sim}} will contain a tibble with the exogenous and endogenous
-variables, as well as the parameters, of the simulated model as columns.
-
-The equations at the \code{equations} argument should take the usual R formula syntax.
-Also, endogenous and exogenous variables should explicitly indicate if they're
-to be considered contemporaneously or with lags, while parameters in should not
-be accompanied by period of evaluation indication.
-
-On the other hand, the named lists should not include time indices.
-
-See \code{\link{sfcr_sim}} for further information.
+Add scenario(s) to a model generated with \code{sfcr_sim()} functions.
 }
-\examples{
-eqs <- list(
-  TX_s[t] ~ TX_d[t],
-  YD[t] ~ W[t] * N_s[t] - TX_s[t],
-  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
-  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
-  N_s[t] ~ N_d[t],
-  N_d[t] ~ Y[t] / W[t],
-  C_s[t] ~ C_d[t],
-  G_s[t] ~ G_d[t],
-  Y[t] ~ C_s[t] + G_s[t],
-  TX_d[t] ~ theta * W[t] * N_s[t],
-  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
-)
-
-exg <- list("G_d" = 20, "W" = 1)
-params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-
-# t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state
-steady_state <- sfcr_sim(equations = eqs, t = 10, exogenous = exg,
-                         parameters = params, initial = NULL)
-
-# Increase G_d from 20 to 30
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("G_d" = 30))
-
-# Increase alpha1 from 0.6 to 0.8
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_param = list("alpha1" = 0.8))
-
-# Increase W to 2, alpha2 to 0.5, and decrease theta to 0.15
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("W" = 2),
-              shock_param = list("alpha2" = 0.5, "theta" = 0.15))
-
-
+\seealso{
+\code{\link{sfcr_sim}}
 }

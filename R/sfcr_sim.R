@@ -1,225 +1,96 @@
-# I think I can remove this function entirely
-.lhs_names <- function(lhs_eqs) {
-  name <- NULL
-  value <- NULL
-  unlist(lhs_eqs) %>%
-    tibble::enframe(name = "name", value = "value") %>%
-    dplyr::mutate(value = gsub("\\[t\\]", "", value)) %>%
-    dplyr::select(-name) %>%
-    dplyr::mutate(v = 1) %>%
-    purrr::set_names("name", "value")
-}
-
-# Eval for initial values
-.ev_iv <- function(a, b, n, from_start = F) {
-  if (isTRUE(from_start)) {
-    eval(str2expression(paste(a, "<- rep(", b, ", t)")),
-      envir = parent.frame(n = n)
-    )
-  } else {
-    eval(str2expression(paste(a, "<- c(1, rep(", b, ", t-1))")),
-      envir = parent.frame(n = n)
-    )
-  }
-}
-
-.initiate_vals <- function(names, values, t = t, n = 4, from_start = F) {
-  purrr::map2(names, values, function(.x, .y) {
-    .ev_iv(.x, .y, n, from_start)
-  })
-}
-
-# Eval for random vars
-.ev_rand <- function(a, b, c, n) {
-  eval(str2expression(paste(a, "<- rnorm(t, mean = ", b, ", sd =", c, ')')),
-       envir = parent.frame(n = n))
-}
-
-.initiate_random <- function(random, t = t, n = 2) {
-  map2(names(random), random, function(.x, .y) {
-    .ev_rand(.x, .y[1], .y[2], n = n)
-  })
-}
-
-
-.ev <- function(a, b, n) eval(str2expression(paste(a, "<-", b)), envir = parent.frame(n = n))
-
-
-.final_tb <- function(vars, params) {
-  final_tb <- dplyr::bind_cols(vars, params)
-  final_tb['t'] <- 1:nrow(final_tb)
-  dplyr::select(final_tb, c(t, dplyr::everything()))
-}
-
-# GaussSeidel algorithm
-
-#' @importFrom rlang :=
-#'
-.gen_steady_internal <- function(equations, t = 100, exogenous, parameters, initial = NULL, random = NULL, max_iter = 100) {
-
-  # Get equations as a tibble
-  #eqs <- .eq_as_tb(equations) %>%
-  #  mutate(across(c(lhs, rhs), ~.mod_str(.x)))
-
-  # eqs <- .eq_as_tb(equations)
-  #
-  # pend <- paste0("(?<![[:alnum:]])(",paste0(eqs$lhs, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
-  # pexg <- paste0("(?<![[:alnum:]])(",paste0(c(names(exogenous), names(parameters)), collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|_)")
-  #
-  # equations <- eqs %>%
-  #   .add_time_stamps(pend, pexg)
-
-
-
-  # Left-hand side
-  lhs_eqs <- list(equations$lhs)
-
-  # Right-hand side
-  rhs_eqs <- list(equations$rhs)
-
-  # Get names of endogenous variables
-  lhs_names <- .lhs_names(lhs_eqs)
-
-
-  # Initiate variables numerically --
-
-  # Endogenous vars
-  .initiate_vals(lhs_names$name, lhs_names$value, t = t)
-
-  # If initial values are specified:
-  if (!is.null(initial)) {
-    .initiate_vals(names(initial), initial, t = t, from_start = T)
-  }
-
-  if (!is.null(random)) {
-    .initiate_random(random, n = 4)
-  }
-
-  # Exogenous variables
-  .initiate_vals(names(exogenous), exogenous, t = t)
-
-  # --
-
-  # Initiate parameters
-  .initiate_vals(names(parameters), parameters, t = t, from_start = T)
-
-  # Calculate SFC model
-   # for (t in 2:t) {
-   #   for (iterations in 1:40) {
-   #     purrr::map2(lhs_eqs, rhs_eqs, function(x, y) .ev(x, y, 3))
-   #   }
-   # }
-
-
-  # tmp vars to check convergence
-  purrr::map(seq_along(lhs_eqs[[1]]), function(.x) eval(str2expression(paste0("tmp",.x, "<- 0")),
-                                                      parent.frame(n = 2)))
-
-
-  #start <- Sys.time()
-  for (t in 2:t) {
-   for (iterations in 1:max_iter) {
-  #     # Calculate the variables
-      purrr::map2(lhs_eqs, rhs_eqs, function(.x, .y) .ev(.x, .y, 3))
-  #
-  #     # Check
-       purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-         eval(str2expression(paste0('cdt', .x, '<- isTRUE(all.equal.numeric(tmp',.x,',', .y, '))')),
-              parent.frame(n = 2))})
-  #
-  #
-       text_to_eval <- paste0("cdt",seq_along(lhs_eqs[[1]]),collapse=",")
-       mean_cdt <- eval(str2expression(paste0('mean(c(',text_to_eval,'))')))
-  #
-       if (mean_cdt == 1) {break} else {
-         # Dynamically create tmp vars to check convergence
-         purrr::map2(seq_along(lhs_eqs[[1]]), lhs_eqs[[1]], function(.x, .y) {
-           eval(str2expression(paste0('tmp',.x, '<-', .y)),
-                parent.frame(n = 2))
-
-         }
-         )}
-     }
-
-   }
-  #end <- Sys.time()
-  #end - start
-
-
-  # Endogenous and Exogenous a a list
-  vars_names <- c(lhs_names$name, names(exogenous))
-
-  vars_tb <- purrr::map_dfc(vars_names, function(.x) tibble::tibble(!!.x := eval(str2expression(.x))))
-
-  # Tibble with exogenous values
-  #params_tb <- dplyr::bind_cols(parameters)
-
-  # Final output
-  final_tb <- .final_tb(vars_tb, parameters)
-
-  return(final_tb)
-}
-
-
 #' Simulate a stock-flow consistent model
 #'
 #' The \code{sfcr_sim} function is used to simulate a SFC model. With adequate number of
 #' periods, the simulated model should converge to a steady state scenario.
 #'
-#' @param equations A list containing all the equations of the model to be simulated.
-#' See details.
-#' @param t A number specifying the total number of periods of the model to be simulated. It should be at least 2 periods.
-#' @param exogenous,parameters,initial Named lists with exogenous, parameters, and initial values
-#' of endogenous variables as values. See details.
-#' @param random Named list with the name of the random component as name, and the desired mean
-#' and standard deviation as values.
+#' @param equations A list containing all the equations of the model to be simulated. The equations
+#' must be written in R syntax, with the left-hand side separated from the right-hand side
+#' by a tilde \code{~}.
+#' @param periods A number specifying the total number of periods of the model to be simulated.
+#' @param exogenous,parameters,initial Lists of exogenous variables, parameters, and initial
+#' values. They should be written as equations using the R syntax.
 #' @param hidden Named list that identify the two variables that make the hidden equality
 #' in the SFC model, e.g., \code{list("H_h" = "H_s")}. Defaults to NULL.
 #' If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.
-#' If it is not, it will throw out an error.
 #' @param max_iter Maximum iterations allowed per period.
+#' @param .hidden_tol Error tolerance to accept the equality of the hidden equation. Defaults to 1.
 #'
-#' @details The output of  \code{sfcr_sim()} will contain a tibble with the exogenous and endogenous
-#' variables, as well as the parameters, of the simulated model as columns.
+#' @return A \code{sfcr_tbl}.
 #'
-#' The equations at the `equations` argument should take the usual R formula syntax.
-#' Also, endogenous and exogenous variables should explicitly indicate if they're
-#' to be considered contemporaneously or with lags, while parameters in should not
-#' be accompanied by period of evaluation indication. For example, a consumption
-#' equation should be written like C_d\[t\] ~ alpha1 * YD\[t\] + alpha2 * H_h\[t-1\].
+#' @details The output of a \code{sfcr_sim()} is a \code{sfcr_tbl}. The only difference between
+#' a \code{sfcr_tbl} and a standard \code{tbl_df} is that the former has two extra attributes:
+#' \code{matrix} and \code{call}. The \code{matrix} attribute, for example, can be accessed by
+#' calling \code{attributes(sfcr_sim_object)$matrix}.
+#' It is possible to see, in the matrix, the number of iterations required to calculate each
+#' block of equations in the model.
+#' The \code{call} attribute shows the blocks of equations and preserve the call that are used
+#' internally.
 #'
+#' The \code{equations}, \code{exogenous}, and \code{parameters} arguments must be written
+#' with the R formula syntax, i.e., the left-hand side of each item is separated to the
+#' right-hand side by a tilde. Variables that represent lags of endogenous or exogenous
+#' variables must be followed by \code{[-1]}. See examples for details on the syntax.
 #'
-#' The named lists should not include time indications. See examples.
+#' The algorithm finds the block of independent equations sequentially.
+#' It first looks for all variables that depends only on exogenous variables or
+#' on lagged values. It saves these variables as the first block and eliminate
+#' them from the adjacency matrix.
+#' It repeats this process until all blocks are identified or until it finds
+#' a cycle.
+#' If a cycle is found, it jumps to the bottom and finds all variables that
+#' does not have any children. The algorithm assign these variables to the
+#' end of the block list and eliminates them sequentially until it reaches
+#' the cycle block. This algorithm is inspired by the algorithm of
+#' \insertCite{godin2018pksfc}{Rdpack}
+#'
+#' All the cyclical variables are treated as a single cycle. Hence, this algorithm
+#' is unable to identify independent cycles. However, this is not a common
+#' structure of SFC models.
+#'
+#' The model is simulated using the Gauss Seidel algorithm, as described
+#' by \insertCite{kinsella2011gauss}. It calculates the values of each
+#' block of independent equations sequentially. When the absolute difference
+#' between the value calculated in the new round and the value calculated
+#' in the previous round divided by the value of the previous round for
+#' all variables in the block falls below 1e-4, the model jumps to the
+#' next block.
 #'
 #'
 #' @example inst/examples/example_sfcr_sim.R
 #'
 #' @export
 #'
-sfcr_sim <- function(equations, t = 100, exogenous, parameters, random = NULL, initial = NULL, hidden = NULL, max_iter = 100, .simultaneous = FALSE) {
-  if (!is.list(exogenous)) stop("`exogenous` must be a list.")
+#' @author João Macalós
+#'
+sfcr_sim <- function(equations, exogenous, parameters, periods, initial = NULL, hidden = NULL, max_iter = 350, .hidden_tol = 1) {
 
-  if (!is.list(parameters)) stop("`parameters` must be a list.")
+  external <- dplyr::bind_rows(.eq_as_tb(exogenous), .eq_as_tb(parameters))
 
-  if (!is.null(initial) & !is.list(initial)) stop("`initial` must be a list.")
+  s1 <- .sfcr_find_order(equations)
 
-  if (t < 2) stop('Required at least two time periods.')
+  if (mean(grepl('rnorm|rbinom|runif', s1$rhs)) > 0) {stop ("Please define random variations as an external parameter.")}
 
-  if (t > 350) stop('Maximum time periods allowed are 350.')
+  s2 <- .prep_equations(s1, external)
 
-  equations <- .sfcr_order_eqs(equations, exogenous, parameters, .simultaneous)
+  s3 <- .make_matrix(s2, external, periods, initial = initial)
 
-  x <- .gen_steady_internal(equations, t = t, exogenous, parameters, initial, random, max_iter)
+  s4 <- .sfcr_gauss_seidel(s3, s2, periods, max_iter)
 
   if (!is.null(hidden)) {
-    h1 <- dplyr::pull(x, names(hidden))
-    h2 <- dplyr::pull(x, hidden[[1]])
+    is_hidden_true <- .sfcr_is_hidden_true(s4, hidden)
 
-    is_hidden_true <- all.equal(h1, h2, tolerance = 0.01)
-
-    if (!isTRUE(is_hidden_true)) stop("Hidden equation is not fulfilled. Check again the equations in the model.")
-
+    if (isTRUE(is_hidden_true < .hidden_tol)) stop("Hidden equation is not fulfilled. Check the model try again. If the problem persists, try `hidden = NULL` to see if it is related to the tolerance level.")
   }
 
-  return(x)
+  s5 <- tibble::tibble(data.frame(s4)) %>%
+    dplyr::mutate(period = dplyr::row_number()) %>%
+    dplyr::select(-tidyselect::contains('block')) %>%
+    dplyr::select(period, tidyselect::everything())
+
+  attr(s5, "matrix") <- s4
+  attr(s5, "calls") <- s2
+
+  class(s5) <- c("sfcr_tbl", "tbl_df", "tbl", "data.frame")
+
+  return(s5)
 }

@@ -6,49 +6,78 @@
 \usage{
 sfcr_sim(
   equations,
-  t = 100,
   exogenous,
   parameters,
-  random = NULL,
+  periods,
   initial = NULL,
   hidden = NULL,
-  max_iter = 100
+  max_iter = 350,
+  .hidden_tol = 1
 )
 }
 \arguments{
-\item{equations}{A list containing all the equations of the model to be simulated.
-See details.}
+\item{equations}{A list containing all the equations of the model to be simulated. The equations
+must be written in R syntax, with the left-hand side separated from the right-hand side
+by a tilde \code{~}.}
 
-\item{t}{A number specifying the total number of periods of the model to be simulated. It should be at least 2 periods.}
+\item{exogenous, parameters, initial}{Lists of exogenous variables, parameters, and initial
+values. They should be written as equations using the R syntax.}
 
-\item{exogenous, parameters, initial}{Named lists with exogenous, parameters, and initial values
-of endogenous variables as values. See details.}
-
-\item{random}{Named list with the name of the random component as name, and the desired mean
-and standard deviation as values.}
+\item{periods}{A number specifying the total number of periods of the model to be simulated.}
 
 \item{hidden}{Named list that identify the two variables that make the hidden equality
 in the SFC model, e.g., \code{list("H_h" = "H_s")}. Defaults to NULL.
-If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.
-If it is not, it will throw out an error.}
+If \code{hidden} is supplied, the model will evaluate if the hidden equation is satisfied.}
 
 \item{max_iter}{Maximum iterations allowed per period.}
+
+\item{.hidden_tol}{Error tolerance to accept the equality of the hidden equation. Defaults to 1.}
+}
+\value{
+A \code{sfcr_tbl}.
 }
 \description{
 The \code{sfcr_sim} function is used to simulate a SFC model. With adequate number of
 periods, the simulated model should converge to a steady state scenario.
 }
 \details{
-The output of  \code{sfcr_sim()} will contain a tibble with the exogenous and endogenous
-variables, as well as the parameters, of the simulated model as columns.
+The output of a \code{sfcr_sim()} is a \code{sfcr_tbl}. The only difference between
+a \code{sfcr_tbl} and a standard \code{tbl_df} is that the former has two extra attributes:
+\code{matrix} and \code{call}. The \code{matrix} attribute, for example, can be accessed by
+calling \code{attributes(sfcr_sim_object)$matrix}.
+It is possible to see, in the matrix, the number of iterations required to calculate each
+block of equations in the model.
+The \code{call} attribute shows the blocks of equations and preserve the call that are used
+internally.
 
-The equations at the \code{equations} argument should take the usual R formula syntax.
-Also, endogenous and exogenous variables should explicitly indicate if they're
-to be considered contemporaneously or with lags, while parameters in should not
-be accompanied by period of evaluation indication. For example, a consumption
-equation should be written like C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1].
+The \code{equations}, \code{exogenous}, and \code{parameters} arguments must be written
+with the R formula syntax, i.e., the left-hand side of each item is separated to the
+right-hand side by a tilde. Variables that represent lags of endogenous or exogenous
+variables must be followed by \code{[-1]}. See examples for details on the syntax.
 
-The named lists should not include time indications. See examples.
+The algorithm finds the block of independent equations sequentially.
+It first looks for all variables that depends only on exogenous variables or
+on lagged values. It saves these variables as the first block and eliminate
+them from the adjacency matrix.
+It repeats this process until all blocks are identified or until it finds
+a cycle.
+If a cycle is found, it jumps to the bottom and finds all variables that
+does not have any children. The algorithm assign these variables to the
+end of the block list and eliminates them sequentially until it reaches
+the cycle block. This algorithm is inspired by the algorithm of
+\insertCite{godin2018pksfc}{Rdpack}
+
+All the cyclical variables are treated as a single cycle. Hence, this algorithm
+is unable to identify independent cycles. However, this is not a common
+structure of SFC models.
+
+The model is simulated using the Gauss Seidel algorithm, as described
+by \insertCite{kinsella2011gauss}. It calculates the values of each
+block of independent equations sequentially. When the absolute difference
+between the value calculated in the new round and the value calculated
+in the previous round divided by the value of the previous round for
+all variables in the block falls below 1e-4, the model jumps to the
+next block.
 }
 \examples{
 eqs <- list(
@@ -68,7 +97,11 @@ eqs <- list(
 exg <- list("G_d" = 20, "W" = 1)
 params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
 
-# t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state
+# t is set to 10 to run faster. A usual model should run at
+# least 50 periods to find a steady state
 sfcr_sim(equations = eqs, t = 10, exogenous = exg, parameters = params, initial = NULL)
 
+}
+\author{
+João Macalós
 }
