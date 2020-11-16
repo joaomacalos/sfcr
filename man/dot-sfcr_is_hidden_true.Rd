@@ -4,7 +4,14 @@
 \alias{.sfcr_is_hidden_true}
 \title{Check if hidden equation condition is validated}
 \usage{
-.sfcr_is_hidden_true(m, hidden)
+.sfcr_is_hidden_true(m, hidden, .hidden_tol)
+}
+\arguments{
+\item{m}{A matrix simulated with \code{sfcr_gauss_seidel()}.}
+
+\item{hidden}{A named list containing the hidden equation.}
+
+\item{.hidden_tol}{The tolerance to accept equality in the hidden equation}
 }
 \description{
 Check if hidden equation condition is validated

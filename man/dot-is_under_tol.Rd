@@ -6,6 +6,11 @@
 \usage{
 .is_under_tol(x, y, tol = 0.1)
 }
+\arguments{
+\item{y, x}{Numeric values}
+
+\item{tol}{Numeric value determining the tolerance for the test}
+}
 \description{
 Check if difference is below a given tolerance level
 }

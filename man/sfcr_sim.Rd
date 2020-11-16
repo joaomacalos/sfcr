@@ -55,24 +55,13 @@ with the R formula syntax, i.e., the left-hand side of each item is separated to
 right-hand side by a tilde. Variables that represent lags of endogenous or exogenous
 variables must be followed by \code{[-1]}. See examples for details on the syntax.
 
-The algorithm finds the block of independent equations sequentially.
-It first looks for all variables that depends only on exogenous variables or
-on lagged values. It saves these variables as the first block and eliminate
-them from the adjacency matrix.
-It repeats this process until all blocks are identified or until it finds
-a cycle.
-If a cycle is found, it jumps to the bottom and finds all variables that
-does not have any children. The algorithm assign these variables to the
-end of the block list and eliminates them sequentially until it reaches
-the cycle block. This algorithm is inspired by the algorithm of
-\insertCite{godin2018pksfc}{Rdpack}
-
-All the cyclical variables are treated as a single cycle. Hence, this algorithm
-is unable to identify independent cycles. However, this is not a common
-structure of SFC models.
+This function uses two consecutive depth-first searches to determine the blocks
+of independent equations. These blocks are used in turn to solve the model
+sequentially, optimizing the simulation. The \code{igraph} package is used
+to implement this algorithm.
 
 The model is simulated using the Gauss Seidel algorithm, as described
-by \insertCite{kinsella2011gauss}. It calculates the values of each
+by \insertCite{kinsella2011gauss}{sfcr}. It calculates the values of each
 block of independent equations sequentially. When the absolute difference
 between the value calculated in the new round and the value calculated
 in the previous round divided by the value of the previous round for
@@ -81,27 +70,33 @@ next block.
 }
 \examples{
 eqs <- list(
-  TX_s[t] ~ TX_d[t],
-  YD[t] ~ W[t] * N_s[t] - TX_s[t],
-  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
-  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
-  N_s[t] ~ N_d[t],
-  N_d[t] ~ Y[t] / W[t],
-  C_s[t] ~ C_d[t],
-  G_s[t] ~ G_d[t],
-  Y[t] ~ C_s[t] + G_s[t],
-  TX_d[t] ~ theta * W[t] * N_s[t],
-  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
+  TX_s ~ TX_d,
+  YD ~ W * N_s - TX_s,
+  C_d ~ alpha1 * YD + alpha2 * H_h[-1],
+  H_h ~ YD - C_d + H_h[-1],
+  N_s ~ N_d,
+  N_d ~ Y / W,
+  C_s ~ C_d,
+  G_s ~ G_d,
+  Y ~ C_s + G_s,
+  TX_d ~ theta * W * N_s,
+  H_s ~ G_d - TX_d + H_s[-1]
 )
 
-exg <- list("G_d" = 20, "W" = 1)
-params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
+exg <- list(G_d ~ 20, W ~ 1)
+params <- list(alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
 
-# t is set to 10 to run faster. A usual model should run at
+# `periods` is set to 10 to run faster. A usual model should run at
 # least 50 periods to find a steady state
-sfcr_sim(equations = eqs, t = 10, exogenous = exg, parameters = params, initial = NULL)
+sfcr_sim(equations = eqs, exogenous = exg, parameters = params, periods = 10)
 
 }
+\references{
+\insertRef{kinsella2011gauss}{sfcr}
+}
+\seealso{
+\code{\link[igraph]{components}}
+}
 \author{
-João Macalós
+João Macalós, \email{joaomacalos@gmail.com}
 }

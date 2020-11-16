@@ -9,3 +9,15 @@
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
 NULL
+
+
+
+#' Not in operator
+#'
+#' @name %nin%
+#'
+#' @param x,y vectors for comparison
+#'
+#' @export
+#'
+`%nin%` <- function(x,y) !(`%in%`(x,y))

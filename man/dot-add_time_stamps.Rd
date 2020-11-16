@@ -6,6 +6,12 @@
 \usage{
 .add_time_stamps(eq_as_tb)
 }
+\arguments{
+\item{eq_as_tb}{A tibble generated with \code{.eq_as_tb()}.}
+}
 \description{
 Find dependencies and order the equations
+}
+\author{
+João Macalós
 }

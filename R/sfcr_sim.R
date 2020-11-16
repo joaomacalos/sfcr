@@ -31,36 +31,34 @@
 #' right-hand side by a tilde. Variables that represent lags of endogenous or exogenous
 #' variables must be followed by \code{[-1]}. See examples for details on the syntax.
 #'
-#' The algorithm finds the block of independent equations sequentially.
-#' It first looks for all variables that depends only on exogenous variables or
-#' on lagged values. It saves these variables as the first block and eliminate
-#' them from the adjacency matrix.
-#' It repeats this process until all blocks are identified or until it finds
-#' a cycle.
-#' If a cycle is found, it jumps to the bottom and finds all variables that
-#' does not have any children. The algorithm assign these variables to the
-#' end of the block list and eliminates them sequentially until it reaches
-#' the cycle block. This algorithm is inspired by the algorithm of
-#' \insertCite{godin2018pksfc}{Rdpack}
-#'
-#' All the cyclical variables are treated as a single cycle. Hence, this algorithm
-#' is unable to identify independent cycles. However, this is not a common
-#' structure of SFC models.
+#' This function uses two consecutive depth-first searches to determine the blocks
+#' of independent equations. These blocks are used in turn to solve the model
+#' sequentially, optimizing the simulation. The \code{igraph} package is used
+#' to implement this algorithm.
 #'
 #' The model is simulated using the Gauss Seidel algorithm, as described
-#' by \insertCite{kinsella2011gauss}. It calculates the values of each
+#' by \insertCite{kinsella2011gauss}{sfcr}. It calculates the values of each
 #' block of independent equations sequentially. When the absolute difference
 #' between the value calculated in the new round and the value calculated
 #' in the previous round divided by the value of the previous round for
 #' all variables in the block falls below 1e-4, the model jumps to the
 #' next block.
 #'
+#' @seealso \code{\link[igraph]{components}}
+#'
+#' @references
+#'
+#' \insertRef{kinsella2011gauss}{sfcr}
+#'
 #'
 #' @example inst/examples/example_sfcr_sim.R
 #'
+#'
+#' @importFrom Rdpack reprompt
+#'
 #' @export
 #'
-#' @author João Macalós
+#' @author João Macalós, \email{joaomacalos@@gmail.com}
 #'
 sfcr_sim <- function(equations, exogenous, parameters, periods, initial = NULL, hidden = NULL, max_iter = 350, .hidden_tol = 1) {
 
@@ -74,20 +72,35 @@ sfcr_sim <- function(equations, exogenous, parameters, periods, initial = NULL, 
 
   s3 <- .make_matrix(s2, external, periods, initial = initial)
 
+  .sfcr_eqs_check(s3, s2)
+
   s4 <- .sfcr_gauss_seidel(s3, s2, periods, max_iter)
 
   if (!is.null(hidden)) {
-    is_hidden_true <- .sfcr_is_hidden_true(s4, hidden)
+    is_hidden_true <- .sfcr_is_hidden_true(s4, hidden, .hidden_tol)
 
     if (isTRUE(is_hidden_true < .hidden_tol)) stop("Hidden equation is not fulfilled. Check the model try again. If the problem persists, try `hidden = NULL` to see if it is related to the tolerance level.")
   }
 
-  s5 <- tibble::tibble(data.frame(s4)) %>%
-    dplyr::mutate(period = dplyr::row_number()) %>%
-    dplyr::select(-tidyselect::contains('block')) %>%
-    dplyr::select(period, tidyselect::everything())
+  # Rows
+  s5 <- tibble::tibble(data.frame(s4))
+  s5["period"] <- 1:nrow(s5)
+  s5 <- dplyr::select(s5, -tidyselect::contains("block"))
+  s5 <- dplyr::select(s5, .data$period, tidyselect::everything())
+  s5 <- dplyr::mutate(s5, dplyr::across(-c(.data$period), ~round(.x, digits = 4)))
+
 
   attr(s5, "matrix") <- s4
+
+  # Columns
+  # s5 <- tibble::tibble(data.frame(t(s4))) %>%
+  #   dplyr::mutate(period = dplyr::row_number()) %>%
+  #   dplyr::select(-tidyselect::contains('block')) %>%
+  #   dplyr::select(period, tidyselect::everything())
+  #
+  # attr(s5, "matrix") <- t(s4)
+
+
   attr(s5, "calls") <- s2
 
   class(s5) <- c("sfcr_tbl", "tbl_df", "tbl", "data.frame")
