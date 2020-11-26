@@ -66,7 +66,7 @@
   exg_exprs <- purrr::map(external$rhs, function(x) parse(text=x))
 
   # Blocks of independent equations
-  blocks <- unique(equations$block)
+  blocks <- sort(unique(equations$block))
   blocks <- paste0("block", blocks)
   lblocks <- rep(0, vctrs::vec_size(blocks))
   names(lblocks) <- blocks
@@ -86,6 +86,7 @@
   # variable depends on lagged exogenous
 
   m1[1, ] <- 1e-15
+  #m1[1, ] <- 1
 
   if (!is.null(initial)) {
     initial <- .eq_as_tb(initial)
@@ -142,8 +143,9 @@
           msg <- conditionMessage(err)
 
           if (grepl("non-numeric", msg)) {
-            msg <- "An endogenous variable is missing. Check the equations and try again. Tip: look for the variable not surrounded by `m[i, ]` after `Error in` in this message."
+            msg <- "An endogenous variable is missing. Check the equations and try again.\n\nTip: look for the variable not surrounded by `m[i, ]` after `Error in` in this message."
           }
+
           err$message <- msg
           stop(err)
         }
@@ -161,6 +163,8 @@
 #' @param periods Total number of rows (periods) in the model.
 #' @param max_ite Maximum number of iterations allowed per block per period.
 #'
+#' @inheritParams sfcr_baseline
+#'
 #' @details This is the main algorithm of the package. It simulates the model
 #' by recursion with the help of four nested for loops. At each round of
 #' iteration, the values calculated are compared to the previous values. If
@@ -171,7 +175,7 @@
 #'
 #' @author João Macalós
 #'
-.sfcr_gauss_seidel <- function(m, equations, periods, max_ite) {
+.sfcr_gauss_seidel <- function(m, equations, periods, max_ite, tol) {
 
   exprs <- purrr::map(equations$rhs, function(x) parse(text=x))
 
@@ -213,6 +217,7 @@
 
           # Rows
           checks[[var]] <- abs((m[[i, var]] - holdouts[[var]]) / (holdouts[[var]] + 1e-15))
+          #checks[[var]] <- abs(m[[i, var]] - holdouts[[var]])
           # Columns
           #checks[[var]] <- abs((m[[var, i]] - holdouts[[var]]) / (holdouts[[var]] + 1e-15))
           # List
@@ -233,7 +238,7 @@
         # List
         #m[[paste0('block', block)]][[i]] <- ite
 
-        if (all(checks < 1e-4)) {break}
+        if (all(checks < tol)) {break}
 
       }
     }

@@ -4,7 +4,7 @@
 \alias{.sfcr_gauss_seidel}
 \title{Gauss Seidel algorithm}
 \usage{
-.sfcr_gauss_seidel(m, equations, periods, max_ite)
+.sfcr_gauss_seidel(m, equations, periods, max_ite, tol)
 }
 \arguments{
 \item{m}{The initialized matrix obtained with \code{.make_matrix()}.}
@@ -14,6 +14,8 @@
 \item{periods}{Total number of rows (periods) in the model.}
 
 \item{max_ite}{Maximum number of iterations allowed per block per period.}
+
+\item{tol}{Tolerance accepted to determine convergence in the Gauss Seidel algorithm.}
 }
 \description{
 Gauss Seidel algorithm

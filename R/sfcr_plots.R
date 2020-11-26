@@ -5,14 +5,14 @@
 #' @importFrom expm `%^%`
 #'
 .return_loops <- function(m) {
-  answers <- numeric()
+  loops <- numeric()
 
   for (i in seq_len(nrow(m))) {
-    path_lengths <- diag(m %^% i)
-    answers <- c(answers, which(path_lengths > 0))
+    loop_lengths <- diag(m %^% i)
+    loops <- c(loops, which(loop_lengths > 0))
   }
 
-  x <- unique(answers)
+  x <- unique(loops)
 
   return(x)
 }
@@ -20,7 +20,7 @@
 
 #' Create a \code{tbl_graph} object blocks and cycles information
 #'
-#' @inheritParams sfcr_sim
+#' @inheritParams sfcr_baseline
 #'
 #' @return A \code{tbl_graph}
 #'
@@ -66,7 +66,7 @@ sfcr_dag_blocks <- function(equations) {
 
 #' Create a \code{tbl_graph} object with cycles information
 #'
-#' @inheritParams sfcr_sim
+#' @inheritParams sfcr_baseline
 #'
 #' @return A \code{tbl_graph}
 #'
@@ -109,8 +109,9 @@ sfcr_dag_cycles <- function(equations) {
 
 #' Plot the DAG with blocks and cycles information
 #'
-#' @inheritParams sfcr_sim
+#' @inheritParams sfcr_baseline
 #' @param title Title of the plot.
+#' @param size Size of the points.
 #'
 #' @return A \code{tbl_graph}
 #'
@@ -120,9 +121,10 @@ sfcr_dag_cycles <- function(equations) {
 #'
 #' @author João Macalós, \email{joaomacalos@@gmail.com}
 #'
+#'
 #' @export
 #'
-sfcr_dag_blocks_plot <- function(equations, title = NULL) {
+sfcr_dag_blocks_plot <- function(equations, title = NULL, size = 15) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Packages \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
@@ -145,17 +147,20 @@ sfcr_dag_blocks_plot <- function(equations, title = NULL) {
 
   dag_blocks <- sfcr_dag_blocks(equations)
 
-  nb_cols <- tidygraph::activate(dag_blocks, .data$nodes) %>% dplyr::pull(.data$block) %>% unique() %>% length()
+  nb_cols <- dag_blocks %>% tidygraph::activate('nodes') %>% dplyr::pull(.data$block) %>% unique() %>% length()
   mycolors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Dark2"))(nb_cols)
 
 
   ggraph::ggraph(dag_blocks, layout = "sugiyama") +
-   ggraph::geom_node_point(ggplot2::aes(color = forcats::as_factor(.data$block),
-                       shape = forcats::fct_rev(forcats::as_factor(.data$value))), size = 15) +
+   ggraph::geom_node_point(ggplot2::aes(
+     color = forcats::as_factor(.data$block),
+     shape = forcats::fct_rev(forcats::as_factor(.data$value))),
+     size = size,
+     alpha = 0.8) +
     ggraph::geom_edge_link(
     edge_width = 0.5,
-    start_cap = ggraph::circle(5, "mm"),
-    end_cap = ggraph::circle(5, "mm"),
+    start_cap = ggraph::circle(size/2.5, "mm"),
+    end_cap = ggraph::circle(size/2.5, "mm"),
     arrow = ggplot2::arrow(type = "closed",
                  length = ggplot2::unit(3, "mm")),
     alpha = 0.2) +
@@ -175,7 +180,14 @@ sfcr_dag_blocks_plot <- function(equations, title = NULL) {
 
 }
 
-sfcr_dag_cycles_plot <- function(equations, title = NULL) {
+
+#' Plot the DAG with cycles information
+#'
+#' @inheritParams sfcr_dag_blocks_plot
+#'
+#' @export
+#'
+sfcr_dag_cycles_plot <- function(equations, title = NULL, size = 15) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Packages \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
@@ -189,13 +201,18 @@ sfcr_dag_cycles_plot <- function(equations, title = NULL) {
   dag_loops <- sfcr_dag_cycles(equations)
 
   ggraph::ggraph(dag_loops, layout = "sugiyama") +
-    ggraph::geom_node_point(ggplot2::aes(color = forcats::fct_rev(forcats::as_factor(.data$value))), size = 15) +
+    ggraph::geom_node_point(ggplot2::aes(
+      color = forcats::fct_rev(forcats::as_factor(.data$value))),
+      size = size,
+      alpha = 0.8) +
     ggraph::geom_edge_link(
       edge_width = 0.5,
-      start_cap = ggraph::circle(8, "mm"),
-      end_cap = ggraph::circle(8, "mm"),
-      arrow = ggplot2::arrow(type = "closed",
-                    length = ggplot2::unit(3, "mm"))) +
+      start_cap = ggraph::circle(size/2.5, "mm"),
+      end_cap = ggraph::circle(size/2.5, "mm"),
+      arrow = ggplot2::arrow(
+        type = "closed",
+        length = ggplot2::unit(3, "mm")),
+        alpha = 0.2) +
     ggraph::geom_node_text(ggplot2::aes(label = .data$name)) +
     ggplot2::scale_color_manual(name = "Cyclical", values = c("tomato", "steelblue"), drop = F) +
     ggplot2::theme(panel.border = ggplot2::element_blank(),

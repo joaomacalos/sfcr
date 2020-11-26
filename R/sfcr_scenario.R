@@ -38,51 +38,23 @@
   return(m)
 }
 
-#' Create schock(s) to add to a \code{sfcr_scenario()}.
-#'
-#' @param variables A list with formula(e) containing the name of the variable(s)
-#' that will be shocked on the left-hand side and their new values on the right-
-#' hand side.
-#' @param start An integer indicating the period when the shock takes place.
-#' @param end An integer indicating the period when the shock ends.
-#'
-#' @examples
-#'
-#' sfcr_shock(
-#'  variables = list(G_d ~ 30, W ~ 1.5),
-#'  start = 5,
-#'  end = 66)
-#'
-#' @export
-#'
-#' @author João Macalós, \email{joaomacalos@@gmail.com}
-#
-sfcr_shock <- function(variables, start, end) {
-  structure(
-    list(
-    variables = variables,
-    start = start,
-    end = end
-  ),
-  class = c("sfcr_shock", "list")
-  )
-}
-
 #' Add scenarios to a \code{sfcr} model.
 #'
-#' @param sfcr_sim A model generated with the \code{sfcr_sim()} function.
+#' @param baseline A model generated with the \code{sfcr_baseline()} function.
 #' @param scenario A list containing one or more shocks created with
 #' \code{sfcr_shock()} function.
 #'
 #' @param periods The total periods in the model.
 #' @param max_iter The maximum allowed iteration per period.
 #'
-#' @details Add scenario(s) to a model generated with \code{sfcr_sim()} functions.
+#' @inheritParams sfcr_baseline
+#'
+#' @details Add scenario(s) to a model generated with \code{sfcr_baseline()} functions.
 #'
 #' This function inherits the block structure from the steady state model
 #' and also uses the Gauss Seidel algorithm.
 #'
-#' @seealso \code{\link{sfcr_sim}}
+#' @seealso \code{\link{sfcr_baseline}}
 #'
 #' @example inst/examples/example_sfcr_scenario.R
 #'
@@ -90,28 +62,36 @@ sfcr_shock <- function(variables, start, end) {
 #'
 #' @author João Macalós, \email{joaomacalos@@gmail.com}
 #'
-sfcr_scenario <- function(sfcr_sim, scenario, periods, max_iter = 350) {
+sfcr_scenario <- function(baseline, scenario, periods, max_iter = 350, tol = 1e-10) {
 
-  if (isFALSE(rlang::is_bare_list(scenario))) {stop ("Please surround the shocks with a list.")}
+  if (inherits(scenario, "sfcr_shock")) {
+    scenario <- list(scenario)
+  }
+
+  #if (isFALSE(rlang::is_bare_list(scenario))) {stop ("Please surround the shocks with a list.")}
 
   if (isTRUE(class(scenario[[1]]) != "sfcr_shock")) {stop ("Please use `sfcr_shock()` to create shocks.")}
 
-  m <- .sfcr_make_scenario_matrix(sfcr_sim, scenario, periods)
+  m <- .sfcr_make_scenario_matrix(baseline, scenario, periods)
 
-  eqs <- attributes(sfcr_sim)$calls
+  eqs <- attr(baseline, "calls")
 
-  s1 <- .sfcr_gauss_seidel(m, eqs, periods, max_iter)
+  s1 <- .sfcr_gauss_seidel(m, eqs, periods, max_iter, tol)
 
   s2 <- tibble::tibble(data.frame(s1)) %>%
     dplyr::mutate(period = dplyr::row_number()) %>%
     dplyr::select(-tidyselect::contains('block')) %>%
-    dplyr::select(.data$period, tidyselect::everything()) %>%
-    dplyr::mutate(dplyr::across(-c(.data$period), ~round(.x, digits = 4)))
+    dplyr::select(.data$period, tidyselect::everything())
+    #dplyr::mutate(dplyr::across(-c(.data$period), ~round(.x, digits = 4)))
 
-  attr(s2, "matrix") <- s1
-  attr(s2, "calls") <- eqs
+  #attr(s2, "matrix") <- s1
+  #attr(s2, "calls") <- eqs
 
-  class(s2) <- c("sfcr", "tbl_df", "tbl", "data.frame")
+  #class(s2) <- c("sfcr", "tbl_df", "tbl", "data.frame")
 
-  return(s2)
+  ext <- attr(baseline, "external")
+
+  x <- new_sfcr_tbl(s2, s1, eqs, ext)
+
+  return(x)
 }

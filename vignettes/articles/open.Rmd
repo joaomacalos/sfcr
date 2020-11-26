@@ -1,0 +1,814 @@
+---
+title: "Model OPEN"
+references:
+- id: godley2007monetary
+  title: >
+       Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth
+  author:
+  - family: Godley
+    given: Wynne
+  - family: Lavoie
+    given: Marc
+  publisher: Palgrave Macmillan
+  type: book
+  issued:
+    year: 2007
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  paged.print = F
+)
+```
+
+```{r setup}
+library(sfcr)
+library(tidyverse)
+```
+
+
+## Model REG
+
+We start this notebook with the model **REG**, that represents a country with two regions and a single monetary and fiscal authority. This model is presented in @godley2007monetary [p. 171-187].
+
+This model draws upon the PC model, dividing its private sector into two entities: "north" and "south".
+
+From this model onward there will be a proliferation of subscripts and superscripts. If not stated otherwise, I will try to follow the convention below when naming the variables:
+
+```{r, echo = F}
+tbl <- tribble(
+  ~"Variable name", ~"subscript", ~"_SUPERSCRIPT", ~"result",
+  "Y", "", "_N", "Y_N",
+  "B", "h", "_S", "Bh_S"
+)
+
+knitr::kable(tbl, format = "html") %>% kableExtra::kable_styling(full_width = F)
+```
+
+
+As usual, we start by writing down the equations, exogenous variables, and parameters:
+
+```{r}
+reg_eqs <- list(
+  Y_N ~ C_N + G_N + X_N - IM_N,
+  Y_S ~ C_S + G_S + X_S - IM_S,
+  IM_N ~ mu_N * Y_N,
+  IM_S ~ mu_S * Y_S,
+  X_N ~ IM_S,
+  X_S ~ IM_N,
+  YD_N ~ Y_N - TX_N + r[-1] * Bh_N[-1],
+  YD_S ~ Y_S - TX_S + r[-1] * Bh_S[-1],
+  TX_N ~ theta * ( Y_N + r[-1] * Bh_N[-1] ),
+  TX_S ~ theta * ( Y_S + r[-1] * Bh_S[-1] ),
+  V_N ~ V_N[-1] + ( YD_N - C_N ),
+  V_S ~ V_S[-1] + ( YD_S - C_S ),
+  C_N ~ alpha1_N * YD_N + alpha2_N * V_N[-1],
+  C_S ~ alpha1_S * YD_S + alpha2_S * V_S[-1],
+  Hh_N ~ V_N - Bh_N,
+  Hh_S ~ V_S - Bh_S,
+  Bh_N ~ V_N * ( lambda0_N + lambda1_N * r - lambda2_N * ( YD_N/V_N ) ),
+  Bh_S ~ V_S * ( lambda0_S + lambda1_S * r - lambda2_S * ( YD_S/V_S ) ),
+  TX ~ TX_N + TX_S,
+  G ~ G_N + G_S,
+  Bh ~ Bh_N + Bh_S,
+  Hh ~ Hh_N + Hh_S,
+  Bs ~ Bs[-1] + ( G + r[-1] * Bs[-1] ) - ( TX + r[-1] * Bcb[-1] ),
+  Hs ~ Hs[-1] + Bcb - Bcb[-1],
+  Bcb ~ Bs - Bh
+)
+
+reg_exg <- list(
+  r ~ 0.025,
+  G_S ~ 20,
+  G_N ~ 20
+)
+
+reg_prms <- list(
+  mu_N ~ 0.15,
+  mu_S ~ 0.15,
+  alpha1_N ~ 0.7,
+  alpha1_S ~ 0.7,
+  alpha2_N ~ 0.3,
+  alpha2_S ~ 0.3,
+  lambda0_N ~ 0.67,
+  lambda0_S ~ 0.67,
+  lambda1_N ~ 0.05,
+  lambda1_S ~ 0.05,
+  lambda2_N ~ 0.01,
+  lambda2_S ~ 0.01,
+  theta ~ 0.2
+)
+
+```
+
+
+We can now simulate the model, adding also the hidden equation to spot any errors in the equations^[To understand the importance of the `hidden` argument, I invite the reader to change the first equation to `Y_N ~ C_N + G_N + X_N + IM_N`. That's obviously a mistake as `IM_N` should be deducted from the model. However, it is a easy-to-make typo when copying the equations from the book. The model will run and converge to answers in each period but they will make little sense. Setting the hidden equation would throw an error instead, inviting the reader to re-check the equations.]:
+
+```{r}
+reg <- sfcr_sim(reg_eqs, reg_exg, reg_prms, 100, hidden = c("Hh" = "Hs"))
+```
+
+
+We start by investigating some aspects of the stationary (steady) state of the REG model.
+
+First, we calculate the trade balance and government deficit for each region:
+
+```{r}
+reg <- reg %>%
+  mutate(TB_N = X_N - IM_N,
+         TB_S = X_S - IM_S,
+         GB_N = TX_N - (G_N + dplyr::lag(r) * dplyr::lag(Bh_N)),
+         GB_S = TX_S - (G_S + dplyr::lag(r) * dplyr::lag(Bh_S)))
+```
+
+
+As always, we reshape the model object to plot. I will also create an extra column `region` to indicate whether the variable relates to the `N` or `S` region. Global variables like `G` and `Hh` are classified as `NA` region.
+
+To do so I used the `case_when()` function from `dplyr`, and I searched for the "_N" or "_S" components in each variable name with the `str_detect()` function from `stringr`. Both packages are part of the `tidyverse` packages.
+
+These operations are "piped" together in a single call.
+
+```{r}
+reg_long <- reg %>%
+  pivot_longer(cols = -period) %>%
+  mutate(region = case_when(
+    str_detect(name, '_N') ~ "North",
+    str_detect(name, "_S") ~ "South",
+    # `T` means everything else inside
+    # the case_when function
+    T ~ NA_character_
+  ))
+```
+
+I will also make an auxiliary function that create the balances, reshape the model, and add the region group to avoid repeating this code for every new model:
+
+```{r}
+to_long <- function(model) {
+  model %>%
+    mutate(TB_N = X_N - IM_N,
+         TB_S = X_S - IM_S,
+         GB_N = TX_N - (G_N + dplyr::lag(r) * dplyr::lag(Bh_N)),
+         GB_S = TX_S - (G_S + dplyr::lag(r) * dplyr::lag(Bh_S)),
+         deltaV_N = V_N - lag(V_N),
+         deltaV_S = V_S - lag(V_S)) %>%
+    pivot_longer(cols = -period) %>%
+  mutate(region = case_when(
+    str_detect(name, '_N') ~ "North",
+    str_detect(name, "_S") ~ "South",
+    # `T` means everything else inside
+    # the case_when function
+    T ~ NA_character_
+  ))
+}
+```
+
+
+
+```{r}
+reg_long %>%
+  filter(name %in% c("GB_N", "GB_S", "TB_N", "TB_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name), size = 1, alpha = 0.5) +
+  facet_wrap(~region)
+```
+
+With this Figure we note that the model is correctly specified since the sector balances converge to equality as was expected from equations 6.30 to 6.32 from @godley2007monetary [p. 177]. Below I reproduce equation 6.32, an important result that will be used often in this notebook^[Also note that I wrote the balances in their standard form, i.e., I called the "trade balance" as exports minus imports, and "government balance" as taxes minus expenditures. The results are the same because they should converge to zero in a correctly specified model.]:
+
+$$
+G_T^N - T^N = IM^N - X^N
+$$
+
+Also, in this example, both regions are exactly balanced, with their sectoral balances equal to zero. This is, as @godley2007monetary [p. 179], a super stationary state that is achieved because all the parameters are the same for the both regions. There is nothing in the system that will lead to this result. The reader is invited to change the parameters by her/himself to check this claim.
+
+## Experiments with model REG
+
+### An increase in the propensity to import of the South
+
+To see what would happen if there was an increase in the propensity to import in the southern region, we calculate a scenario by adding a shock to `reg` model:
+
+```{r}
+shock1 <- sfcr_shock(
+  variables = list(mu_S ~ 0.25),
+  start = 5,
+  end = 60
+)
+
+reg_1 <- sfcr_scenario(
+  reg,
+  scenario = list(shock1),
+  periods = 60
+)
+```
+
+
+I use the `to_long()` function created earlier to reshape this model:
+
+```{r}
+reg_1long <- to_long(reg_1)
+```
+
+And reproduce Figure 6.1 that describes what happens with the variation of the wealth of Southern households, the government balance with this region, and the trade balance of this region:
+
+```{r}
+reg_1long %>%
+  filter(name %in% c("deltaV_S", "GB_S", "TB_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+What would happen with the GDP in both regions?
+
+```{r}
+reg_1long %>%
+  filter(name %in% c("Y_N", "Y_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+### An increase in the government expenditures of the South
+
+Before we saw that an exogenous increase of the Southern imports **caused** a higher government deficit in that region. What would happen if we exogenously increase the government deficit instead?
+
+```{r}
+shock2 <- sfcr_shock(
+  variables = list(G_S ~ 25),
+  start = 5,
+  end = 60
+)
+
+reg_2 <- sfcr_scenario(reg, list(shock2), 60)
+reg_2long <- to_long(reg_2)
+```
+
+
+```{r}
+reg_2long %>%
+  filter(name %in% c("Y_N", "Y_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "Impact on regrional GDPs")
+```
+
+```{r}
+reg_2long %>%
+  filter(name %in% c("deltaV_S", "TB_S", "GB_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+### An increase in the propensity to save of the Southern households
+
+One of the puzzling results of model PC was that an increase in the propensity to save led to higher long-run output. This results is in contrast with the post-Keynesian "paradox of thrift". what would happen in model REG if the households of one of its regions increased its propensity to save?
+
+To check it, we add a shock to model REG, creating a new scenario:
+
+```{r}
+shock3 <- sfcr_shock(
+  variables = list(alpha1_S ~ 0.6),
+  start = 5,
+  end = 60
+)
+
+reg_3 <- sfcr_scenario(reg, list(shock3), periods = 60)
+reg_3long <- to_long(reg_3)
+```
+
+Let's see what happened with the GDP of both regions:
+
+```{r}
+reg_3long %>%
+  filter(name %in% c("Y_S", "Y_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+Again we see that higher thriftiness lead to higher steady state output levels, although the short-run effect is markedly negative.
+
+The evolution of the sectoral balances and wealth of the South region is visualized next:
+
+```{r}
+reg_3long %>%
+  filter(name %in% c("deltaV_S", "TB_S", "GB_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+The interesting feature of this exercise is that it shows that it is possible to have government deficits (or surpluses) at the same time as trade surpluses (deficits), but only in the transitional period to the new steady state.
+
+### A change in the liquidity preference of Southern households
+
+The last exercise with this model is to check the effect of an increase in the liquidity preference of Northern households.
+
+```{r}
+shock4 <- sfcr_shock(
+  variables = list(lambda0_S ~ 1),
+  start = 5,
+  end = 60
+)
+
+reg_4 <- sfcr_scenario(reg, list(shock4), 60)
+reg_4long <- to_long(reg_4)
+```
+
+
+```{r}
+reg_4long %>%
+  filter(name %in% c("Y_S", "Y_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "Effects on GDP")
+```
+
+```{r}
+reg_4long %>%
+  filter(name %in% c("deltaV_S", "TB_S", "GB_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "Effects on sectoral balances")
+```
+
+As we can see, a decrease in liquidity preference leads to higher stationary output in both regions. The higher wealth in the form of bonds lead to more interest payments, which initially increases the government deficit but this effect dies out when consumption out of wealth picks up. The Southern region ends up with a twin deficit.
+
+It is also noteworthy that the size of this effect is rather small.
+
+# Model OPEN
+
+We are finally ready to create a model with two countries, two governments, two currencies!
+
+Without further adue, let's write the equations, parameters, and exogenous values.
+
+```{r}
+open_eqs <- list(
+  Y_N ~ C_N + G_N + X_N - IM_N,
+  Y_S ~ C_S + G_S + X_S - IM_S,
+  IM_N ~ mu_N * Y_N,
+  IM_S ~ mu_S * Y_S,
+  X_N ~ IM_S / xr,
+  X_S ~ IM_N * xr,
+  YD_N ~ Y_N - TX_N + r_N[-1] * Bh_N[-1],
+  YD_S ~ Y_S - TX_S + r_S[-1] * Bh_S[-1],
+  TX_N ~ theta_N * ( Y_N + r_N[-1] * Bh_N[-1] ),
+  TX_S ~ theta_S * ( Y_S + r_S[-1] * Bh_S[-1] ),
+  V_N ~ V_N[-1] + ( YD_N - C_N ),
+  V_S ~ V_S[-1] + ( YD_S - C_S ),
+  C_N ~ alpha1_N * YD_N + alpha2_N * V_N[-1],
+  C_S ~ alpha1_S * YD_S + alpha2_S * V_S[-1],
+  Hh_N ~ V_N - Bh_N,
+  Hh_S ~ V_S - Bh_S,
+  Bh_N ~ V_N * ( lambda0_N + lambda1_N * r_N - lambda2_N * ( YD_N/V_N ) ),
+  Bh_S ~ V_S * ( lambda0_S + lambda1_S * r_S - lambda2_S * ( YD_S/V_S ) ),
+  Bs_N ~ Bs_N[-1] + ( G_N + r_N[-1] * Bs_N[-1] ) - ( TX_N + r_N[-1] * Bcb_N[-1] ),
+  Bs_S ~ Bs_S[-1] + ( G_S + r_S[-1] * Bs_S[-1] ) - ( TX_S + r_S[-1] * Bcb_S[-1] ),
+  Bcb_N ~ Bs_N - Bh_N,
+  Bcb_S ~ Bs_S - Bh_S,
+  or_N ~ or_N[-1] + (( Hs_N - Hs_N[-1] - ( Bcb_N - Bcb_N[-1] ) )/pg_N),
+  or_S ~ or_S[-1] + (( Hs_S - Hs_S[-1] - ( Bcb_S - Bcb_S[-1] ) )/pg_S),
+  Hs_N ~ Hh_N,
+  Hs_S ~ Hh_S,
+  pg_S ~ pg_N * xr,
+  deltaor_S ~ or_S - or_S[-1],
+  deltaor_N ~ - (or_N - or_N[-1])
+)
+
+
+open_exg <- list(
+  xr ~ 1,
+  pg_N ~ 1,
+  r_N ~ 0.025,
+  r_S ~ 0.025,
+  G_S ~ 20,
+  G_N ~ 20
+)
+
+open_prms <- list(
+  mu_N ~ 0.15,
+  mu_S ~ 0.15,
+  alpha1_N ~ 0.7,
+  alpha1_S ~ 0.8,
+  alpha2_N ~ 0.3,
+  alpha2_S ~ 0.2,
+  lambda0_N ~ 0.67,
+  lambda0_S ~ 0.67,
+  lambda1_N ~ 0.05,
+  lambda1_S ~ 0.05,
+  lambda2_N ~ 0.01,
+  lambda2_S ~ 0.01,
+  theta_N ~ 0.2,
+  theta_S ~ 0.2
+)
+```
+
+The hidden equation in this model is:
+
+$$
+\Delta or^S = \Delta or^N
+$$
+
+Hence, we created two auxiliary variables: `deltaor_S` and `deltaor_N`. These are the variation of gold reserves in each country at each period, with the `deltaor_N` variable multiplied by -1. The reason is that the hidden equation argument only recognize the names of the variables and test for their equality.
+
+Note also that at least something must be different from one country to the other. Otherwise, the model will simulate two twin economies. In this case, we made the propensities to consume out of disposable income and wealth different.
+
+We can simulate the model:
+
+```{r}
+open <- sfcr_sim(open_eqs, open_exg, open_prms, periods = 60, hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+open %>% select(period, deltaor_N, deltaor_S)
+```
+
+Let's also adapt our `to_long()` function to incorporate the new questions we want to investigate with the OPEN model:
+
+```{r}
+to_long <- function(model) {
+  model %>%
+    mutate(TB_N = X_N - IM_N,
+         TB_S = X_S - IM_S,
+         GB_N = TX_N - (G_N + dplyr::lag(r_N) * dplyr::lag(Bh_N)),
+         GB_S = TX_S - (G_S + dplyr::lag(r_S) * dplyr::lag(Bh_S)),
+         deltaV_N = V_N - lag(V_N),
+         deltaV_S = V_S - lag(V_S),
+         deltaBcb_N = Bcb_N - lag(Bcb_N),
+         deltaBcb_S = Bcb_S - lag(Bcb_S),
+         deltaHs_N = Hs_N - lag(Hs_N),
+         deltaHs_S = Hs_S - lag(Hs_S)) %>%
+    pivot_longer(cols = -period) %>%
+  mutate(country = case_when(
+    str_detect(name, '_N') ~ "North",
+    str_detect(name, "_S") ~ "South",
+    # `T` means everything else inside
+    # the case_when function
+    T ~ NA_character_
+  ))
+}
+```
+
+
+And let's plot the main variables to check if the model arrived into the super stationary steady state:
+
+```{r}
+open_long <- to_long(open)
+
+open_long %>%
+  filter(name %in% c("TB_S", "TB_N", "GB_N", "GB_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~country)
+```
+
+Perfect. Now let's play with scenarios.
+
+## Ever-falling gold reserves
+
+What happens if there is an increase in the propensity to import in the South?
+
+```{r}
+shock1 <- sfcr_shock(
+  variables = list(mu_S ~ 0.25),
+  start = 5,
+  end = 60
+)
+
+open_1 <- sfcr_scenario(open, scenario = list(shock1), periods = 60)
+open_1l <- to_long(open_1)
+```
+
+```{r}
+open_1l %>%
+  filter(name %in% c("Y_N", "Y_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "Evolution of GDP")
+```
+
+We see that both economies arrive to a new stationary GDP, with the Southern economy being permanently below its initial GDP. 
+
+What happen with the trade and government balances?
+
+```{r}
+open_1l %>%
+  filter(name %in% c("TB_S", "TB_N", "GB_S", "GB_N", "deltaV_S", "deltaV_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~country) +
+  labs(title = "Twin deficits/surpluses")
+```
+
+An increase in the propensity to consume leads to a permanent twin deficit in the South economy and a permanent twin surplus in the North economy. This situation makes one wonder: what happens with the gold reserves of both countries?
+
+```{r}
+open_1l %>%
+  filter(name %in% c("or_S", "or_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "Ever falling gold reserves")
+```
+
+This situation is obviously unsustainable. A country cannot have a ever-falling gold reserves ad-infinitum. However, here it is nice to see what's happening with the balance sheet of the Southern central bank:
+
+```{r}
+open_1l %>%
+  filter(name %in% c("deltaHs_S", "deltaBcb_S", "deltaor_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "Evolution of the Balance sheet of South Central Bank")
+```
+
+This graph shows the compensation thesis in action: the variation in the money stocks in the economy is equal to zero in the long-run. All the depletion of gold reserves is being compensated by the central bank by acquiring Bonds from the government.
+
+Yet, this model is unsustainable. A country cannot have ever-falling gold reserves (at least not in a gold standard system).
+
+## OPEN2: Adjustment through government expenditures
+
+Let's slightly modify model OPEN to  introduce an adjustment mechanism through government expenditures. The idea here is that the government running out of gold will contract pure government expenditures in order to reestablish the balance in its balance of payments.
+
+
+```{r}
+open2_eqs <- open_eqs
+
+open2_eqs <- c(
+  open2_eqs,
+  G_N ~ G_N[-1] + phi_N * ( (or_N - or_N[-1]) * pg_N[-1] ),
+  G_S ~ G_S[-1] + phi_S * ( (or_S - or_S[-1]) * pg_S[-1] )
+)
+
+open2_prms <- c(
+  open_prms,
+  phi_N ~ 0.25,
+  phi_S ~ 0.25
+)
+
+# Remove G_N and G_S from exogenous variables
+open2_exg <- open_exg[1:4]
+
+open2_initial <- list(
+  G_N ~ 20,
+  G_S ~ 20
+)
+
+open2 <- sfcr_sim(open2_eqs, open2_exg, open2_prms, 60, initial = open2_initial, hidden = c("deltaor_N" = "deltaor_S"), .hidden_tol = 0.01)
+
+```
+
+We then add `shock1` to this model:
+
+```{r}
+open2_1 <- sfcr_scenario(open2, list(shock1), 60)
+open2_1l <- to_long(open2_1)
+```
+
+
+And we plot the variables:
+
+```{r}
+open2_1l %>%
+  filter(name %in% c("TB_S", 'TB_N', 'deltaV_N', "deltaV_S", "GB_S",  "GB_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~country)
+```
+
+## OPEN3: Adjustment through interest rates
+
+International organizations like the IMF and the WB usually suggest monetary contraction together with fiscal austerity for countries dealing with balance of payments crisis. How would our model fare if we added an adjustment mechanism through interest rates instead?
+
+The answer is simple: it will not adjust. This model inherits from model PC where there higher interest rates actually lead to higher economic activity. Therefore, adjusting the interest rate in response to the balance of payments disequilibrium will only aggravate the problem as it will lead to higher economic activity and hecenforth to higher imports. 
+
+Let's take a look at this developments.
+
+
+```{r}
+#TODO here: the equations for model OPENM should have the percent change in gold reserves as a determinant of interest rates, rather than the absolute change in gold reserves (Source: Zezza)
+
+open3_eqs <- c(
+  open_eqs,
+  r_N ~ r_N[-1] - phi_N * ( ((or_N - or_N[-1])/or_N[-1]) * pg_N[-1] ),
+  r_S ~ r_S[-1] - phi_S * ( ((or_S - or_S[-1])/or_S[-1]) * pg_S[-1] )
+)
+
+open3_exg <- c(
+  open_exg[c(1,2,5,6)]
+)
+
+open3_prms <- c(
+  open_prms,
+  phi_N ~ 0.005,
+  phi_S ~ 0.005
+)
+
+# We have to initialize the interest rates now
+open3_initial <- list(
+  r_N ~ 0.025,
+  r_S ~ 0.025
+)
+
+open3 <- sfcr_sim(open3_eqs, open3_exg, open3_prms, periods = 100, initial = open3_initial,
+                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+
+open3 %>% select(period, r_N, r_S)
+```
+
+```{r}
+open3_l <- to_long(open3)
+
+open3_l %>%
+  filter(name %in% c("r_N", "r_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+It is even difficult to find a steady state for this model. Play as much as you want to see by yourself.
+
+Let's try adding a buffer zone around the variation of the gold reserves that would trigger a interest rate increase:
+
+```{r}
+open4_eqs <- c(
+  open_eqs,
+  r_N ~ if (abs(( (or_N - or_N[-1]) * pg_N[-1] )) > 2) {r_N[-1] - phi_N * ( (or_N - or_N[-1]) * pg_N[-1] )} else {r_N[-1]},
+  r_S ~ if (abs(( (or_S - or_S[-1]) * pg_S[-1] )) > 2) {r_S[-1] - phi_S * ( (or_S - or_S[-1]) * pg_S[-1] )} else {r_S[-1]}
+)
+
+open4 <- sfcr_sim(open4_eqs, open3_exg, open3_prms, periods = 50, initial = open3_initial,
+                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+
+profvis::profvis(open4 <- sfcr_sim(open4_eqs, open3_exg, open3_prms, periods = 50, initial = open3_initial,
+                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01))
+
+```
+
+
+
+```{r}
+open4_l <- to_long(open4)
+
+open4_l %>%
+  filter(name %in% c("r_N", "r_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~country)
+```
+This is a steady state. However, its a very unstable model in which any shock blows it up. In the following experiment I include only 20 periods because the model does not run if I add much more than that.
+
+```{r}
+shock1 <- sfcr_shock(
+  variables = list(mu_S ~ 0.2),
+  start = 5,
+  end = 20
+)
+
+open4_1 <- sfcr_scenario(open4, scenario = list(shock1), periods = 20)
+open4_1l <- to_long(open4_1)
+```
+
+
+```{r}
+open4_1l %>%
+  filter(name %in% c("r_N", "r_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+This model obviously explode and I had to decrease the number of periods to find some solution to it (as they do in the book).
+
+```{r}
+open4_1l %>%
+  filter(name %in% c("TB_N", "TB_S", "GB_S", "GB_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+```{r}
+p1 <- sfcr_dag_blocks_plot(open4_eqs)
+```
+
+
+#### Making aggregate income dependent on interest rates
+
+One possibility outlined in the book is to modify the propensity to consume out of disposable income to be a negative function on interest rates:
+
+```{r}
+open4b_eqs <- c(
+  open3_eqs,
+  alpha1_S ~ alpha10_S - iota_S * r_S,
+  alpha1_N ~ alpha10_N - iota_N * r_S
+  )
+
+open4b_prms <- open3_prms
+
+open4b_prms[[3]] <- alpha10_N ~ 0.7
+open4b_prms[[4]] <- alpha10_S ~ 0.8
+open4b_prms[[17]] <- iota_S ~ 0.5
+open4b_prms[[18]] <- iota_N ~ 0.35
+
+open4b <- sfcr_sim(open4b_eqs, open3_exg, open4b_prms, 100, initial = open3_initial, hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+
+open4b_l <- to_long(open4b)
+```
+
+
+As we can see in the Figure below, this model struggles to find a stable stationary state. What is happening here is that there's no stabilizing mechanism on the side of the North economy.
+
+```{r}
+open4b_l %>%
+  filter(name %in% c("r_N", "r_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(title = "No stationary state")
+```
+
+```{r}
+open4b_l %>%
+  filter(name %in% c("r_N", "r_S")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  labs(
+    title = "Model OPEN4B",
+    subtitle = "No stationary state")
+```
+```{r}
+open4b_l %>%
+  filter(str_detect(name, "TB|GB")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~ country) +
+  labs(
+    title = "Model OPEN4B",
+    subtitle = "No stationary state")
+```
+```{r}
+open4b_l %>%
+  filter(str_detect(name, "YD|V")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(color = name)) +
+  facet_wrap(~ country) +
+  labs(
+    title = "Model OPEN4B",
+    subtitle = "No stationary state")
+```
+
+```{r}
+open4b_l %>%
+  filter(str_detect(name, "Y_")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~ country) +
+  labs(
+    title = "Model OPEN4B",
+    subtitle = "No stationary state")
+```
+
+### A perverse reaction function? The puzzling effect of interes rates revisited
+
+Now, let's imagine a similar model, but where the central bank react to a trade deficit by **decreasing** interest rates:
+
+```{r}
+open5_eqs <- c(
+  open_eqs,
+  r_N ~ r_N[-1] + phi_N * ( (or_N - or_N[-1]) * pg_N[-1] ),
+  r_S ~ r_S[-1] + phi_S * ( (or_S - or_S[-1]) * pg_S[-1] )
+)
+
+open5_exg <- c(
+  open_exg[c(1,2,5,6)]
+)
+
+open5_prms <- c(
+  open_prms,
+  phi_N ~ 0.002,
+  phi_S ~ 0.002
+)
+
+# We have to initialize the interest rates now
+open5_initial <- list(
+  r_N ~ 0.025,
+  r_S ~ 0.025
+)
+
+open5 <- sfcr_sim(open5_eqs, open5_exg, open5_prms, periods = 100, initial = open3_initial,
+                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+
+
+shock1 <- sfcr_shock(
+  variables = list(mu_S ~ 0.2),
+  start = 5,
+  end = 60
+)
+
+open5_1 <- sfcr_scenario(open5, scenario = list(shock1), periods = 60)
+open5_1l <- to_long(open5_1)
+```
+
+
+```{r}
+open5_1l %>%
+  filter(name %in% c("TB_N", "TB_S", "GB_S", "GB_N")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name)) +
+  facet_wrap(~ country) +
+  labs(
+    title = "Model OPEN5",
+    subtitle = "The puzzling effect of interest rates")
+```
+
+Voilà, we found that in model OPEN a reaction function that decreases interest rates brings the model back to a stable equilibrium.
+
+## References

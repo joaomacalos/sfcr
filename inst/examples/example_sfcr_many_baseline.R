@@ -14,7 +14,10 @@ eqs <- sfcr_set(
 
 external <- sfcr_set(G_d ~ 20, W ~ 1, alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
 
-# `periods` is set to 10 to run faster. A usual model should run at
-# least 50 periods to find a steady state
-sfcr_baseline(equations = eqs, external = external, periods = 10)
+# t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state
+baseline <- sfcr_baseline(eqs, external, periods = 10)
 
+# Expand `sfcr_set` object
+expanded <- sfcr_expand(external, "alpha2", c(0.1, 0.2))
+
+sfcr_many_baseline(eqs, expanded, periods = 10)

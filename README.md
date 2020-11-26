@@ -9,8 +9,8 @@
 status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=master)](https://travis-ci.com/joaomacalos/sfcr)
 <!-- badges: end -->
 
-The goal of `sfcr` is to provide an intuitive and `tidy` way to estimate
-stock-flow consistent (SFC) models with R.
+The goal of the `sfcr` package is to provide an intuitive and `tidy` way
+to estimate stock-flow consistent (SFC) models with R.
 
 ## Installation
 
@@ -28,105 +28,103 @@ This is a basic example which shows you how to simulate the steady state
 of the “SIM” model from Godley and Lavoie (2007 ch. 3) and simulate a
 scenario where the government increase its expenditures.
 
-A more complete description of the `sfcr_sim()` and `sfcr_scenario()`
-variables can be found at the `vignette("sfcr")`.
+The `sfcr_set()` function is used to create define the equations and
+external variables of the model.
 
-The first step is to simulate the steady state of the model with the
-`sfcr_sim()` function:
+These sets are used to simulate the baseline scenario of the model with
+the `sfcr_baseline()` function:
 
 ``` r
 library(sfcr)
 
-eqs <- list(
-  TX_s ~ TX_d,
-  YD ~ W * N_s - TX_s,
-  C_d ~ alpha1 * YD + alpha2 * H_h[-1],
-  H_h ~ YD - C_d + H_h[-1],
-  N_s ~ N_d,
-  N_d ~ Y / W,
-  C_s ~ C_d,
-  G_s ~ G_d,
-  Y ~ C_s + G_s,
-  TX_d ~ theta * W * N_s,
-  H_s ~ G_d - TX_d + H_s[-1]
+eqs <- sfcr_set(
+  TXs ~ TXd,
+  YD ~ W * Ns - TXs,
+  Cd ~ alpha1 * YD + alpha2 * Hh[-1],
+  Hh ~ YD - Cd + Hh[-1],
+  Ns ~ Nd,
+  Nd ~ Y / W,
+  Cs ~ Cd,
+  Gs ~ Gd,
+  Y ~ Cs + Gs,
+  TXd ~ theta * W * Ns,
+  Hs ~ Gd - TXd + Hs[-1]
 )
 
-exg <- list(
-  G_d ~ 20, 
-  W ~ 1
-  )
-
-params <- list(
+external <- sfcr_set(
+  Gd ~ 20, 
+  W ~ 1,
   alpha1 ~ 0.6,
   alpha2 ~ 0.4,
   theta ~ 0.2
   )
 
-sim <- sfcr_sim(
+sim <- sfcr_baseline(
   equations = eqs, 
+  external = external,
   periods = 60, 
-  exogenous = exg, 
-  parameters = params
+  
   )
 
 sim
 #> # A tibble: 60 x 17
-#>    period  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s
-#>     <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1      1  0      0     0     0     0     0     0       0   0    0      0  
-#>  2      2  7.69  30.8  18.5  12.3  38.5  38.5  18.5    20  38.5  7.69  12.3
-#>  3      3  9.58  38.3  27.9  22.7  47.9  47.9  27.9    20  47.9  9.58  22.7
-#>  4      4 11.2   44.7  35.9  31.5  55.9  55.9  35.9    20  55.9 11.2   31.5
-#>  5      5 12.5   50.2  42.7  39.0  62.7  62.7  42.7    20  62.7 12.5   39.0
-#>  6      6 13.7   54.8  48.4  45.3  68.4  68.4  48.4    20  68.4 13.7   45.3
-#>  7      7 14.7   58.6  53.3  50.6  73.3  73.3  53.3    20  73.3 14.7   50.7
-#>  8      8 15.5   61.9  57.4  55.1  77.4  77.4  57.4    20  77.4 15.5   55.2
-#>  9      9 16.2   64.7  60.9  59.0  80.9  80.9  60.9    20  80.9 16.2   59.0
-#> 10     10 16.8   67.0  63.8  62.2  83.8  83.8  63.8    20  83.8 16.8   62.2
-#> # ... with 50 more rows, and 5 more variables: G_d <dbl>, W <dbl>,
-#> #   alpha1 <dbl>, alpha2 <dbl>, theta <dbl>
+#>    period      TXs       YD       Cd       Hh       Ns       Nd       Cs
+#>  *  <int>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+#>  1      1 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15
+#>  2      2 7.69e+ 0 3.08e+ 1 1.85e+ 1 1.23e+ 1 3.85e+ 1 3.85e+ 1 1.85e+ 1
+#>  3      3 9.59e+ 0 3.83e+ 1 2.79e+ 1 2.27e+ 1 4.79e+ 1 4.79e+ 1 2.79e+ 1
+#>  4      4 1.12e+ 1 4.48e+ 1 3.59e+ 1 3.15e+ 1 5.59e+ 1 5.59e+ 1 3.59e+ 1
+#>  5      5 1.25e+ 1 5.02e+ 1 4.27e+ 1 3.90e+ 1 6.27e+ 1 6.27e+ 1 4.27e+ 1
+#>  6      6 1.37e+ 1 5.48e+ 1 4.85e+ 1 4.53e+ 1 6.85e+ 1 6.85e+ 1 4.85e+ 1
+#>  7      7 1.47e+ 1 5.86e+ 1 5.33e+ 1 5.06e+ 1 7.33e+ 1 7.33e+ 1 5.33e+ 1
+#>  8      8 1.55e+ 1 6.19e+ 1 5.74e+ 1 5.52e+ 1 7.74e+ 1 7.74e+ 1 5.74e+ 1
+#>  9      9 1.62e+ 1 6.47e+ 1 6.09e+ 1 5.90e+ 1 8.09e+ 1 8.09e+ 1 6.09e+ 1
+#> 10     10 1.68e+ 1 6.71e+ 1 6.38e+ 1 6.22e+ 1 8.38e+ 1 8.38e+ 1 6.38e+ 1
+#> # ... with 50 more rows, and 9 more variables: Gs <dbl>, Y <dbl>, TXd <dbl>,
+#> #   Hs <dbl>, Gd <dbl>, W <dbl>, alpha1 <dbl>, alpha2 <dbl>, theta <dbl>
 ```
 
 With the steady state values at hand, we can use the `sfcr_scenario()`
-function to see what happens if we increase government expenditures
-`G_d` from 20 to 30:
+function to see what happens if we increase government expenditures `Gd`
+from 20 to 30:
 
 ``` r
 shock <- sfcr_shock(
-  variables = list(
-    G_d ~ 30
+  variables = sfcr_set(
+    Gd ~ 30
   ),
   start = 5,
   end = 60
 )
 
 sim2 <- sfcr_scenario(
-  sfcr_sim = sim,
-  scenario = list(shock),
+  baseline = sim,
+  scenario = shock,
   periods = 60
   )
 
 sim2
 #> # A tibble: 60 x 17
-#>    period  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s
-#>     <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1      1  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.4
-#>  2      2  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.4
-#>  3      3  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.4
-#>  4      4  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.4
-#>  5      5  23.8  95.4  89.2  86.1  119.  119.  89.2    30  119.  23.8  86.6
-#>  6      6  24.8  99.1  93.9  91.3  124.  124.  93.9    30  124.  24.8  91.8
-#>  7      7  25.6 102.   97.9  95.7  128.  128.  97.9    30  128.  25.6  96.2
-#>  8      8  26.3 105.  101.   99.5  131.  131. 101.     30  131.  26.3  99.9
+#>    period   TXs    YD    Cd    Hh    Ns    Nd    Cs    Gs     Y   TXd    Hs
+#>  *  <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1      1  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  2      2  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  3      3  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  4      4  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  5      5  23.8  95.4  89.2  86.2  119.  119.  89.2    30  119.  23.8  86.2
+#>  6      6  24.8  99.2  94.0  91.4  124.  124.  94.0    30  124.  24.8  91.4
+#>  7      7  25.6 102.   98.0  95.8  128.  128.  98.0    30  128.  25.6  95.8
+#>  8      8  26.3 105.  101.   99.5  131.  131. 101.     30  131.  26.3  99.5
 #>  9      9  26.8 107.  104.  103.   134.  134. 104.     30  134.  26.8 103. 
-#> 10     10  27.3 109.  107.  105.   137.  137. 107.     30  137.  27.3 106. 
-#> # ... with 50 more rows, and 5 more variables: G_d <dbl>, W <dbl>,
-#> #   alpha1 <dbl>, alpha2 <dbl>, theta <dbl>
+#> 10     10  27.3 109.  107.  105.   137.  137. 107.     30  137.  27.3 105. 
+#> # ... with 50 more rows, and 5 more variables: Gd <dbl>, W <dbl>, alpha1 <dbl>,
+#> #   alpha2 <dbl>, theta <dbl>
 ```
 
 With `sfcr`, the models are written entirely with R using the standard R
-syntax. Furthermore, their output is a `tibble` that is easily
-manipulated with the `tidyverse` tools and plotted with `ggplot2`.
+syntax. Furthermore, their output is a `tibble`, meaning that it can be
+easily manipulated with `dplyr` and other `tidyverse` tools and plotted
+with `ggplot2`.
 
 ### References
 

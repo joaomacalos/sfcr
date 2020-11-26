@@ -26,6 +26,21 @@
     dplyr::mutate(rhs = gsub("\\[-1\\]", "___", .data$rhs))
 }
 
+.add_time2 <- function(x) {
+  gsub("\\[-1\\]", "___", x)
+}
+
+#' Pattern replacement var
+#' @param x vector of variables
+#'
+.pvar <- function(x) {paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(x, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|\\_)")}
+
+#' Pattern replacement lag
+#' @param x vector of variables
+#'
+.pvarlag <- function(x) {paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(x, collapse = "|"), ")(?=___)")}
+
+
 
 .sfcr_find_adjacency <- function(equations) {
 
@@ -36,11 +51,14 @@
   km[is.na(km)] <- 0
 
   # Detect all endogenous vars
-  ken <- paste0("(?<![[:alnum:]]|\\_|\\.)(", paste0(equations$lhs, collapse = '|'), ")(?![[:alnum:]]|\\_|\\.)")
+  #ken <- paste0("(?<![[:alnum:]]|\\_|\\.)(", paste0(equations$lhs, collapse = '|'), ")(?![[:alnum:]]|\\_|\\.)")
 
   # Extract them from equations
   k3 <- equations %>%
-    dplyr::mutate(rhs = stringr::str_extract_all(.data$rhs, ken))# %>%
+    dplyr::mutate(rhs = stringr::str_extract_all(.data$rhs, .pvar(equations$lhs)))
+
+  #k3 <- equations %>%
+  #  dplyr::mutate(rhs = stringr::str_extract_all(.data$rhs, ken))# %>%
     #dplyr::rowwise() %>%
     #dplyr::filter(vctrs::vec_size(.data$rhs) > 0)
 
@@ -79,7 +97,10 @@
 
   k1 <- .eq_as_tb(equations)
 
-  k2 <- .add_time_stamps(k1)
+  k2 <- k1 %>%
+    dplyr::mutate(rhs = .add_time2(.data$rhs))
+
+  # k2 <- .add_time_stamps(k1)
 
   # STEP 1
   # Create adjacency matrix

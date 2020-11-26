@@ -1,0 +1,207 @@
+---
+title: "SIM Model"
+references:
+- id: godley2007monetary
+  title: >
+       Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth
+  author:
+  - family: Godley
+    given: Wynne
+  - family: Lavoie
+    given: Marc
+  publisher: Palgrave Macmillan
+  type: book
+  issued:
+    year: 2007
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  paged.print = F
+)
+```
+
+In this article we show how the `sfcr` package can be used to replicate the model SIM from @godley2007monetary [ch. 3].
+
+We start by loading the `sfcr` package and the `tidyverse` packages, that are going to be used to manipulate the data and generate the plots:
+
+```{r setup}
+library(sfcr)
+library(tidyverse)
+```
+
+
+## SIM Model
+
+The first step is to write down the equations, exogenous variables, and parameters:
+
+```{r}
+sim_eqs <- list(
+  TX_s ~ TX_d,
+  YD ~ W * N_s - TX_s,
+  C_d ~ alpha1 * YD + alpha2 * H_h[-1],
+  H_h ~ YD - C_d + H_h[-1],
+  N_s ~ N_d,
+  N_d ~ Y / W,
+  C_s ~ C_d,
+  G_s ~ G_d,
+  Y ~ C_s + G_s,
+  TX_d ~ theta * W * N_s,
+  H_s ~ G_d - TX_d + H_s[-1]
+)
+
+sim_exg <- list(
+  G_d ~ 20,
+  W ~ 1)
+
+sim_prms <- list(
+alpha1 ~ 0.6,
+alpha2 ~ 0.4,
+theta ~ 0.2
+)
+```
+
+With these objects defined, we can simulate the SIM model. We will make it run for 100 periods. We will also define the hidden equation before hand, ensuring that the model is written correctly:
+
+```{r}
+hidden_equation <- c("H_h" = "H_s")
+sim <- sfcr_sim(sim_eqs, sim_exg, sim_prms, 100, hidden = hidden_equation)
+sim
+```
+We can check that the model generates the same long-run results as the model presented in page 69 @godley2007monetary..
+
+```{r}
+sim %>%
+  filter(period %in% c(1, 2, 3, 50)) %>%
+  select(period, G_s, Y, TX_d, YD, H_s) %>%
+  t() %>%
+  round(digits = 0)
+  
+```
+
+### A permanent increase in government expenditures
+
+What happens if there is a permanent increase in government expenditures? To check it, we need to use the `sfcr_shock()` and `sfcr_scenario()` functions:
+
+```{r}
+shock1 <- sfcr_shock(
+  variables = list(
+    G_d ~ 25
+  ),
+  start = 5,
+  end = 50
+)
+
+sim2 <- sfcr_scenario(sim, list(shock1), 50)
+```
+To visualize the consequences of the shock with the `ggplot2` package, we need to first transform the model into long format. We can do it with `pivot_longer()` function from `dplyr`. 
+
+The syntax might look complicated but it is actually simple. With the `pivot_longer()` function we want to transform all columns from the `sim2` object into the long format, indexed by the `period` column. That's why in cols we "remove" the period column.
+
+To plot, we filter the `sim2_long` object to keep only $Y$. As we can see, an increase in government leads to an increase in production in the long run.
+
+```{r}
+sim2_long <- sim2 %>%
+  pivot_longer(cols = -period)
+
+sim2_long %>%
+  filter(name == "Y") %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line()
+```
+
+To plot multiple variables in the same plot, we need to filter not for a specific variable, but for a group of variables. We do it by using the R operator `%in%` instead of `==`. 
+
+Let's see how to plot $YD$, $C_d$, and $H_h$:
+
+```{r}
+sim2_long %>%
+  filter(name %in% c("YD", "C_d", "H_h")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+## SIMEX model
+
+The SIMEX model expands model SIM by introducing expectations into the model. Technically, it modifies one of the equations and add two new equations.
+
+To do it, we first create a copy of `sim_eqs`, and then modify this list in place.
+
+```{r}
+simex_eqs <- sim_eqs
+
+simex_eqs[[3]] <- C_d ~ alpha1 * YDE + alpha2 * H_h[-1]
+simex_eqs[[12]] <- H_d ~ H_d[-1] + YDE - C_d
+simex_eqs[[13]] <- YDE ~ YD[-1]
+```
+
+We use these new equations to simulate the SIMEX model:
+
+```{r}
+simex <- sfcr_sim(simex_eqs, sim_exg, sim_prms, 50, hidden = c("H_h" = "H_s"))
+```
+
+And immediately add a shock to propensity to consume in this model:
+
+```{r}
+shock2 <- sfcr_shock(
+  variables = list(alpha1 ~ 0.7),
+  start = 5,
+  end = 50
+)
+
+simex2 <- sfcr_scenario(simex, list(shock2), 50)
+```
+
+We then wrap up this article by plotting the consequences of an increase in the propensity to consume on consumption, disposable income, and wealth:
+
+```{r}
+simex2_long <- simex2 %>%
+  pivot_longer(cols = -period)
+
+simex2_long %>%
+  filter(name %in% c("C_d", "YD", "H_h")) %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(linetype = name))
+```
+
+An attentive reader would notice that the Figure above is not the same as Figure 3.8 of @godley2007monetary. That's because Figure 3.8 shocks the SIM model and not the SIMEX model. I'll leave as an exercise for the reader to generate Figure 3.8.
+
+## Blocks of independent equations
+
+If the user is interested, she or he can check how many iterations was necessary per block to converge to a result by checking the `matrix` attribute of the `sim` object. The blocks of independently estimated equations can be obtained by checking the `calls` attribute. The other attributes are inherited from the `tbl_df` class.
+
+```{r}
+# Check all attributes of a `sfcr_sim` model:
+names(attributes(sim))
+```
+
+```{r}
+attr(sim, 'calls')
+```
+We can see that there are three independent blocks of equations. In practice, this means that the model first calculates the value of $G_s$, that depends only on a exogenous variable, than it calculates together the values of $TX_s$ until $TX_d$. These variables are calculated together because they constitute a **cycle**, i.e., they are determined simultaneously. Finally, the variables $H_h$ and $H_s$ are calculated in the final block, as they are defined outside the cycle,
+
+Variables inside a cycle usually take much longer to converge. We can see it by checking the `block` columns on the `matrix` attribute of `sim`:
+
+```{r}
+tibble(data.frame(attr(sim, "matrix"))) %>%
+  mutate(period = row_number()) %>%
+  select(period, contains("block"))
+```
+
+This can be compared with the SIMEX model, which does not have any cylce:
+
+```{r}
+tibble(data.frame(attr(simex, "matrix"))) %>%
+  mutate(period = row_number()) %>%
+  select(period, contains("block"))
+```
+
+As can be seen, this model has much more blocks, meaning that the endogenous variables are identified one after the other, and requires much less iterations to converge.
+
+# References
+
+
+
