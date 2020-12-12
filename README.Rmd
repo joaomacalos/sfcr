@@ -44,7 +44,7 @@ devtools::install_github("joaomacalos/sfcr")
 ```
 ## Example
 
-This is a basic example which shows you how to simulate the steady state of the "SIM" model from @godley2007monetary [ch. 3] and simulate a scenario where the government increase its expenditures.
+This is a basic example which shows how to simulate the "SIM" model from @godley2007monetary [ch. 3], as well as how to add scenarios to this baseline model.
 
 The `sfcr_set()` function is used to create define the equations and external variables of the model.
 
@@ -105,6 +105,6 @@ sim2 <- sfcr_scenario(
 sim2
 ```
 
-With `sfcr`, the models are written entirely with R using the standard R syntax. Furthermore, their output is a `tibble`, meaning that it can be easily manipulated with `dplyr` and other `tidyverse` tools and plotted with `ggplot2`.
+With `sfcr`, the models are written entirely within R and use the standard R syntax. Furthermore, their output is a `tibble`, meaning that it can be easily manipulated with `dplyr` and other `tidyverse` tools and plotted with `ggplot2`.
 
 ### References

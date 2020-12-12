@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfcr package
+# sfcr
 
 <!-- badges: start -->
 
@@ -121,10 +121,10 @@ sim2
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 
-With `sfcr`, the models are written entirely with R using the standard R
-syntax. Furthermore, their output is a `tibble`, meaning that it can be
-easily manipulated with `dplyr` and other `tidyverse` tools and plotted
-with `ggplot2`.
+With `sfcr`, the models are written entirely within R and use the
+standard R syntax. Furthermore, their output is a `tibble`, meaning that
+it can be easily manipulated with `dplyr` and other `tidyverse` tools
+and plotted with `ggplot2`.
 
 ### References
 
