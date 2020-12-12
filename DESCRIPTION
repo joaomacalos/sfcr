@@ -36,7 +36,6 @@ Suggests:
     ggraph,
     ggplot2,
     grDevices,
-    kableExtra,
     knitr,
     pkgdown,
     rmarkdown,
