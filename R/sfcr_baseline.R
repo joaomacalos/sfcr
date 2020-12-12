@@ -230,40 +230,13 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
     abortifnot(all(abs(s4[, .h1] - s4[, .h2]) < .hidden_tol), "Hidden equation is not fulfilled. Check the model try again. If the problem persists, try `hidden = NULL` to see if it is related to the tolerance level.")
   }
 
-
-
-
-
-  # if (!is.null(hidden)) {
-  #   is_hidden_true <- .sfcr_is_hidden_true(s4, hidden, .hidden_tol)
-  #
-  # if (isTRUE(is_hidden_true < .hidden_tol)) stop("Hidden equation is not fulfilled. Check the model try again. If the problem persists, try `hidden = NULL` to see if it is related to the tolerance level.")
-  # }
-
   # Rows
   s5 <- tibble::tibble(data.frame(s4))
   s5["period"] <- 1:nrow(s5)
   s5 <- dplyr::select(s5, -tidyselect::contains("block"))
   s5 <- dplyr::select(s5, .data$period, tidyselect::everything())
-  #s5 <- dplyr::mutate(s5, dplyr::across(-c(.data$period), ~round(.x, digits = 4)))
 
   x <- new_sfcr_tbl(tbl = s5, matrix = s4, calls = s2, external = external$lhs)
-
-
-  #attr(s5, "matrix") <- s4
-
-  # Columns
-  # s5 <- tibble::tibble(data.frame(t(s4))) %>%
-  #   dplyr::mutate(period = dplyr::row_number()) %>%
-  #   dplyr::select(-tidyselect::contains('block')) %>%
-  #   dplyr::select(period, tidyselect::everything())
-  #
-  # attr(s5, "matrix") <- t(s4)
-
-
-  #attr(s5, "calls") <- s2
-
-  #class(s5) <- c("sfcr_tbl", "tbl_df", "tbl", "data.frame")
 
   return(x)
 }
