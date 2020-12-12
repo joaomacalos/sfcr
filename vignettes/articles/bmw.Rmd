@@ -1,0 +1,303 @@
+---
+title: "Model BMW"
+output: 
+  rmarkdown::html_document:
+    toc: true
+references:
+- id: godley2007monetary
+  title: >
+       Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth
+  author:
+  - family: Godley
+    given: Wynne
+  - family: Lavoie
+    given: Marc
+  publisher: Palgrave Macmillan
+  type: book
+  issued:
+    year: 2007
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Load the required packages for this analysis:
+
+```{r setup}
+library(sfcr)
+library(tidyverse)
+```
+
+# Bank-Money World model
+
+1. Write down the equations of the model:
+
+```{r}
+bmw_eqs <- list(
+  # Basic behavioral equations
+  Cs ~ Cd,
+  Is ~ Id,
+  Ns ~ Nd,
+  Ls ~ Ls[-1] + Ld - Ld[-1],
+  
+  # Transactions of the firms
+  Y ~ Cs + Is,
+  WBd ~ Y - rl[-1] * Ld[-1] - AF,
+  AF ~ delta * K[-1],
+  Ld ~ Ld[-1] + Id - AF,
+  
+  # Transactions of households
+  YD ~ WBs + rm[-1] * Mh[-1],
+  Mh ~ Mh[-1] + YD - Cd,
+  
+  # Transactions of the banks
+  Ms ~ Ms[-1] + Ls - Ls[-1],
+  rm ~ rl,
+  
+  # The wage bill
+  WBs ~ W * Ns,
+  Nd ~ Y / pr,
+  W ~ WBd / Nd,
+  
+  # Household behavior
+  Cd ~ alpha0 + alpha1 * YD + alpha2 * Mh[-1],
+  
+  # The investment behavior
+  K ~ K[-1] + Id - DA,
+  DA ~ delta * K[-1],
+  KT ~ kappa * Y[-1],
+  Id ~ gamma * (KT - K[-1]) + DA
+)
+
+bmw_external <- list(
+  rl ~ 0.025,
+  alpha0 ~ 20,
+  alpha1 ~ 0.75,
+  alpha2 ~ 0.10,
+  delta ~ 0.10,
+  gamma ~ 0.15,
+  kappa ~ 1,
+  pr ~ 1
+)
+
+bmw <- sfcr_sim(bmw_eqs, bmw_external, periods = 66, hidden = c("Ms" = "Mh"))
+
+```
+
+Let's check the internal structure of this model with the `sfcr_dag_blocks_plot()` function:
+
+```{r}
+sfcr_dag_blocks_plot(bmw_eqs)
+```
+
+First, let's check that the model arrived to a steady state income level:
+
+
+```{r}
+bmw %>%
+  pivot_longer(cols = -period) %>%
+  filter(name == "Y") %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line() +
+  labs(title = "Steady state GDP")
+```
+
+Now we add some shocks to this model to see how it behaves in different scenarios.
+
+## An increase in autonomous consumption expenditures
+
+First, let's write a helper function to convert the models to the long format, filter the variables we want to plot, and make a line plot:
+
+```{r}
+do_plot <- function(model, variables, title = NULL) {
+  model %>%
+    mutate(YK = Y / lag(K)) %>%
+    pivot_longer(cols = -period) %>%
+    filter(name %in% variables) %>%
+    ggplot(aes(x = period, y = value)) +
+    geom_line(aes(linetype = name)) +
+    labs(title = title)
+}
+```
+
+We then write the shock we want to add and simulate the new scenario:
+
+```{r}
+shock1 <- sfcr_shock(
+  variables = list(
+    alpha0 ~ 30
+  ),
+  start = 5,
+  end = 60
+)
+
+bmw1 <- sfcr_scenario(bmw,
+                      scenario = list(shock1),
+                      periods = 60)
+```
+
+How the consumption of households and their disposable income evolves?
+
+```{r}
+bmw1 %>%
+  do_plot(variables = c("Cd", "YD"), 
+          title = "BMW1: Evolution of consumption and disposable income")
+```
+
+And the investment of firms?
+
+```{r}
+bmw1 %>%
+  do_plot(variables = c("Id", "AF"),
+          title = "BMW1: Investment of firms")
+```
+
+## Increase in the propensity to save
+
+```{r}
+shock2 <- sfcr_shock(
+  variables = list(
+    alpha1 ~ 0.7
+  ),
+  start = 5,
+  end = 60
+)
+
+bmw2 <- sfcr_scenario(bmw,
+                      scenario = list(shock2),
+                      periods = 60)
+```
+
+
+```{r}
+bmw2 %>%
+  do_plot(variables = c("Cd", "YD"), title = "BMW2: Decrease in the propensity to save")
+```
+ As can be seen, a decrease in the propensity to save in this model leads to a permanent decrease in consumption and on disposable income.
+ 
+```{r}
+bmw2 %>%
+  do_plot(variables = c("YK"), title = "BMW2: Decrease in the propensity to save")
+```
+As a note, it is possible to add `ggplot2` arguments to our helper function:
+
+```{r}
+bmw2 %>%
+  do_plot(variables = c("W"), title = "BMW2: Decrease in the propensity to save") +
+  labs(subtitle = "Evolution of the real wage")
+```
+
+# Model BMWK
+
+```{r}
+bmwk_eqs <- bmw_eqs
+bmwk_eqs[[16]] <- Cd ~ alpha0 + alpha1w * WBs + alpha1r * rm[-1] * Mh[-1] + alpha2 * Mh
+
+bmwk_prms <- bmw_prms
+bmwk_prms[[2]] <- alpha1w ~ 0.8
+bmwk_prms[[8]] <- alpha1r ~ 0.15
+
+bmwk <- sfcr_sim(equations = bmwk_eqs,
+                 exogenous = bmw_exg,
+                 parameters = bmwk_prms,
+                 periods = 100,
+                 hidden = c("Ms" = "Mh"),
+                 tol = 1e-20
+                 )
+
+```
+
+```{r}
+bmwk %>%
+  do_plot(variables = 'Y', "BMWK: Steady state")
+```
+
+Let's see the impact of an increase on interest rates in this model:
+
+```{r}
+shock3 <- sfcr_shock(
+  variables = list(rl ~ 0.035),
+  start = 5,
+  end = 100
+)
+
+bmwk1 <- sfcr_scenario(bmwk, list(shock3), 100, tol = 1e-10)
+
+bmwk1 %>%
+  do_plot("Y", "BMWK1: Increase in the interest rate (rm)") +
+  labs(subtitle = "Evolution of Gross Domestic Income (Y)")
+```
+This model has a very interesting characteristic. If we don't strive for numerical precision with a very small `tol` argument at the `bmw` model, the tiny differences in each period lead the model to explosion:
+
+```{r}
+shock3 <- sfcr_shock(
+  variables = list(rl ~ 0.035),
+  start = 5,
+  end = 200
+)
+
+bmwk1_explode <- sfcr_scenario(bmwk, list(shock3), 200, tol = 1e-5)
+
+bmwk1_explode %>%
+  do_plot("Y", "BMWK1_EXP: Increase in the interest rate (rm)") +
+  labs(subtitle = "Explosion of Gross Domestic Income (Y)")
+```
+
+# Stability tests
+
+Let's try to visualize the sensitivity of the model BMW to different parameter values, as discussed in @godley2007monetary [section 7.5.2]
+
+We'll start by trying different values for the `kappa` parameter:
+
+```{r}
+kappa <- seq(1, 2.6, 0.2)
+kappa_expr <- paste0("kappa ~ ", kappa)
+kappa_expr <- lapply(kappa_expr, function(x) as.formula(x))
+
+sbmw_prms <- rep(list(bmw_prms), length(kappa))
+
+for (p in seq_along(sbmw_prms)) {
+  sbmw_prms[[p]][[6]] <- kappa_expr[[p]]
+}
+
+sbmw <- map_dfr(seq_along(sbmw_prms), function(x) {
+  sfcr_sim(bmw_eqs, bmw_exg, sbmw_prms[[x]], periods = 50, tol = 1e-10) %>%
+    mutate(simulation = x)
+})
+```
+
+
+
+```{r}
+sbmw %>%
+  pivot_longer(cols = -c(period, simulation)) %>%
+  filter(name == "Y") %>%
+  ggplot(aes(x = period, y = value)) +
+  geom_line(aes(color = as_factor(simulation))) +
+  scale_y_log10() +
+  scale_color_hue("Simulation") +
+  annotate("text", x = 45, y = 1200, label = expression(kappa~"="~1.6)) +
+  annotate("text", x = 45, y = 80000, label = expression(kappa~"="~1.8))
+  
+```
+
+
+# References
+
+
+
+
+
+
+
+
+
+
+
+
+
+

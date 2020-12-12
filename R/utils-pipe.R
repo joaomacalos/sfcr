@@ -9,3 +9,13 @@
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
 NULL
+
+#' Abort if not
+#'
+#' @param cnd Condition to be evaluated.
+#' @param message Message to display if condition is false.
+abortifnot <- function(cnd, message = NULL) {
+
+  if (isFALSE(cnd)) rlang::abort(message)
+
+}

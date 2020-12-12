@@ -9,12 +9,8 @@
 status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=master)](https://travis-ci.com/joaomacalos/sfcr)
 <!-- badges: end -->
 
-The goal of `sfcr` is to provide an intuitive and `tidy` way to estimate
-stock-flow consistent (SFC) models with R.
-
-With `sfcr`, the models are written entirely with R using the standard R
-syntax. Furthermore, their output is a `tibble` that is easily
-manipulated with the `tidyverse` tools and plotted with `ggplot2`.
+The goal of the `sfcr` package is to provide an intuitive and `tidy` way
+to estimate stock-flow consistent (SFC) models with R.
 
 ## Installation
 
@@ -28,98 +24,107 @@ devtools::install_github("joaomacalos/sfcr")
 
 ## Example
 
-This is a basic example which shows you how to simulate the steady state
-of the “SIM” model from Godley and Lavoie (2007 ch. 3) and shock this
-model with an increase in government expenditures.
+This is a basic example which shows how to simulate the “SIM” model from
+Godley and Lavoie (2007 ch. 3), as well as how to add scenarios to this
+baseline model.
 
-A more complete description of the `sfcr_sim()` and `sfcr_scenario()`
-variables can be found at the `vignette("sfcr")`.
+The `sfcr_set()` function is used to create define the equations and
+external variables of the model.
 
-The first step is to simulate the steady state of the model with the
-`sfcr_sim()` function:
+These sets are used to simulate the baseline scenario of the model with
+the `sfcr_baseline()` function:
 
 ``` r
 library(sfcr)
 
-eqs <- list(
-  TX_s[t] ~ TX_d[t],
-  YD[t] ~ W[t] * N_s[t] - TX_s[t],
-  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
-  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
-  N_s[t] ~ N_d[t],
-  N_d[t] ~ Y[t] / W[t],
-  C_s[t] ~ C_d[t],
-  G_s[t] ~ G_d[t],
-  Y[t] ~ C_s[t] + G_s[t],
-  TX_d[t] ~ theta * W[t] * N_s[t],
-  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
+eqs <- sfcr_set(
+  TXs ~ TXd,
+  YD ~ W * Ns - TXs,
+  Cd ~ alpha1 * YD + alpha2 * Hh[-1],
+  Hh ~ YD - Cd + Hh[-1],
+  Ns ~ Nd,
+  Nd ~ Y / W,
+  Cs ~ Cd,
+  Gs ~ Gd,
+  Y ~ Cs + Gs,
+  TXd ~ theta * W * Ns,
+  Hs ~ Gd - TXd + Hs[-1]
 )
 
-exg <- list("G_d" = 20, "W" = 1)
-
-params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-
-sim_model <- sfcr_sim(
-  equations = eqs, 
-  t = 60, 
-  exogenous = exg, 
-  parameters = params
+external <- sfcr_set(
+  Gd ~ 20, 
+  W ~ 1,
+  alpha1 ~ 0.6,
+  alpha2 ~ 0.4,
+  theta ~ 0.2
   )
 
-sim_model
+sim <- sfcr_baseline(
+  equations = eqs, 
+  external = external,
+  periods = 60, 
+  
+  )
+
+sim
 #> # A tibble: 60 x 17
-#>        t  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s   G_d
-#>    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1     1  1      1     1     1     1     1     1       1   1    1      1       1
-#>  2     2  7.85  31.4  19.2  13.2  39.2  39.2  19.2    20  39.2  7.85  13.2    20
-#>  3     3  9.72  38.9  28.6  23.4  48.6  48.6  28.6    20  48.6  9.72  23.4    20
-#>  4     4 11.3   45.2  36.5  32.1  56.5  56.5  36.5    20  56.5 11.3   32.1    20
-#>  5     5 12.6   50.5  43.2  39.5  63.2  63.2  43.2    20  63.2 12.6   39.5    20
-#>  6     6 13.8   55.1  48.8  45.7  68.8  68.8  48.8    20  68.8 13.8   45.7    20
-#>  7     7 14.7   58.9  53.6  51.0  73.6  73.6  53.6    20  73.6 14.7   51.0    20
-#>  8     8 15.5   62.1  57.7  55.5  77.7  77.7  57.7    20  77.7 15.5   55.5    20
-#>  9     9 16.2   64.9  61.1  59.2  81.1  81.1  61.1    20  81.1 16.2   59.3    20
-#> 10    10 16.8   67.2  64.0  62.4  84.0  84.0  64.0    20  84.0 16.8   62.4    20
-#> # ... with 50 more rows, and 4 more variables: W <dbl>, alpha1 <dbl>,
-#> #   alpha2 <dbl>, theta <dbl>
+#>    period      TXs       YD       Cd       Hh       Ns       Nd       Cs
+#>  *  <int>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+#>  1      1 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15
+#>  2      2 7.69e+ 0 3.08e+ 1 1.85e+ 1 1.23e+ 1 3.85e+ 1 3.85e+ 1 1.85e+ 1
+#>  3      3 9.59e+ 0 3.83e+ 1 2.79e+ 1 2.27e+ 1 4.79e+ 1 4.79e+ 1 2.79e+ 1
+#>  4      4 1.12e+ 1 4.48e+ 1 3.59e+ 1 3.15e+ 1 5.59e+ 1 5.59e+ 1 3.59e+ 1
+#>  5      5 1.25e+ 1 5.02e+ 1 4.27e+ 1 3.90e+ 1 6.27e+ 1 6.27e+ 1 4.27e+ 1
+#>  6      6 1.37e+ 1 5.48e+ 1 4.85e+ 1 4.53e+ 1 6.85e+ 1 6.85e+ 1 4.85e+ 1
+#>  7      7 1.47e+ 1 5.86e+ 1 5.33e+ 1 5.06e+ 1 7.33e+ 1 7.33e+ 1 5.33e+ 1
+#>  8      8 1.55e+ 1 6.19e+ 1 5.74e+ 1 5.52e+ 1 7.74e+ 1 7.74e+ 1 5.74e+ 1
+#>  9      9 1.62e+ 1 6.47e+ 1 6.09e+ 1 5.90e+ 1 8.09e+ 1 8.09e+ 1 6.09e+ 1
+#> 10     10 1.68e+ 1 6.71e+ 1 6.38e+ 1 6.22e+ 1 8.38e+ 1 8.38e+ 1 6.38e+ 1
+#> # ... with 50 more rows, and 9 more variables: Gs <dbl>, Y <dbl>, TXd <dbl>,
+#> #   Hs <dbl>, Gd <dbl>, W <dbl>, alpha1 <dbl>, alpha2 <dbl>, theta <dbl>
 ```
 
 With the steady state values at hand, we can use the `sfcr_scenario()`
-function to see what happens if we increase government expenditures
-(“G\_d”) from 20 to 30:
+function to see what happens if we increase government expenditures `Gd`
+from 20 to 30:
 
 ``` r
-shock <- list("G_d" = 30)
+shock <- sfcr_shock(
+  variables = sfcr_set(
+    Gd ~ 30
+  ),
+  start = 5,
+  end = 60
+)
 
 sim2 <- sfcr_scenario(
-  steady_state = sim_model,
-  equations = eqs, 
-  t = 60, 
-  exogenous = exg, 
-  parameters = params, 
-  shock_exg = shock
+  baseline = sim,
+  scenario = shock,
+  periods = 60
   )
 
 sim2
 #> # A tibble: 60 x 17
-#>        t  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s   G_d
-#>    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1     1  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.2    20
-#>  2     2  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.2    20
-#>  3     3  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.2    20
-#>  4     4  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.2    20
-#>  5     5  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.2    20
-#>  6     6  23.8  95.4  89.2  86.1  119.  119.  89.2    30  119.  23.8  86.4    30
-#>  7     7  24.8  99.2  94.0  91.4  124.  124.  94.0    30  124.  24.8  91.6    30
-#>  8     8  25.6 102.   98.0  95.8  128.  128.  98.0    30  128.  25.6  96.0    30
-#>  9     9  26.3 105.  101.   99.5  131.  131. 101.     30  131.  26.3  99.7    30
-#> 10    10  26.8 107.  104.  103.   134.  134. 104.     30  134.  26.8 103.     30
-#> # ... with 50 more rows, and 4 more variables: W <dbl>, alpha1 <dbl>,
+#>    period   TXs    YD    Cd    Hh    Ns    Nd    Cs    Gs     Y   TXd    Hs
+#>  *  <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1      1  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  2      2  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  3      3  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  4      4  20.0  80.0  80.0  80.0  100.  100.  80.0    20  100.  20.0  80.0
+#>  5      5  23.8  95.4  89.2  86.2  119.  119.  89.2    30  119.  23.8  86.2
+#>  6      6  24.8  99.2  94.0  91.4  124.  124.  94.0    30  124.  24.8  91.4
+#>  7      7  25.6 102.   98.0  95.8  128.  128.  98.0    30  128.  25.6  95.8
+#>  8      8  26.3 105.  101.   99.5  131.  131. 101.     30  131.  26.3  99.5
+#>  9      9  26.8 107.  104.  103.   134.  134. 104.     30  134.  26.8 103. 
+#> 10     10  27.3 109.  107.  105.   137.  137. 107.     30  137.  27.3 105. 
+#> # ... with 50 more rows, and 5 more variables: Gd <dbl>, W <dbl>, alpha1 <dbl>,
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 
-The output is a `tibble` that can be easily manipulated and plotted with
-the `tidyverse` packages.
+With `sfcr`, the models are written entirely within R and use the
+standard R syntax. Furthermore, their output is a `tibble`, meaning that
+it can be easily manipulated with `dplyr` and other `tidyverse` tools
+and plotted with `ggplot2`.
 
 ### References
 

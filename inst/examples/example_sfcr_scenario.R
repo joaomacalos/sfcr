@@ -1,32 +1,37 @@
-eqs <- list(
-  TX_s[t] ~ TX_d[t],
-  YD[t] ~ W[t] * N_s[t] - TX_s[t],
-  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
-  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
-  N_s[t] ~ N_d[t],
-  N_d[t] ~ Y[t] / W[t],
-  C_s[t] ~ C_d[t],
-  G_s[t] ~ G_d[t],
-  Y[t] ~ C_s[t] + G_s[t],
-  TX_d[t] ~ theta * W[t] * N_s[t],
-  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
+eqs <- sfcr_set(
+  TX_s ~ TX_d,
+  YD ~ W * N_s - TX_s,
+  C_d ~ alpha1 * YD + alpha2 * H_h[-1],
+  H_h ~ YD - C_d + H_h[-1],
+  N_s ~ N_d,
+  N_d ~ Y / W,
+  C_s ~ C_d,
+  G_s ~ G_d,
+  Y ~ C_s + G_s,
+  TX_d ~ theta * W * N_s,
+  H_s ~ G_d - TX_d + H_s[-1]
 )
 
-exg <- list("G_d" = 20, "W" = 1)
-params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
+external <- sfcr_set(G_d ~ 20, W ~ 1, alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
 
 # t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state
-steady_state <- sfcr_sim(equations = eqs, t = 10, exogenous = exg,
-                         parameters = params, initial = NULL)
+steady_state <- sfcr_baseline(eqs, external, periods = 10)
 
-# Increase G_d from 20 to 30
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("G_d" = 30))
+# Increase G_d from 20 to 30 between periods 5 and 10
+shock1 <- sfcr_shock(sfcr_set(G_d ~ 30), 5, 10)
 
-# Increase alpha1 from 0.6 to 0.8
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_param = list("alpha1" = 0.8))
+sfcr_scenario(steady_state, scenario = list(shock1), 10)
 
 # Increase W to 2, alpha2 to 0.5, and decrease theta to 0.15
-sfcr_scenario(steady_state, eqs, t = 10, exg, params, shock_exg = list("W" = 2),
-              shock_param = list("alpha2" = 0.5, "theta" = 0.15))
+shock2 <- sfcr_shock(
+  variables = sfcr_set(
+  W ~ 2,
+  alpha2 ~ 0.5,
+  theta ~ 0.15
+  ),
+  start = 5,
+  end = 10)
+
+sfcr_scenario(steady_state, list(shock2), 10)
 
 

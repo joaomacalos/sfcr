@@ -1,6 +1,18 @@
 ---
 output: github_document
-bibliography: references.bib
+references:
+- id: godley2007monetary
+  title: >
+       Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth
+  author:
+  - family: Godley
+    given: Wynne
+  - family: Lavoie
+    given: Marc
+  publisher: Palgrave Macmillan
+  type: book
+  issued:
+    year: 2007
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -20,9 +32,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=master)](https://travis-ci.com/joaomacalos/sfcr)
 <!-- badges: end -->
 
-The goal of `sfcr` is to provide an intuitive and `tidy` way to estimate stock-flow consistent (SFC) models with R. 
-
-With `sfcr`, the models are written entirely with R using the standard R syntax. Furthermore, their output is a `tibble` that is easily manipulated with the `tidyverse` tools and plotted with `ggplot2`.
+The goal of the `sfcr` package is to provide an intuitive and `tidy` way to estimate stock-flow consistent (SFC) models with R. 
 
 ## Installation
 
@@ -34,62 +44,67 @@ devtools::install_github("joaomacalos/sfcr")
 ```
 ## Example
 
-This is a basic example which shows you how to simulate the steady state of the "SIM" model from @godley2007monetary [ch. 3] and shock this model with an increase in government expenditures.
+This is a basic example which shows how to simulate the "SIM" model from @godley2007monetary [ch. 3], as well as how to add scenarios to this baseline model.
 
-A more complete description of the `sfcr_sim()` and `sfcr_scenario()` variables can be found at the `vignette("sfcr")`.
+The `sfcr_set()` function is used to create define the equations and external variables of the model.
 
-The first step is to simulate the steady state of the model with the `sfcr_sim()` function:
+These sets are used to simulate the baseline scenario of the model with the `sfcr_baseline()` function:
 
 ```{r example}
 library(sfcr)
 
-eqs <- list(
-  TX_s[t] ~ TX_d[t],
-  YD[t] ~ W[t] * N_s[t] - TX_s[t],
-  C_d[t] ~ alpha1 * YD[t] + alpha2 * H_h[t-1],
-  H_h[t] ~ YD[t] - C_d[t] + H_h[t-1],
-  N_s[t] ~ N_d[t],
-  N_d[t] ~ Y[t] / W[t],
-  C_s[t] ~ C_d[t],
-  G_s[t] ~ G_d[t],
-  Y[t] ~ C_s[t] + G_s[t],
-  TX_d[t] ~ theta * W[t] * N_s[t],
-  H_s[t] ~ G_d[t] - TX_d[t] + H_s[t-1]
+eqs <- sfcr_set(
+  TXs ~ TXd,
+  YD ~ W * Ns - TXs,
+  Cd ~ alpha1 * YD + alpha2 * Hh[-1],
+  Hh ~ YD - Cd + Hh[-1],
+  Ns ~ Nd,
+  Nd ~ Y / W,
+  Cs ~ Cd,
+  Gs ~ Gd,
+  Y ~ Cs + Gs,
+  TXd ~ theta * W * Ns,
+  Hs ~ Gd - TXd + Hs[-1]
 )
 
-exg <- list("G_d" = 20, "W" = 1)
-
-params <- list("alpha1" = 0.6, "alpha2" = 0.4, "theta" = 0.2)
-
-sim_model <- sfcr_sim(
-  equations = eqs, 
-  t = 60, 
-  exogenous = exg, 
-  parameters = params
+external <- sfcr_set(
+  Gd ~ 20, 
+  W ~ 1,
+  alpha1 ~ 0.6,
+  alpha2 ~ 0.4,
+  theta ~ 0.2
   )
 
-sim_model
+sim <- sfcr_baseline(
+  equations = eqs, 
+  external = external,
+  periods = 60, 
+  
+  )
+
+sim
 ```
 
-
-With the steady state values at hand, we can use the `sfcr_scenario()` function to see what happens if we increase government expenditures ("G_d") from 20 to 30:
+With the steady state values at hand, we can use the `sfcr_scenario()` function to see what happens if we increase government expenditures `Gd` from 20 to 30:
 
 ```{r}
-shock <- list("G_d" = 30)
+shock <- sfcr_shock(
+  variables = sfcr_set(
+    Gd ~ 30
+  ),
+  start = 5,
+  end = 60
+)
 
 sim2 <- sfcr_scenario(
-  steady_state = sim_model,
-  equations = eqs, 
-  t = 60, 
-  exogenous = exg, 
-  parameters = params, 
-  shock_exg = shock
+  baseline = sim,
+  scenario = shock,
+  periods = 60
   )
 
 sim2
 ```
 
-
-The output is a `tibble` that can be easily manipulated and plotted with the `tidyverse` packages.
+With `sfcr`, the models are written entirely within R and use the standard R syntax. Furthermore, their output is a `tibble`, meaning that it can be easily manipulated with `dplyr` and other `tidyverse` tools and plotted with `ggplot2`.
 
 ### References

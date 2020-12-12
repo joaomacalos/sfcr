@@ -2,8 +2,8 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
-references.bib
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.travis\.yml$
+^vignettes/articles$
