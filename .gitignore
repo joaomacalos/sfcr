@@ -1,7 +1,6 @@
 .Rproj.user
 .Rhistory
 .RData
-references.bib
 inst/doc
 docs
 docs/*
