@@ -4,7 +4,7 @@
 new_sfcr_set <- function(list) {
   stopifnot(inherits(list, "list"))
 
-  if (mean(vapply(list, rlang::is_formula, logical(1))) < 1) rlang::abort("Invalid arguments. Please use the R equations syntax to define the formulas.")
+  if (mean(vapply(list, rlang::is_formula, logical(1))) < 1) rlang::abort("Invalid arguments. Please use the R formula syntax (`~` instead of `=`) to separate the equations.")
 
   structure(list,
             class = c("sfcr_set", "list"))
@@ -15,24 +15,127 @@ new_sfcr_set <- function(list) {
 
 #' Define the formulas of the model
 #'
+#' The \code{sfcr_set()} function is used to create the lists of equations,
+#' external variables, initial values, and also to modify the variables inside
+#' the \code{sfcr_shock()} function.
+#'
+#'
+#' @details
+#'
+#' This function is a S3 generic that applicable to only two inputs: formulas and
+#' \code{sfcr_set}s. It is used to create a new set of equations or to modify an existing
+#' one.
+#'
+#' Therefore, the equations must be written using the R formula syntax, i.e., the left-hand
+#' side of each equation is separated from the right-hand side with a \code{~} ("twiddle")
+#' instead of a \code{=}.
+#'
+#' Furthermore, the \code{sfcr_set()} function recognizes two symbols that are not
+#' native to R language: \code{[-1]}, and \code{d()}.
+#'
+#' * If a variable defined with \code{sfcr_set()} is followed by \code{[-1]}, it will
+#'   be recognized as a lagged variable.
+#'
+#' * If a variable is defined inside \code{d()}, the \code{sfcr} engines will transform
+#' them into a first difference equations.
+#'
+#'
 #' @param ... The formulas used to define the equations and external
 #' values of the system
+#' @param exclude One or more indices of equations to be excluded. The
+#' correct indices can be found with \code{sfcr_set_index()}.
 #'
 #' @author João Macalós
 #'
 #' @examples
-#' sfcr_set(alpha0 ~ 15, alpha1 ~ 0.8, alpha2 ~ 0.15)
+#' # Endogenous set
+#' set1 <- eqs <- sfcr_set(
+#'   TXs ~ TXd,
+#'   YD ~ W * Ns - TXs,
+#'   Cd ~ alpha1 * YD + alpha2 * Hh[-1],
+#'   Hh ~ YD - Cd + Hh[-1],
+#'   Ns ~ Nd,
+#'   Nd ~ Y / W,
+#'   Cs ~ Cd,
+#'   Gs ~ Gd,
+#'   Y ~ Cs + Gs,
+#'   TXd ~ theta * W * Ns,
+#'   Hs ~ Gd - TXd + Hs[-1]
+#'   )
+#'
+#' # Exogenous set
+#' set2 <- sfcr_set(alpha1 ~ 0.8, alpha2 ~ 0.15)
+#'
+#' # Modify an existing set
+#' set2 <- sfcr_set(set1, Hh ~ Hh[-1] + d(Hs), exclude = 4)
 #'
 #' @export
 #'
-sfcr_set <- function(...) {
+sfcr_set <- function(..., exclude = NULL) {
+  UseMethod("sfcr_set")
+}
 
-  tryCatch(
-    error = function(cnd) rlang::abort("Please use the R equations syntax to define the formulas."),
-    formulas <- list(...)
-  )
+#' S3 method for sfcr_set
+#'
+#' @param ... The formulas used to define the equations and external
+#' values of the system
+#' @param exclude One or more indices of equations to be excluded. The
+#' correct indices can be found with \code{sfcr_set_index()}.
+#'
+#'
+#' @export
+#'
+sfcr_set.formula <- function(..., exclude = NULL) {
+
+  formulas <- rlang::list2(...)
 
   formulas <- new_sfcr_set(formulas)
 
+  formulas[exclude] <- NULL
+
   return(formulas)
+}
+
+#' S3 method for sfcr_set
+#'
+#' @param ... A sfcr_set and new formulas to be added
+#' @param exclude One or more indices of equations to be excluded. The
+#' correct indices can be found with \code{sfcr_set_index()}.
+#'
+#' @export
+#'
+sfcr_set.sfcr_set <- function(..., exclude = NULL) {
+  formulas <- c(...)
+
+  formulas <- new_sfcr_set(formulas)
+
+  formulas[exclude] <- NULL
+
+  return(formulas)
+}
+
+
+
+#' Get names of endogenous vars and their index
+#'
+#' The \code{sfcr_set_index()} function takes a list of equations as its input and returns
+#' a tibble containing the name of the variable on the left-hand side of the equations
+#' and their position in the equations list.
+#'
+#' This function aims to facilitate locating a specific equation in the list in order to
+#' modify the list of equations.
+#'
+#' @param eqs A list of equations created with \code{sfcr_set()}
+#'
+#' @export
+#'
+#' @author João Macalós
+#'
+sfcr_set_index <- function(eqs) {
+
+  abortifnot(inherits(eqs, "sfcr_set"), "Please supply a list of equations created with `sfcr_set()`.")
+
+  purrr::map_df(eqs, ~ tibble::enframe(name = "id", deparse(.x, width.cutoff = 500))) %>%
+    dplyr::mutate(id = 1:length(eqs)) %>%
+    tidyr::separate(.data$value, into = c("lhs", "rhs"), " ~ ")
 }

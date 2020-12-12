@@ -48,7 +48,7 @@ sfcr_matrix <- function(columns, codes, ...) {
       rlang::set_names(c("name", codes))
     )
 
-  ar <- list(...)
+  ar <- rlang::list2(...)
   ar <- purrr::map(ar, ~c(.x[-1], name = .x[1]))
   #ar <- purrr::imap(ar, ~c(.x, name = .y))
 
@@ -122,16 +122,21 @@ sfcr_matrix <- function(columns, codes, ...) {
 #' Print matrix to screen
 #'
 #' @param matrix A balance sheet or transactions-flow matrix
-#' @param which Is it a balance-sheet or a transactions-flow matrix?
+#' @param which A character string for the matrix. Is it a balance-sheet or
+#' a transactions-flow matrix? here are two options:
+#' \code{"bs"} for balance-sheet matrices, and \code{"tfm"} for transactions-
+#' flow matrices. The default is \code{"tfm"}.
+#' @param ... Additional arguments to be passed to \code{kable_styling()}.
 #'
 #' @details This function takes a matrix as input and generate a \code{kableExtra}
 #' table with math symbols displayed in latex style.
+#'
 #'
 #' @example inst/examples/example_sfcr_matrix_display.R
 #'
 #'
 #' @export
-sfcr_matrix_display <- function(matrix, which = "tfm") {
+sfcr_matrix_display <- function(matrix, which = "tfm", ...) {
   match.arg(which, c("tfm", "bs"))
 
   if (!requireNamespace("kableExtra", quietly = TRUE)) {
@@ -155,7 +160,7 @@ sfcr_matrix_display <- function(matrix, which = "tfm") {
       purrr::set_names(c("", nms_latex[2:length(nms_latex)], "$\\sum$"))
   } else {
     latex <- latex %>%
-      dplyr::mutate(dplyr::across(ncol(latex), ~dplyr::if_else(str_length(.x) == 0, "$0$", .x))) %>%
+      dplyr::mutate(dplyr::across(ncol(latex), ~dplyr::if_else(stringr::str_length(.x) == 0, "$0$", .x))) %>%
       purrr::set_names(c("", nms_latex[2:(length(nms_latex) - 1)], "$\\sum$"))
   }
 
@@ -164,160 +169,6 @@ sfcr_matrix_display <- function(matrix, which = "tfm") {
                   format = "html",
                   table.attr = "style = \"color: black;\""
   ) %>%
-    kableExtra::kable_styling(c("striped", "hover"))
-
-}
-
-
-.all_equal <- function(x) {diff(range(x)) < 1e-3}
-.is_equal <- function(x, y) {abs(x - y) < 1e-3}
-
-
-.get_matrix <- function(mtrx, baseline, bl1, bl2) {
-
-  nms <- colnames(mtrx)
-  colnames(mtrx) <- c("name", nms[2:length(nms)])
-
-  mtrx <- mtrx %>%
-    dplyr::mutate(dplyr::across(-1, ~.add_time2(.x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvar(bl1$lhs), "m\\[i,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvar(bl2), "m\\[i,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvarlag(bl1$lhs), "m\\[i-1,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvarlag(bl2), "m\\[i-1,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("___", "", .x)))
-
-}
-
-
-.validate_tfm <- function(tfm, m) {
-  k2 <- as.matrix(tfm[, -1])
-  k3 <- matrix(NA_real_, nrow = nrow(k2), ncol = ncol(k2))
-  colnames(k3) <- colnames(k2)
-
-  ids <- which(purrr::map_lgl(k2, ~stringr::str_length(.x) != 0))
-
-  l1 <- 2:nrow(m)
-
-  for (i in l1) {
-    for (j in ids) {
-      k3[[j]] <- eval(str2expression(k2[[j]]))
-    }
-
-    r1 <- rowSums(as.matrix(k3), na.rm = T)
-    c1 <- colSums(as.matrix(k3), na.rm = T)
-
-    if (isFALSE(.all_equal(r1))) {
-      r2 <- which(abs(r1) > 1e-3)
-      message <- paste0("Ooops, water is leaking!\n`", tfm[r2, ]$name, "` row does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-      rlang::abort(message = message)
-    }
-
-    if (isFALSE(.all_equal(c1))) {
-      c2 <- which(abs(c1) > 1e-3)
-      message <- paste0("Ooops, water is leaking!\n`", tfm[, c2]$name, "` column does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-      rlang::abort(message = message)
-    }
-  }
-}
-
-
-.validate_matrix <- function(mtrx, m, which = "tfm") {
-  match.arg(which, c("tfm", "bs"))
-
-  k2 <- as.matrix(mtrx[, -1])
-  k3 <- matrix(0, nrow = nrow(k2), ncol = ncol(k2))
-  colnames(k3) <- colnames(k2)
-
-  ids <- which(purrr::map_lgl(k2, ~stringr::str_length(.x) != 0))
-
-  l1 <- 2:nrow(m)
-
-  if (which == "tfm") {
-    for (i in l1) {
-      for (j in ids) {
-        k3[[j]] <- eval(str2expression(k2[[j]]))
-      }
-
-      r1 <- rowSums(as.matrix(k3), na.rm = T)
-      c1 <- colSums(as.matrix(k3), na.rm = T)
-
-      if (isFALSE(.all_equal(r1))) {
-        r2 <- which(abs(r1) > 1e-3)
-        message <- paste0("Ooops, water is leaking!\n`", mtrx[r2, ]$name, "` row does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-        rlang::abort(message = message)
-      }
-
-      if (isFALSE(.all_equal(c1))) {
-        c2 <- which(abs(c1) > 1e-3)
-        message <- paste0("Ooops, water is leaking!\n`", mtrx[, c2]$name, "` column does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-        rlang::abort(message = message)
-      }
-    }
-
-  }
-
-  if (which == "bs") {
-    for (i in l1) {
-      for (j in ids) {
-        k3[[j]] <- eval(str2expression(k2[[j]]))
-      }
-
-      r1 <- rowSums(k3[, -ncol(k3)], na.rm = T)
-      rs <- k3[, ncol(k3)]
-      c1 <- colSums(k3, na.rm = T)
-
-      if (isFALSE(all(.is_equal(r1, rs)))) {
-        r2 <- which(isFALSE(.is_equal(r1, rs)))
-        message <- paste0("Ooops, water is leaking!\n`", mtrx[, r2]$name, "` row is not equal to expected sum. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
-        rlang::abort(message = message)
-      }
-
-      if (isFALSE(.all_equal(c1))) {
-        c2 <- which(abs(c1) > 1e-3)
-        message <- paste0("Oooops, water is leaking!\n`", mtrx[, c2]$name, "` column does not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
-        rlang::abort(message = message)
-      }
-    }
-  }
-}
-
-
-#' Validate a transactions-flow or balance-sheet matrix
-#'
-#' This function validates a transactions-flow or balance-sheet
-#' matrix with the simulated data obtained with \code{sfcr_baseline()}
-#' function
-#'
-#' @param matrix A transactions-flow or balance sheet matrix
-#' @param baseline A baseline model.
-#' @param which Is it a transactions-flow or a balance-sheet matrix?
-#'
-#' @export
-sfcr_validate <- function(matrix, baseline, which = "tfm") {
-
-  match.arg(which, c("tfm", "bs"))
-
-  bl1 <- attr(baseline, "calls")
-  bl2 <- attr(baseline, "external")
-  m <- attr(baseline, "matrix")
-
-  # If TFM
-
-  if (which == "tfm") {
-    tfm <- .get_matrix(matrix, baseline, bl1, bl2)
-
-    .validate_matrix(tfm, m, "tfm")
-
-    cat("Water tight! The transactions-flow matrix is consistent with the simulated model.")
-  }
-
-  else {
-    bs <- .get_matrix(matrix, baseline, bl1, bl2)
-
-    .validate_matrix(bs, m, "bs")
-
-    cat("Water tight! The balance-sheet matrix is consistent with the simulated model.")
-  }
-
+    kableExtra::kable_styling(c("striped", "hover"), ...)
 
 }

@@ -17,19 +17,21 @@ URL: https://github.com/joaomacalos/sfcr
 BugReports: https://github.com/joaomacalos/sfcr/issues
 Imports: 
     dplyr (>= 1.0.2),
-    expm,
-    forcats,
+    expm (>= 0.999.5),
+    forcats (>= 0.5.0),
     igraph (>= 1.2.6),
     magrittr (>= 1.5),
     purrr (>= 0.3.4),
-    Rdpack,
+    Rdpack (>= 2.1),
+    rootSolve (>= 1.8.2.1),
     rlang (>= 0.4.7),
     tibble (>= 3.0.3),
     tidyr (>= 1.1.2),
     tidyselect (>= 1.1.0),
-    stringr,
+    stringr (>= 1.4.0),
     utils,
-    vctrs
+    vctrs (>= 0.3.5),
+    Rcpp (>= 1.0.5)
 Suggests: 
     ggraph,
     ggplot2,
@@ -45,3 +47,6 @@ Suggests:
     networkD3
 VignetteBuilder: knitr
 RdMacros: Rdpack
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo

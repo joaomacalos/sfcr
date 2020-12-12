@@ -125,6 +125,9 @@ lambda41 <- -(lambda44 + lambda42 + lambda43)
 
 # lambda21 = - (lambda22 + lambda23 + lambda24)
 lambda21 = -(lambda22 + lambda23 + lambda24)
+cat("lambda21: ", lambda21)
+cat("lambda31: ", lambda31)
+cat("lambda41: ", lambda41)
 
 lambda12 = lambda21
 lambda13 = lambda31
@@ -191,7 +194,7 @@ insout_ext <- sfcr_set(
   
   # PORTFOLIO PARAMETERS
   
-  # (note that the sfcr package does not evaluate defined in the global environment when setting the external variables.
+  # (note that the sfcr package does not evaluate variables defined in the global environment when setting the external variables.
   # Therefore, the parameters' values must be added by hand here.)
   
   lambda10 ~ -0.17071,
@@ -485,15 +488,37 @@ insout <- sfcr_baseline(
   periods = 210,
   initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1, BPM ~ 0.0035),
   hidden = c("Hbd" = "Hbs"),
-  tol = 1e-25
+  tol = 1e-25,
+  method = "Gauss"
+)
+
+insout2 <- sfcr_baseline(
+  equations = insout_eqs,
+  external = insout_ext,
+  periods = 210,
+  initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1, BPM ~ 0.0035),
+  hidden = c("Hbd" = "Hbs"),
+  tol = 1e-25,
+  method = "nleq2"
 )
 ```
 
+```{r, paged.print = F}
+insout %>%
+  select(period, Hbs, Hbd, BLRN, z3, z5, rm, everything()) %>%
+  .round()
+```
+
+```{r, paged.print = F}
+insout2 %>%
+  select(period, Hbs, Hbd, BLRN, z3, z5, rm, everything()) %>%
+  .round()
+```
 
 Fulfilling the hidden equation is a good sign. But did the model arrive to a sensible steady state?
 
 ```{r}
-insout %>%
+insout2 %>%
   pivot_longer(cols = -period) %>%
   filter(name %in% c("Y", "y", "s", "inv", "pi", "Bs", "M1s", "M2s", "V", "INV", "FXf", "FXb")) %>%
   ggplot(aes(x = period, y = value)) +
@@ -514,7 +539,8 @@ pingpong <- sfcr_baseline(
   periods = 200,
   initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1),
   hidden = c("Hbd" = "Hbs"),
-  tol = 1e-25
+  tol = 1e-25,
+  method = "Broyden"
 )
 
 # Some values are cut out given the limits I set to this plot
@@ -528,7 +554,7 @@ Ping pong is bad because it prevents a stable steady state where we wanna run ou
 Setting `top` to 0.1 solves the problem:
 
 ```{r}
-insout %>%
+insout2 %>%
   do_plot(variables = c("BLRN", "bot", "top")) +
   ylim(0, 0.1)
 ```
@@ -537,7 +563,7 @@ insout %>%
 What about `BPM` and `toppm` and `botpm`?
 
 ```{r}
-insout %>%
+insout2 %>%
   do_plot(variables = c("BPM", "toppm", "botpm")) +
   ylim(0, 0.01)
 ```

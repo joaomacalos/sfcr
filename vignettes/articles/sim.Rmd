@@ -38,44 +38,74 @@ library(tidyverse)
 The first step is to write down the equations, exogenous variables, and parameters:
 
 ```{r}
-sim_eqs <- list(
-  TX_s ~ TX_d,
-  YD ~ W * N_s - TX_s,
-  C_d ~ alpha1 * YD + alpha2 * H_h[-1],
-  H_h ~ YD - C_d + H_h[-1],
-  N_s ~ N_d,
-  N_d ~ Y / W,
-  C_s ~ C_d,
-  G_s ~ G_d,
-  Y ~ C_s + G_s,
-  TX_d ~ theta * W * N_s,
-  H_s ~ G_d - TX_d + H_s[-1]
+sim_eqs <- sfcr_set(
+  TXs ~ TXd,
+  YD ~ W * Ns - TXs,
+  Cd ~ alpha1 * YD + alpha2 * Hh[-1],
+  Hh ~ YD - Cd + Hh[-1],
+  Ns ~ Nd,
+  Nd ~ Y / W,
+  Cs ~ Cd,
+  Gs ~ Gd,
+  Y ~ Cs + Gs,
+  TXd ~ theta * W * Ns,
+  Hs ~ Gd - TXd + Hs[-1]
 )
 
-sim_exg <- list(
-  G_d ~ 20,
-  W ~ 1)
-
-sim_prms <- list(
-alpha1 ~ 0.6,
-alpha2 ~ 0.4,
-theta ~ 0.2
+sim_ext <- sfcr_set(
+  Gd ~ 20,
+  W ~ 1,
+  alpha1 ~ 0.6,
+  alpha2 ~ 0.4,
+  theta ~ 0.2
 )
 ```
 
 With these objects defined, we can simulate the SIM model. We will make it run for 100 periods. We will also define the hidden equation before hand, ensuring that the model is written correctly:
 
 ```{r}
-hidden_equation <- c("H_h" = "H_s")
-sim <- sfcr_sim(sim_eqs, sim_exg, sim_prms, 100, hidden = hidden_equation)
-sim
+system.time(sim <- sfcr_baseline(
+  equations = sim_eqs, 
+  external = sim_ext, 
+  periods = 100, 
+  hidden = c("Hh" = "Hs"),
+  method = "Gauss")
+  )
+
 ```
+
+
+
+
+
+
+```{r}
+sim %>%
+  mutate(d = abs(Hh - Hs)) %>%
+  select(Hh, Hs, d) %>%
+  .round()
+```
+
+
+
+```{r}
+system.time(sim2 <- sfcr_baseline(
+  equations = sim_eqs, 
+  external = sim_ext, 
+  periods = 100, 
+  hidden = c("Hh" = "Hs"), 
+  method = "Newton")
+  )
+```
+
+
+
 We can check that the model generates the same long-run results as the model presented in page 69 @godley2007monetary..
 
 ```{r}
 sim %>%
   filter(period %in% c(1, 2, 3, 50)) %>%
-  select(period, G_s, Y, TX_d, YD, H_s) %>%
+  select(period, Gs, Y, TXd, YD, Hs) %>%
   t() %>%
   round(digits = 0)
   

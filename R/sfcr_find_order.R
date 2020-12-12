@@ -12,7 +12,8 @@
     unlist
 
   tibble::tibble(vars) %>%
-    tidyr::separate(.data$vars, c('lhs', 'rhs'), ' ~ ')
+    tidyr::separate(.data$vars, c('lhs', 'rhs'), ' ~ ') %>%
+    dplyr::mutate(rhs = stringr::str_replace_all(.data$rhs, "d\\((.*?)\\)", "\\(\\1 - \\1\\[-1\\]\\)"))
 }
 
 #' Find dependencies and order the equations

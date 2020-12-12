@@ -31,7 +31,7 @@ new_sfcr_mlt <- function(multis, fixed) {
 #' The available methods for the \code{sfcr_multis()} function depends
 #' on the \code{expanded} argument. There are three possible methods:
 #'
-#' * 1. \code{sfcr_mlt_set}:
+#' * \code{sfcr_mlt_set}:
 #'   When the \code{sfcr_multis()} takes an \code{sfcr_mlt_external} class
 #'   as the input of \code{expanded}, it must take a list of equations of
 #'   the \code{sfcr_set} class as the \code{fixed} input. This method
@@ -39,7 +39,7 @@ new_sfcr_mlt <- function(multis, fixed) {
 #'   and vary on the external variables supplied with the \code{expanded}
 #'   argument.
 #'
-#' * 2. \code{sfcr_mlt_shock}:
+#' * \code{sfcr_mlt_shock}:
 #'   When the \code{sfcr_multis()} takes an \code{sfcr_mlt_shock} class
 #'   as the input of \code{expanded}, it must also take an object of
 #'   \code{sfcr_tbl} class as the input of \code{fixed}. It will simulate
@@ -47,7 +47,7 @@ new_sfcr_mlt <- function(multis, fixed) {
 #'   and diverge on the content of the multiple shocks provided with the
 #'   \code{expanded} argument that are applied to it.
 #'
-#' * 3. \code{sfcr_mlt}:
+#' * \code{sfcr_mlt}:
 #'   When the \code{sfcr_multis()} function takes a \code{sfcr_mlt} class
 #'   object as the input of the \code{expanded} argument, a \code{sfcr_shock}
 #'   object must be supplied with the \code{fixed} argument. This method

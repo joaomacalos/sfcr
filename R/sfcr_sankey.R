@@ -38,6 +38,7 @@ sfcr_sankey <- function(tfm, baseline, when = "start") {
 
   # Convert entries to valid expressions
   tfm <- tfm %>%
+    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, "d\\((.*?)\\)", "\\(\\1 - \\1\\[-1\\]\\)"))) %>%
     dplyr::mutate(dplyr::across(-1, ~.add_time2(.x))) %>%
     dplyr::mutate(dplyr::across(-1, ~gsub(.pvar(bl1$lhs), "m\\[2,'\\1'\\]", .x, perl = T))) %>%
     dplyr::mutate(dplyr::across(-1, ~gsub(.pvar(bl2), "m\\[2,'\\1'\\]", .x, perl = T))) %>%

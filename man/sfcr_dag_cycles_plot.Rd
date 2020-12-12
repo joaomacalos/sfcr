@@ -7,9 +7,9 @@
 sfcr_dag_cycles_plot(equations, title = NULL, size = 15)
 }
 \arguments{
-\item{equations}{A list containing all the equations of the model to be simulated. The equations
-must be written in R syntax, with the left-hand side separated from the right-hand side
-by a tilde \code{~}.}
+\item{equations}{A \code{sfcr_set} containing all the equations of the model to be simulated. The equations
+must be written with the R formula syntax, with the left-hand side separated from the right-hand side
+by a twiddle \code{~}.}
 
 \item{title}{Title of the plot.}
 

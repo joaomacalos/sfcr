@@ -30,3 +30,7 @@ abortifnot <- function(cnd, message = NULL) {
 
 }
 
+.round <- function(tbl) {
+  tbl %>%
+    dplyr::mutate(dplyr::across(tidyselect::everything(), ~round(.x, digits = 2)))
+}

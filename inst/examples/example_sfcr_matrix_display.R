@@ -14,4 +14,4 @@ bs_insout <- sfcr_matrix(
   r9 = c("Balance", h = "-V", f = 0, g = "+GD", cb = 0, b = 0, s = "-INV")
 )
 
-sfcr_matrix_display(bs_insout)
+sfcr_matrix_display(bs_insout, "bs")

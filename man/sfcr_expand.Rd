@@ -13,8 +13,14 @@ a shock set created with \code{sfcr_shock()}}
 \item{variable}{the name of variable to be expanded.}
 
 \item{values}{a vector containing the new values of the external or
-shock variable.
-
+shock variable.}
+}
+\description{
+The \code{sfcr_expand()} function is a s3 \strong{generic} that takes
+a list of external objects and returns a expanded set of these lists.
+It has methodsf or \code{sfcr_set} objects and \code{sfcr_shock} objects.
+}
+\details{
 There are two available methods for the \code{sfcr_expand()} function:
 \itemize{
 \item \code{sfcr_set}:
@@ -27,12 +33,7 @@ Takes a \code{sfcr_shock} object and creates a list of shocks that inherits
 all the aspects of the \code{x} shock but set the \code{values} of the
 \code{variable} to each element of \code{value}. The output of this
 method is a \code{sfcr_mlt_shock} object.
-}}
 }
-\description{
-The \code{sfcr_expand()} function is a s3 \strong{generic} that takes
-a list of external objects and returns a expanded set of these lists.
-It has methodsf or \code{sfcr_set} objects and \code{sfcr_shock} objects.
 }
 \examples{
 # 1. Expand a external set:

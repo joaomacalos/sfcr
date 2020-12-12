@@ -4,17 +4,59 @@
 \alias{sfcr_set}
 \title{Define the formulas of the model}
 \usage{
-sfcr_set(...)
+sfcr_set(..., exclude = NULL)
 }
 \arguments{
 \item{...}{The formulas used to define the equations and external
 values of the system}
+
+\item{exclude}{One or more indices of equations to be excluded. The
+correct indices can be found with \code{sfcr_set_index()}.}
 }
 \description{
-Define the formulas of the model
+The \code{sfcr_set()} function is used to create the lists of equations,
+external variables, initial values, and also to modify the variables inside
+the \code{sfcr_shock()} function.
+}
+\details{
+This function is a S3 generic that applicable to only two inputs: formulas and
+\code{sfcr_set}s. It is used to create a new set of equations or to modify an existing
+one.
+
+Therefore, the equations must be written using the R formula syntax, i.e., the left-hand
+side of each equation is separated from the right-hand side with a \code{~} ("twiddle")
+instead of a \code{=}.
+
+Furthermore, the \code{sfcr_set()} function recognizes two symbols that are not
+native to R language: \code{[-1]}, and \code{d()}.
+\itemize{
+\item If a variable defined with \code{sfcr_set()} is followed by \code{[-1]}, it will
+be recognized as a lagged variable.
+\item If a variable is defined inside \code{d()}, the \code{sfcr} engines will transform
+them into a first difference equations.
+}
 }
 \examples{
-sfcr_set(alpha0 ~ 15, alpha1 ~ 0.8, alpha2 ~ 0.15)
+# Endogenous set
+set1 <- eqs <- sfcr_set(
+  TXs ~ TXd,
+  YD ~ W * Ns - TXs,
+  Cd ~ alpha1 * YD + alpha2 * Hh[-1],
+  Hh ~ YD - Cd + Hh[-1],
+  Ns ~ Nd,
+  Nd ~ Y / W,
+  Cs ~ Cd,
+  Gs ~ Gd,
+  Y ~ Cs + Gs,
+  TXd ~ theta * W * Ns,
+  Hs ~ Gd - TXd + Hs[-1]
+  )
+
+# Exogenous set
+set2 <- sfcr_set(alpha1 ~ 0.8, alpha2 ~ 0.15)
+
+# Modify an existing set
+set2 <- sfcr_set(set1, Hh ~ Hh[-1] + d(Hs), exclude = 4)
 
 }
 \author{

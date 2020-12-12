@@ -10,6 +10,8 @@
 #' @param values a vector containing the new values of the external or
 #' shock variable.
 #'
+#' @details
+#'
 #' There are two available methods for the \code{sfcr_expand()} function:
 #' * \code{sfcr_set}:
 #'  Takes a \code{sfcr_set} object with **external** variables and creates

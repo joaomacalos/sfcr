@@ -4,10 +4,10 @@
 \alias{.sfcr_make_scenario_matrix}
 \title{Make matrix for scenario calculations}
 \usage{
-.sfcr_make_scenario_matrix(sfcr_sim, scenario, periods)
+.sfcr_make_scenario_matrix(baseline, scenario, periods)
 }
 \arguments{
-\item{sfcr_sim}{a model calculated with the \code{sfcr_sim()} function}
+\item{baseline}{a model calculated with the \code{sfcr_sim()} function}
 
 \item{scenario}{a List holding the different scenarios}
 
@@ -18,7 +18,7 @@ Make matrix for scenario calculations
 }
 \details{
 This function generates the base matrix that is going to be
-modified in place by the \code{sfcr_gauss_seidel()} algorithm.
+modified in place by the different solvers.
 }
 \author{
 João Macalós

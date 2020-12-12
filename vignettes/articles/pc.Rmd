@@ -41,7 +41,7 @@ bs_pc <- sfcr_matrix(
   r3 = c("Balance", h = "-V", g = "+V")
 )
 
-sfcr_matrix_display(bs_pc, "bs")
+sfcr_matrix_display(bs_pc, "bs", full_width = FALSE)
 ```
 
 ```{r}
@@ -102,13 +102,54 @@ pc_ext <- sfcr_set(
 We then simulate the model to get the steady state values:
 
 ```{r}
-pc <- sfcr_baseline(
+system.time(pc <- sfcr_baseline(
   equations = pc_eqs, 
   external = pc_ext, 
   periods = 70, 
   hidden = c("Hh" = "Hs")
-  )
+))
+
 ```
+
+```{r}
+pc %>%
+  select(Hh, Hs) %>%
+  .round()
+
+
+sfcr_get_matrix(pc) %>%
+  data.frame %>% tibble %>%
+  select(contains("block")) %>%
+  .round()
+```
+
+```{r}
+system.time(pc2 <- sfcr_baseline(
+  equations = pc_eqs, 
+  external = pc_ext, 
+  periods = 70, 
+  hidden = c("Hh" = "Hs"),
+  method = "Newton"
+))
+```
+
+```{r}
+.round(pc2)
+```
+
+
+
+
+```{r}
+sfcr_get_matrix(pc2) %>%
+  data.frame %>%
+  tibble %>%
+  round(digits = 3) %>%
+  select(contains("block"))
+```
+
+
+
 
 The fact that the hidden equation is fulfilled already indicates that the accounting part of the model is water tight. However, the `sfcr` package also allow the user to validate the model using the balance-sheet and transactions-flow matrices.
 

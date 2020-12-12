@@ -4,19 +4,33 @@
 \alias{sfcr_scenario}
 \title{Add scenarios to a \code{sfcr} model.}
 \usage{
-sfcr_scenario(baseline, scenario, periods, max_iter = 350, tol = 1e-10)
+sfcr_scenario(
+  baseline,
+  scenario,
+  periods,
+  max_iter = 350,
+  tol = 1e-10,
+  method = "Broyden",
+  ...
+)
 }
 \arguments{
 \item{baseline}{A model generated with the \code{sfcr_baseline()} function.}
 
-\item{scenario}{A list containing one or more shocks created with
-\code{sfcr_shock()} function.}
+\item{scenario}{Either a shock created with \code{sfcr_shock()}, a list of shocks,
+or \code{NULL}. If \code{scenario = NULL}, the model will just extend the baseline
+model.}
 
-\item{periods}{The total periods in the model.}
+\item{periods}{A number specifying the total number of periods of the model to be simulated.}
 
-\item{max_iter}{The maximum allowed iteration per period.}
+\item{max_iter}{Maximum iterations allowed per period.}
 
-\item{tol}{Tolerance accepted to determine convergence in the Gauss Seidel algorithm.}
+\item{tol}{Tolerance accepted to determine convergence.}
+
+\item{method}{The method to use to find a solution. Defaults to "Broyden".}
+
+\item{...}{Extra arguments to pass to \code{rootSolve::multiroot()} function if "Newton" method
+is selected.}
 }
 \description{
 Add scenarios to a \code{sfcr} model.
@@ -24,8 +38,8 @@ Add scenarios to a \code{sfcr} model.
 \details{
 Add scenario(s) to a model generated with \code{sfcr_baseline()} functions.
 
-This function inherits the block structure from the steady state model
-and also uses the Gauss Seidel algorithm.
+This function inherits the block structure from the steady state model. See
+\code{\link{sfcr_baseline}} for futher details on the algorithms.
 }
 \examples{
 eqs <- sfcr_set(

@@ -15,7 +15,7 @@
 
 \item{max_ite}{Maximum number of iterations allowed per block per period.}
 
-\item{tol}{Tolerance accepted to determine convergence in the Gauss Seidel algorithm.}
+\item{tol}{Tolerance accepted to determine convergence.}
 }
 \description{
 Gauss Seidel algorithm

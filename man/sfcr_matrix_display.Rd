@@ -4,12 +4,17 @@
 \alias{sfcr_matrix_display}
 \title{Print matrix to screen}
 \usage{
-sfcr_matrix_display(matrix, which = "tfm")
+sfcr_matrix_display(matrix, which = "tfm", ...)
 }
 \arguments{
 \item{matrix}{A balance sheet or transactions-flow matrix}
 
-\item{which}{Is it a balance-sheet or a transactions-flow matrix?}
+\item{which}{A character string for the matrix. Is it a balance-sheet or
+a transactions-flow matrix? here are two options:
+\code{"bs"} for balance-sheet matrices, and \code{"tfm"} for transactions-
+flow matrices. The default is \code{"tfm"}.}
+
+\item{...}{Additional arguments to be passed to \code{kable_styling()}.}
 }
 \description{
 Print matrix to screen
@@ -35,5 +40,5 @@ bs_insout <- sfcr_matrix(
   r9 = c("Balance", h = "-V", f = 0, g = "+GD", cb = 0, b = 0, s = "-INV")
 )
 
-sfcr_matrix_display(bs_insout)
+sfcr_matrix_display(bs_insout, "bs")
 }
