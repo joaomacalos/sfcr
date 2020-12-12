@@ -11,11 +11,6 @@ sfcr_validate(matrix, baseline, which, tol = 1, rtol = FALSE)
 
 \item{baseline}{A baseline model.}
 
-\item{which}{A character string for the matrix. Is it a balance-sheet or
-a transactions-flow matrix? here are two options:
-\code{"bs"} for balance-sheet matrices, and \code{"tfm"} for transactions-
-flow matrices. The default is \code{"tfm"}.}
-
 \item{tol}{A numerical value indicating the absolute accepted discrepancy accepted
 to validate whether the rows and columns are equal to their expected values.}
 
