@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfcr
+# sfcr package
 
 <!-- badges: start -->
 
@@ -24,9 +24,9 @@ devtools::install_github("joaomacalos/sfcr")
 
 ## Example
 
-This is a basic example which shows you how to simulate the steady state
-of the “SIM” model from Godley and Lavoie (2007 ch. 3) and simulate a
-scenario where the government increase its expenditures.
+This is a basic example which shows how to simulate the “SIM” model from
+Godley and Lavoie (2007 ch. 3), as well as how to add scenarios to this
+baseline model.
 
 The `sfcr_set()` function is used to create define the equations and
 external variables of the model.

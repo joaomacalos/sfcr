@@ -11,6 +11,8 @@ sfcr_validate(matrix, baseline, which, tol = 1, rtol = FALSE)
 
 \item{baseline}{A baseline model.}
 
+\item{which}{Either "bs" (balance-sheet matrix) or "tfm" (transactions-flow matrix).}
+
 \item{tol}{A numerical value indicating the absolute accepted discrepancy accepted
 to validate whether the rows and columns are equal to their expected values.}
 
@@ -41,5 +43,5 @@ To prevent unnecessary calculations, a absolute check with tolerance defined as 
 prior to this evaluation.
 
 The absolute discrepancy set with \code{tol} should be enough to validate
-a stationary SFC Model. However
+a stationary SFC Model.
 }

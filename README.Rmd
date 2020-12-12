@@ -1,6 +1,18 @@
 ---
 output: github_document
-bibliography: references.bib
+references:
+- id: godley2007monetary
+  title: >
+       Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth
+  author:
+  - family: Godley
+    given: Wynne
+  - family: Lavoie
+    given: Marc
+  publisher: Palgrave Macmillan
+  type: book
+  issued:
+    year: 2007
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->

@@ -179,6 +179,7 @@
 #' evaluated. It defaults to \code{FALSE}. Stationary models should pass the test using
 #' a absolute level while growth models might need a relative validation since computational
 #' discrepancies tend to get larger with the model. See details for further information.
+#' @param which Either "bs" (balance-sheet matrix) or "tfm" (transactions-flow matrix).
 #'
 #' @details The relative discrepancy is calculated differently if we are dealing with a
 #' transactions-flow matrix or with a balance-sheet matrix. If \code{which} is set to \code{tfm},
@@ -197,9 +198,7 @@
 #'
 #'
 #' @details The absolute discrepancy set with \code{tol} should be enough to validate
-#' a stationary SFC Model. However
-#'
-#' @inheritParams sfcr_matrix_display
+#' a stationary SFC Model.
 #'
 #' @export
 sfcr_validate <- function(matrix, baseline, which, tol = 1, rtol = FALSE) {
