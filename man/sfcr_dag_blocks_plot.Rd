@@ -4,7 +4,7 @@
 \alias{sfcr_dag_blocks_plot}
 \title{Plot the DAG with blocks and cycles information}
 \usage{
-sfcr_dag_blocks_plot(equations, title = NULL, size = 15)
+sfcr_dag_blocks_plot(equations, title = NULL, size = 10)
 }
 \arguments{
 \item{equations}{A \code{sfcr_set} containing all the equations of the model to be simulated. The equations

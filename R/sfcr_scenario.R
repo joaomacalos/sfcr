@@ -52,6 +52,17 @@
   m <- steady[rep(seq_len(nrow(steady)), periods), ]
 }
 
+.abort_wrong_shock_var <- function(wrong_var) {
+
+  if (length(wrong_var) == 1) {
+    rlang::abort(message = paste0("Shocked variable `", wrong_var, "` is not included in the external variables of the model. Please check your shocks and try again."))
+  } else {
+    rlang::abort(message = paste0("Shocked variables `", paste0(wrong_var, collapse = ", "), "` are not present in the external variables of the model. Please check your shocks and try again."))
+  }
+
+}
+
+
 #' Add scenarios to a \code{sfcr} model.
 #'
 #' @param baseline A model generated with the \code{sfcr_baseline()} function.
@@ -78,11 +89,33 @@ sfcr_scenario <- function(baseline, scenario, periods, max_iter = 350, tol = 1e-
 
   match.arg(method, c("Gauss", "Newton", "Broyden"))
 
+  # Check inheritance
+
   if (inherits(scenario, "sfcr_shock")) {
     scenario <- list(scenario)
   }
 
-  if (isTRUE(class(scenario[[1]]) != "sfcr_shock") && !is.null(scenario)) {stop ("Please use `sfcr_shock()` to create shocks.")}
+  # Check that all shocks are created with sfcr_shock
+
+  check_all_shocks <- purrr::map_lgl(scenario, ~inherits(.x, "sfcr_shock"))
+
+  if (mean(check_all_shocks) < 1 && !is.null(scenario)) rlang::abort("Please use `sfcr_shock()` to create shocks.")
+
+  # Load calls
+  eqs <- attr(baseline, "calls")
+
+  # Check if variables in the shock are valid
+  ends_names <- eqs$lhs
+  all_names <- colnames(baseline)
+  exgs_names <- all_names[which(!(all_names %in% ends_names))]
+
+  all_shock_vars <- unlist(purrr::map(scenario, ~.eq_as_tb(.x$variables)$lhs))
+  check_valid_vars <- purrr::map_lgl(all_shock_vars, ~{.x %in% exgs_names})
+
+  if (mean(check_valid_vars) < 1) {
+    wrong_var <- all_shock_vars[!check_valid_vars]
+    .abort_wrong_shock_var(wrong_var)
+  }
 
 
   # If scenario is NULL, extend baseline model
@@ -91,8 +124,6 @@ sfcr_scenario <- function(baseline, scenario, periods, max_iter = 350, tol = 1e-
   } else {
     m <- .sfcr_make_scenario_matrix(baseline, scenario, periods)
   }
-
-  eqs <- attr(baseline, "calls")
 
   if (method == "Gauss") {
     s1 <- .sfcr_gauss_seidel(m, eqs, periods, max_iter, tol)

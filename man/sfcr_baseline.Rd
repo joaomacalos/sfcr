@@ -143,13 +143,6 @@ sfcr_baseline(equations = eqs, external = external, periods = 10)
 \insertRef{kinsella2011gauss}{sfcr}
 \insertRef{peressini1988nonlinear}{sfcr}
 }
-\seealso{
-\code{\link[igraph]{components}}
-
-\code{\link[rootSolve]{multiroot}}
-
-\code{\link[rootSolve]{jacobian.full}}
-}
 \author{
 João Macalós, \email{joaomacalos@gmail.com}
 }

@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(tidyverse)
+#library(tidyverse)
 library(sfcr)
 ```
 
@@ -41,7 +41,7 @@ bs_pc <- sfcr_matrix(
   r3 = c("Balance", h = "-V", g = "+V")
 )
 
-sfcr_matrix_display(bs_pc, "bs", full_width = FALSE)
+sfcr_matrix_display(bs_pc, "bs")
 ```
 
 ```{r}
@@ -102,54 +102,14 @@ pc_ext <- sfcr_set(
 We then simulate the model to get the steady state values:
 
 ```{r}
-system.time(pc <- sfcr_baseline(
+pc <- sfcr_baseline(
   equations = pc_eqs, 
   external = pc_ext, 
   periods = 70, 
   hidden = c("Hh" = "Hs")
-))
+)
 
 ```
-
-```{r}
-pc %>%
-  select(Hh, Hs) %>%
-  .round()
-
-
-sfcr_get_matrix(pc) %>%
-  data.frame %>% tibble %>%
-  select(contains("block")) %>%
-  .round()
-```
-
-```{r}
-system.time(pc2 <- sfcr_baseline(
-  equations = pc_eqs, 
-  external = pc_ext, 
-  periods = 70, 
-  hidden = c("Hh" = "Hs"),
-  method = "Newton"
-))
-```
-
-```{r}
-.round(pc2)
-```
-
-
-
-
-```{r}
-sfcr_get_matrix(pc2) %>%
-  data.frame %>%
-  tibble %>%
-  round(digits = 3) %>%
-  select(contains("block"))
-```
-
-
-
 
 The fact that the hidden equation is fulfilled already indicates that the accounting part of the model is water tight. However, the `sfcr` package also allow the user to validate the model using the balance-sheet and transactions-flow matrices.
 
@@ -173,15 +133,15 @@ We can safely conclude that the baseline model is well specified. The `sfcr` pac
 Let's  use the `sfcr_dag_cycles_plot()` function to see the structure of the model:
 
 ```{r}
-sfcr_dag_cycles_plot(pc_eqs, size = 10)
+sfcr_dag_cycles_plot(pc_eqs)
 ```
 
-As can be seen, there's a cycle in this model. The `sfcr` package relies on the `igraph` package to identify the best ordering of the equations to apply the Gauss-Seidel algorithm, reducing the the its computational burden. The blocks of independent equations and the iterations needed at each block to simulate the model can be retrieved by calling the attribute `matrix` of the model.
+As can be seen, there's a cycle in this model. The `sfcr` package relies on the `igraph` package to identify the best ordering of the equations, reducing the the its computational burden. The blocks of independent equations and the iterations needed at each block to simulate the model can be retrieved by calling the `sfcr_get_matrix()` and `sfcr_get_blocks()` equations.
 
 Alternatively, it is also possible to use the `sfcr_dag_blocks_plot()` function to visualize this structure:
 
 ```{r}
-sfcr_dag_blocks_plot(pc_eqs, size = 10)
+sfcr_dag_blocks_plot(pc_eqs)
 ```
 
 ## Sankey's diagram

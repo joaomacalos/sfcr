@@ -51,14 +51,14 @@ sfcr_dag_blocks <- function(equations) {
   blocks <- tibble::enframe(blocks, value = "block")
 
   loops <- .return_loops(k3)
-  loops <- tibble::tibble(name = rownames(k3)[loops], value = T)
+  loops <- tibble::tibble(name = rownames(k3)[loops], cyclical = TRUE)
 
   g1 <- igraph::graph_from_adjacency_matrix(t(k3), mode = "directed")
   g2 <- tidygraph::as_tbl_graph(g1)
 
-  g <- suppressMessages(dplyr::left_join(g2, blocks))
-  g <- suppressMessages(dplyr::left_join(g, loops)) %>%
-    dplyr::mutate(value = dplyr::if_else(is.na(.data$value), F, .data$value))
+  g <- dplyr::left_join(g2, blocks, by = "name")
+  g <- dplyr::left_join(g, loops, by = "name") %>%
+    dplyr::mutate(cyclical = dplyr::if_else(is.na(.data$cyclical), FALSE, .data$cyclical))
 
   return(g)
 
@@ -94,14 +94,14 @@ sfcr_dag_cycles <- function(equations) {
   k3 <- .sfcr_find_adjacency(k2)
 
   loops <- .return_loops(k3)
-  loops <- tibble::tibble(name = rownames(k3)[loops], value = T)
+  loops <- tibble::tibble(name = rownames(k3)[loops], cyclical = TRUE)
 
 
   g1 <- igraph::graph_from_adjacency_matrix(t(k3), mode = "directed")
   g2 <- tidygraph::as_tbl_graph(g1)
 
-  g <- suppressMessages(dplyr::left_join(g2, loops)) %>%
-    dplyr::mutate(value = dplyr::if_else(is.na(.data$value), F, .data$value))
+  g <- dplyr::left_join(g2, loops, by = "name") %>%
+    dplyr::mutate(cyclical = dplyr::if_else(is.na(.data$cyclical), FALSE, .data$cyclical))
 
   return(g)
 
@@ -124,7 +124,7 @@ sfcr_dag_cycles <- function(equations) {
 #'
 #' @export
 #'
-sfcr_dag_blocks_plot <- function(equations, title = NULL, size = 15) {
+sfcr_dag_blocks_plot <- function(equations, title = NULL, size = 10) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Packages \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
@@ -154,7 +154,7 @@ sfcr_dag_blocks_plot <- function(equations, title = NULL, size = 15) {
   ggraph::ggraph(dag_blocks, layout = "sugiyama") +
    ggraph::geom_node_point(ggplot2::aes(
      color = forcats::as_factor(.data$block),
-     shape = forcats::fct_rev(forcats::as_factor(.data$value))),
+     shape = forcats::fct_rev(forcats::as_factor(.data$cyclical))),
      size = size,
      alpha = 0.8) +
     ggraph::geom_edge_link(
@@ -187,7 +187,7 @@ sfcr_dag_blocks_plot <- function(equations, title = NULL, size = 15) {
 #'
 #' @export
 #'
-sfcr_dag_cycles_plot <- function(equations, title = NULL, size = 15) {
+sfcr_dag_cycles_plot <- function(equations, title = NULL, size = 10) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Packages \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
@@ -202,7 +202,7 @@ sfcr_dag_cycles_plot <- function(equations, title = NULL, size = 15) {
 
   ggraph::ggraph(dag_loops, layout = "sugiyama") +
     ggraph::geom_node_point(ggplot2::aes(
-      color = forcats::fct_rev(forcats::as_factor(.data$value))),
+      color = forcats::fct_rev(forcats::as_factor(.data$cyclical))),
       size = size,
       alpha = 0.8) +
     ggraph::geom_edge_link(

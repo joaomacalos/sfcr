@@ -42,14 +42,82 @@ test_that("Mutating a `sfcr_tbl` object does not remove its attributes", {
 test_that("Error if shocks are not created with `sfcr_shock()`", {
   shock1 <- list(
     variables = sfcr_set(G_d ~ 30),
-    start = 5,
-    end = 15
+    start = 3,
+    end = 4
   )
 
   expect_error(sfcr_scenario(
     baseline = sim_model,
-    scenario = list(shock1),
-    periods = 30
+    scenario = shock1,
+    periods = 4
   ), "Please use `sfcr_shock\\(\\)` to create shocks.")
 })
 
+test_that("Shock not present in the external set of the model throws an error", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(Gd ~ 30),
+    start = 3,
+    end = 4
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = shock1,
+    periods = 4
+  ), "Shocked variable `Gd` is not included in the external variables of the model. Please check your shocks and try again.")
+})
+
+
+test_that("Shock not present in the external set of the model throws an error with two vars in the same shock", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(Gd ~ 30, C_d ~ 25),
+    start = 3,
+    end = 4
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = shock1,
+    periods = 4
+  ), "Shocked variables `Gd, C_d` are not present in the external variables of the model. Please check your shocks and try again.")
+})
+
+test_that("Shock not present in the external set of the model throws an error with two shocks", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(Gd ~ 30),
+    start = 3,
+    end = 4
+  )
+
+  shock2 <- sfcr_shock(
+    variables = sfcr_set(C_d ~ 25),
+    start = 3,
+    end = 4
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = list(shock1, shock2),
+    periods = 4
+  ), "Shocked variables `Gd, C_d` are not present in the external variables of the model. Please check your shocks and try again.")
+})
+
+test_that("Test that mix of good and bad shock vars throw the correct error", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(Gd ~ 30),
+    start = 3,
+    end = 4
+  )
+
+  shock2 <- sfcr_shock(
+    variables = sfcr_set(G_d ~ 25),
+    start = 3,
+    end = 4
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = list(shock1, shock2),
+    periods = 4
+  ), "Shocked variable `Gd` is not included in the external variables of the model. Please check your shocks and try again.")
+})

@@ -60,6 +60,25 @@ sfcr_get_matrix <- function(sfcr_tbl) {
   attr(sfcr_tbl, "matrix")
 }
 
+
+#' Get Matrix form of \code{sfcr_tbl} object
+#'
+#' @param sfcr_tbl A \code{sfcr_tbl} object.
+#'
+#' @export
+#'
+sfcr_get_blocks <- function(sfcr_tbl) {
+  abortifnot(inherits(sfcr_tbl, "sfcr_tbl"), "Please provide a valid 'sfcr_tbl' object.")
+
+  tbl <- attr(sfcr_tbl, "calls")
+
+  tbl %>%
+    dplyr::select(endogenous = .data$lhs, .data$block) %>%
+    dplyr::arrange(.data$block)
+
+}
+
+
 #' Simulate the baseline scenario of a stock-flow consistent model
 #'
 #' The \code{sfcr_baseline()} function is used to simulate a SFC model.
@@ -146,11 +165,6 @@ sfcr_get_matrix <- function(sfcr_tbl) {
 #'  In general, the \code{.hidden_tol} argument should be set to a small number (e.g. 1e-6).
 #'  The function will check that this proportion remains the same for all simulated periods.
 #'
-#'
-#'
-#' @seealso \code{\link[igraph]{components}}
-#' @seealso \code{\link[rootSolve]{multiroot}}
-#' @seealso \code{\link[rootSolve]{jacobian.full}}
 #'
 #' @references
 #'

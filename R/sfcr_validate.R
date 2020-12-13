@@ -2,6 +2,50 @@
 
 .is_equal <- function(x, y, tol) {abs(x - y) < tol}
 
+.abort_water_leakr <- function(r2names, which) {
+
+  if (which == "tfm") {
+
+    if (length(r2names) == 1) {
+      message <- paste0("Ooops, water is leaking!\n`", r2names, "` row does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
+    } else {
+      message <- paste0("Ooops, water is leaking!\n`", paste0(r2names, collapse = ", "), "` rows do not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
+    }
+  } else {
+    if (length(r2names) == 1) {
+      message <- paste0("Ooops, water is leaking!\n`", r2names, "` row does not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
+    } else {
+      message <- paste0("Ooops, water is leaking!\n`", paste0(r2names, collapse = ", "), "` rows do not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
+    }
+  }
+
+  rlang::abort(message = message)
+}
+
+
+.abort_water_leakc <- function(c2names, which) {
+
+  if (which == "tfm") {
+
+    if (length(c2names) == 1) {
+      message <- paste0("Ooops, water is leaking!\n`", c2names, "` column does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
+    } else {
+      message <- paste0("Ooops, water is leaking!\n`", paste0(c2names, collapse = ", "), "` columns do not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
+    }
+  } else {
+    if (length(c2names) == 1) {
+      message <- paste0("Ooops, water is leaking!\n`", c2names, "` column does not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
+    } else {
+      message <- paste0("Ooops, water is leaking!\n`", paste0(c2names, collapse = ", "), "` columns do not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
+    }
+  }
+
+  rlang::abort(message = message)
+}
+
+
+
+
 
 .get_matrix <- function(mtrx, baseline, bl1, bl2) {
 
@@ -31,16 +75,12 @@
 
   l1 <- 2:nrow(m)
 
-  relative_disc_rows = vector("logical", length(l1))
-  relative_disc_columns = vector("logical", length(l1))
 
   if (which == "tfm") {
     for (.i in l1) {
-      for (j in ids) {
-        k3[[j]] <- eval(str2expression(k2[[j]]))
+      for (.j in ids) {
+        k3[[.j]] <- eval(str2expression(k2[[.j]]))
       }
-
-      k3 <- as.matrix(k3)
 
       r1 <- rowSums(k3, na.rm = TRUE)
       c1 <- colSums(k3, na.rm = TRUE)
@@ -53,15 +93,22 @@
 
           r2 <- which(abs(r1) > tol)
 
-          message <- paste0("Ooops, water is leaking!\n`", mtrx[r2, ]$name, "` row does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-          rlang::abort(message = message)
+          r2names <- mtrx[r2, ]$name
+
+          .abort_water_leakr(r2names, "tfm")
+
         }
+
 
         # Columns
         if (isFALSE(.all_equal(c1, tol))) {
+
           c2 <- which(abs(c1) > tol)
-          message <- paste0("Ooops, water is leaking!\n`", colnames(mtrx[, c2]), "` column does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-          rlang::abort(message = message)
+
+          c2names <- colnames(k3[, c2])
+
+          .abort_water_leakc(c2names, "tfm")
+
         }
 
       }
@@ -82,8 +129,11 @@
             w1 <- purrr::map_dbl(r2, ~sum(k3[.x, ][which(k3[.x, ] > 0)]))
 
             if (all(r1[r2]/w1 > tol)) {
-              message <- paste0("Ooops, water is leaking!\n`", mtrx[r2, ]$name, "` row does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-              rlang::abort(message = message)
+
+              r2names <- mtrx[r2, ]$name
+
+              .abort_water_leakr(r2names, "tfm")
+
             }
           }
 
@@ -94,8 +144,11 @@
             w1 <- purrr::map_dbl(c2, ~sum(k3[, .x][which(k3[, .x] > 0)]))
 
             if (all(c1[c2]/w1 > tol)) {
-              message <- paste0("Ooops, water is leaking!\n`", colnames(mtrx[, c2]), "` column does not sum to zero. Please make sure that the transactions-flow matrix is written consistently with the model equations.")
-              rlang::abort(message = message)
+
+              c2names <- colnames(k3[, c2])
+
+              .abort_water_leakc(c2names, "tfm")
+
             }
 
           }
@@ -108,11 +161,17 @@
   if (which == "bs") {
 
     for (.i in l1) {
-      for (j in ids) {
-        k3[[j]] <- eval(str2expression(k2[[j]]))
+      for (.j in ids) {
+        k3[[.j]] <- eval(str2expression(k2[[.j]]))
+      }
+
+     if (!(colnames(k3)[ncol(k3)] %in% c("Sum", "sum", "SUM"))) {
+        Sum <- 0
+        k3 <- cbind(k3, Sum)
       }
 
       r1 <- rowSums(k3[, -ncol(k3)], na.rm = TRUE)
+
       rs <- k3[, ncol(k3)]
       c1 <- colSums(k3, na.rm = TRUE)
 
@@ -122,16 +181,21 @@
         if (isFALSE(all(.is_equal(r1, rs, tol)))) {
           r2 <- which(!.is_equal(r1, rs, tol))
 
-          message <- paste0("Ooops, water is leaking!\n`", mtrx[r2, "name"], "` row is not equal to expected sum. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
-          rlang::abort(message = message)
+          r2names <- mtrx[r2, "name"]$name
+
+          .abort_water_leakr(r2names, "bs")
+
         }
 
         # Columns
         if (isFALSE(all(.is_equal(c1, 0, tol)))) {
 
           c2 <- which(!.is_equal(c1, 0, tol))
-          message <- paste0("Oooops, water is leaking!\n`", names(mtrx[c2]), "` column does not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
-          rlang::abort(message = message)
+
+          c2names <- colnames(k3[, c2])
+
+          .abort_water_leakc(c2names, "bs")
+
         }
       }
 
@@ -139,22 +203,32 @@
       else {
         # Rows
         if (isFALSE(all(.is_equal(r1, rs, 1e-3)))) {
+
           r2 <- which(!.is_equal(r1, rs, 1e-3))
+
           if (all(abs((r1[r2] - rs[r2])/rs[r2] > tol))) {
-            message <- paste0("Ooops, water is leaking!\n`", mtrx[r2, "name"], "` row is not equal to expected sum. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
-            rlang::abort(message = message)
+
+            r2names <- mtrx[r2, ]$name
+
+            .abort_water_leakr(r2names, "bs")
+
           }
 
         }
 
         # Columns
         if (isFALSE(all(.is_equal(c1, 0, tol)))) {
+
           c2 <- which(!.is_equal(c1, 0, tol))
+
           w1 <- purrr::map_dbl(c2, ~sum(k3[, .x][which(k3[, .x] > 0)]))
 
           if (all(c1[c2]/w1 > tol)) {
-            message <- paste0("Oooops, water is leaking!\n`", names(mtrx[c2]), "` column does not sum to zero. Please make sure that the balance-sheet matrix is written consistently with the model equations.")
-            rlang::abort(message = message)
+
+            c2names <- colnames(k3[, c2])
+
+            .abort_water_leakc(c2names, "bs")
+
           }
         }
 

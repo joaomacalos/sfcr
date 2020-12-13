@@ -19,21 +19,25 @@
 #' must be name-value pairs that exactly matches the \code{codes} argument.
 #' See the examples for further details.
 #'
-#' @details This function can be used to generate a transactions-
+#' @note This function can be used to generate a transactions-
 #' flow matrix as well as a balance-sheet matrix. If the user
 #' wishes to validate these matrices with the simulated data,
 #' please pay attention to the following details:
 #'
 #' * Transactions-flow Matrix:
-#'   In the transactions-flow matrix, the `sum` column is
-#'   going to be generated automatically by the display and validation
-#'   functions. Please do not add them by hand.
+#'   In the transactions-flow matrix, the \code{sum} column is
+#'   going to be generated automatically by the validation
+#'   function. Please do not add it by hand.
 #'
 #' * Balance-sheet Matrix:
 #'   In the balance-sheet matrix, it might be the case that some
 #'   rows do not sum to zero. Therefore, the user must supply
 #'   by hand the non-zero values of the \code{sum} column.
-#'   This column should always be the last column of the matrix.
+#'   This column should always be the last column of the matrix
+#'   and should always be named as "Sum". If there's no column
+#'   named as "Sum", it will be generated automatically by the
+#'   validation function with all entries equal to zero.
+#'
 #'
 #' @example inst/examples/example_sfcr_matrix.R
 #'
@@ -50,7 +54,6 @@ sfcr_matrix <- function(columns, codes, ...) {
 
   ar <- rlang::list2(...)
   ar <- purrr::map(ar, ~c(.x[-1], name = .x[1]))
-  #ar <- purrr::imap(ar, ~c(.x, name = .y))
 
   tb2 <- purrr::map_dfr(ar, ~.args_to_row(.x, tb))
 

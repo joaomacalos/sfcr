@@ -23,7 +23,7 @@ See the examples for further details.}
 \description{
 Create balance-sheet or transactions-flow matrices
 }
-\details{
+\note{
 This function can be used to generate a transactions-
 flow matrix as well as a balance-sheet matrix. If the user
 wishes to validate these matrices with the simulated data,
@@ -31,13 +31,16 @@ please pay attention to the following details:
 \itemize{
 \item Transactions-flow Matrix:
 In the transactions-flow matrix, the \code{sum} column is
-going to be generated automatically by the display and validation
-functions. Please do not add them by hand.
+going to be generated automatically by the validation
+function. Please do not add it by hand.
 \item Balance-sheet Matrix:
 In the balance-sheet matrix, it might be the case that some
 rows do not sum to zero. Therefore, the user must supply
 by hand the non-zero values of the \code{sum} column.
-This column should always be the last column of the matrix.
+This column should always be the last column of the matrix
+and should always be named as "Sum". If there's no column
+named as "Sum", it will be generated automatically by the
+validation function with all entries equal to zero.
 }
 }
 \examples{
