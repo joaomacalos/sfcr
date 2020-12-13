@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -84,10 +84,43 @@
   </a>
 </li>
 <li>
-  <a href="../articles/sfcr.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/bmw.html">Model BMW</a>
+    </li>
+    <li>
+      <a href="../articles/articles/dis.html">Chapter 9: Model DIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/growth.html">Model GROWTH</a>
+    </li>
+    <li>
+      <a href="../articles/articles/insout.html">Model INSOUT</a>
+    </li>
+    <li>
+      <a href="../articles/articles/lp.html">Liquidity Preference Model</a>
+    </li>
+    <li>
+      <a href="../articles/articles/open.html">Model OPEN</a>
+    </li>
+    <li>
+      <a href="../articles/articles/open12.html">Model Advanced OPEN Economy</a>
+    </li>
+    <li>
+      <a href="../articles/articles/pc.html">Portfolio Choice Model</a>
+    </li>
+    <li>
+      <a href="../articles/articles/sim.html">SIM Model</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -136,15 +169,252 @@
       <tr>
         
         <td>
-          <p><code><a href="sfcr_scenario.html">sfcr_scenario()</a></code> </p>
+          <p><code><a href="abortifnot.html">abortifnot()</a></code> </p>
         </td>
-        <td><p>Add shocks to SFC models</p></td>
+        <td><p>Abort if not</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="sfcr_sim.html">sfcr_sim()</a></code> </p>
+          <p><code><a href="dot-add_time_stamps.html">.add_time_stamps()</a></code> </p>
         </td>
-        <td><p>Simulate a stock-flow consistent model</p></td>
+        <td><p>Find dependencies and order the equations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-broyden_solver.html">.broyden_solver()</a></code> </p>
+        </td>
+        <td><p>Broyden solver</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-eq_as_tb.html">.eq_as_tb()</a></code> </p>
+        </td>
+        <td><p>Split the formulae into a <code>tibble</code> with the left-hand side and
+right-hand side as columns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-extend_baseline_matrix.html">.extend_baseline_matrix()</a></code> </p>
+        </td>
+        <td><p>Extend a baseline matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-find_blocks.html">.find_blocks()</a></code> </p>
+        </td>
+        <td><p>Find blocks of independent equations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-make_matrix.html">.make_matrix()</a></code> </p>
+        </td>
+        <td><p>Make the underlying matrix that will be modified in place with the Gauss Seidel
+algorithm</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-prep_equations.html">.prep_equations()</a></code> </p>
+        </td>
+        <td><p>Re-wrote the equations with the correct matrix syntax that will be used to evaluate
+the expressions inside the Gauss Seidel algorithm</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-pvar.html">.pvar()</a></code> </p>
+        </td>
+        <td><p>Pattern replacement var</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-pvarlag.html">.pvarlag()</a></code> </p>
+        </td>
+        <td><p>Pattern replacement lag</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-return_loops.html">.return_loops()</a></code> </p>
+        </td>
+        <td><p>Find cyclical nodes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-sfcr_broyden.html">.sfcr_broyden()</a></code> </p>
+        </td>
+        <td><p>Broyden solver</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-sfcr_eqs_check.html">.sfcr_eqs_check()</a></code> </p>
+        </td>
+        <td><p>Check for missing endogenous variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-sfcr_find_order.html">.sfcr_find_order()</a></code> </p>
+        </td>
+        <td><p>Place the equations in the correct order for estimation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-sfcr_gauss_seidel.html">.sfcr_gauss_seidel()</a></code> </p>
+        </td>
+        <td><p>Gauss Seidel algorithm</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-sfcr_make_scenario_matrix.html">.sfcr_make_scenario_matrix()</a></code> </p>
+        </td>
+        <td><p>Make matrix for scenario calculations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-sfcr_newton.html">.sfcr_newton()</a></code> </p>
+        </td>
+        <td><p>Newton-Raphson solver implemented with <code>rootSolve::multiroot()</code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="new_sfcr_mlt.html">new_sfcr_mlt()</a></code> </p>
+        </td>
+        <td><p>sfcr_mlt constructor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="new_sfcr_mlt_set.html">new_sfcr_mlt_set()</a></code> </p>
+        </td>
+        <td><p>sfcr_mlt_set constructor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="new_sfcr_mlt_shock.html">new_sfcr_mlt_shock()</a></code> </p>
+        </td>
+        <td><p>sfcr_mlt_shock constructor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="new_sfcr_set.html">new_sfcr_set()</a></code> </p>
+        </td>
+        <td><p>sfcr_set constructor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="new_sfcr_tbl.html">new_sfcr_tbl()</a></code> </p>
+        </td>
+        <td><p>new_sfcr_tbl constructor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_baseline.html">sfcr_baseline()</a></code> </p>
+        </td>
+        <td><p>Simulate the baseline scenario of a stock-flow consistent model</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_dag_blocks.html">sfcr_dag_blocks()</a></code> </p>
+        </td>
+        <td><p>Create a <code>tbl_graph</code> object blocks and cycles information</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot()</a></code> </p>
+        </td>
+        <td><p>Plot the DAG with blocks and cycles information</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_dag_cycles.html">sfcr_dag_cycles()</a></code> </p>
+        </td>
+        <td><p>Create a <code>tbl_graph</code> object with cycles information</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot()</a></code> </p>
+        </td>
+        <td><p>Plot the DAG with cycles information</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_expand.html">sfcr_expand()</a></code> </p>
+        </td>
+        <td><p>Expand variables to implement sensitivity analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_get_blocks.html">sfcr_get_blocks()</a></code> </p>
+        </td>
+        <td><p>Get Matrix form of <code>sfcr_tbl</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_get_matrix.html">sfcr_get_matrix()</a></code> </p>
+        </td>
+        <td><p>Get Matrix form of <code>sfcr_tbl</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_matrix.html">sfcr_matrix()</a></code> </p>
+        </td>
+        <td><p>Create balance-sheet or transactions-flow matrices</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_matrix_display.html">sfcr_matrix_display()</a></code> </p>
+        </td>
+        <td><p>Print matrix to screen</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_multis.html">sfcr_multis()</a></code> </p>
+        </td>
+        <td><p>Simulate multiple SFC models at the same time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_sankey.html">sfcr_sankey()</a></code> </p>
+        </td>
+        <td><p>Plot Sankeys diagram representation of transactrions-flow matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_scenario.html">sfcr_scenario()</a></code> </p>
+        </td>
+        <td><p>Add scenarios to a <code>sfcr</code> model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_set.html">sfcr_set()</a></code> </p>
+        </td>
+        <td><p>Define the formulas of the model</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_set.formula.html">sfcr_set(<i>&lt;formula&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>S3 method for sfcr_set</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_set.sfcr_set.html">sfcr_set(<i>&lt;sfcr_set&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>S3 method for sfcr_set</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_set_index.html">sfcr_set_index()</a></code> </p>
+        </td>
+        <td><p>Get names of endogenous vars and their index</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_shock.html">sfcr_shock()</a></code> </p>
+        </td>
+        <td><p>Create schock(s) to add to a <code>sfcr_scenario()</code>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sfcr_validate.html">sfcr_validate()</a></code> </p>
+        </td>
+        <td><p>Validate a transactions-flow or balance-sheet matrix</p></td>
       </tr>
     </tbody>
     </table>
@@ -160,7 +430,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joao Pedro Macalos.</p>
+  <p>Developed by Joao Macalos.</p>
 </div>
 
 <div class="pkgdown">

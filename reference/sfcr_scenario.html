@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add shocks to SFC models — sfcr_scenario • sfcr</title>
+<title>Add scenarios to a sfcr model. — sfcr_scenario • sfcr</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Add shocks to SFC models — sfcr_scenario" />
-<meta property="og:description" content="The sfcr_scenario function is used to add a shock to a SFC model
-generated with the sfcr_sim function." />
+<meta property="og:title" content="Add scenarios to a sfcr model. — sfcr_scenario" />
+<meta property="og:description" content="Add scenarios to a sfcr model." />
 
 
 
@@ -73,7 +72,7 @@ generated with the sfcr_sim function." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -86,10 +85,43 @@ generated with the sfcr_sim function." />
   </a>
 </li>
 <li>
-  <a href="../articles/sfcr.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/bmw.html">Model BMW</a>
+    </li>
+    <li>
+      <a href="../articles/articles/dis.html">Chapter 9: Model DIS</a>
+    </li>
+    <li>
+      <a href="../articles/articles/growth.html">Model GROWTH</a>
+    </li>
+    <li>
+      <a href="../articles/articles/insout.html">Model INSOUT</a>
+    </li>
+    <li>
+      <a href="../articles/articles/lp.html">Liquidity Preference Model</a>
+    </li>
+    <li>
+      <a href="../articles/articles/open.html">Model OPEN</a>
+    </li>
+    <li>
+      <a href="../articles/articles/open12.html">Model Advanced OPEN Economy</a>
+    </li>
+    <li>
+      <a href="../articles/articles/pc.html">Portfolio Choice Model</a>
+    </li>
+    <li>
+      <a href="../articles/articles/sim.html">SIM Model</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -112,137 +144,138 @@ generated with the sfcr_sim function." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add shocks to SFC models</h1>
+    <h1>Add scenarios to a <code>sfcr</code> model.</h1>
     <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_scenario.R'><code>R/sfcr_scenario.R</code></a></small>
     <div class="hidden name"><code>sfcr_scenario.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The <code>sfcr_scenario</code> function is used to add a shock to a SFC model
-generated with the <code><a href='sfcr_sim.html'>sfcr_sim</a></code> function.</p>
+    <p>Add scenarios to a <code>sfcr</code> model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sfcr_scenario</span><span class='op'>(</span>
-  <span class='va'>steady_state</span>,
-  <span class='va'>equations</span>,
-  t <span class='op'>=</span> <span class='fl'>100</span>,
-  <span class='va'>exogenous</span>,
-  <span class='va'>parameters</span>,
-  shock_exg <span class='op'>=</span> <span class='cn'>NULL</span>,
-  shock_param <span class='op'>=</span> <span class='cn'>NULL</span>
+  <span class='va'>baseline</span>,
+  <span class='va'>scenario</span>,
+  <span class='va'>periods</span>,
+  max_iter <span class='op'>=</span> <span class='fl'>350</span>,
+  tol <span class='op'>=</span> <span class='fl'>1e-10</span>,
+  method <span class='op'>=</span> <span class='st'>"Broyden"</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>steady_state</th>
-      <td><p>A simulated SFC model with <code><a href='sfcr_sim.html'>sfcr_sim</a></code> function to provide the steady
-state values of the variables.</p></td>
+      <th>baseline</th>
+      <td><p>A model generated with the <code><a href='sfcr_baseline.html'>sfcr_baseline()</a></code> function.</p></td>
     </tr>
     <tr>
-      <th>equations</th>
-      <td><p>A list containing all the equations of the model to be simulated.
-See details.</p></td>
+      <th>scenario</th>
+      <td><p>Either a shock created with <code><a href='sfcr_shock.html'>sfcr_shock()</a></code>, a list of shocks,
+or <code>NULL</code>. If <code>scenario = NULL</code>, the model will just extend the baseline
+model.</p></td>
     </tr>
     <tr>
-      <th>t</th>
-      <td><p>A number specifying the total number of periods of the model to be simulated. It should be at least 2 periods.</p></td>
+      <th>periods</th>
+      <td><p>A number specifying the total number of periods of the model to be simulated.</p></td>
     </tr>
     <tr>
-      <th>exogenous, parameters</th>
-      <td><p>Named lists with the initial values of the exogenous and parameters.
-This should be exactly the same values as supplied to <code><a href='sfcr_sim.html'>sfcr_sim</a></code>.</p></td>
+      <th>max_iter</th>
+      <td><p>Maximum iterations allowed per period.</p></td>
     </tr>
     <tr>
-      <th>shock_exg, shock_param</th>
-      <td><p>Named lists with the new values for the exogenous and/or parameters
-that are being shocked to calculate a different scenario.</p></td>
+      <th>tol</th>
+      <td><p>Tolerance accepted to determine convergence.</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>The method to use to find a solution. Defaults to "Broyden".</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Extra arguments to pass to <code><a href='https://rdrr.io/pkg/rootSolve/man/multiroot.html'>rootSolve::multiroot()</a></code> function if "Newton" method
+is selected.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The output of  <code><a href='sfcr_sim.html'>sfcr_sim</a></code> will contain a tibble with the exogenous and endogenous
-variables, as well as the parameters, of the simulated model as columns.</p>
-<p>The equations at the <code>equations</code> argument should take the usual R formula syntax.
-Also, endogenous and exogenous variables should explicitly indicate if they're
-to be considered contemporaneously or with lags, while parameters in should not
-be accompanied by period of evaluation indication.</p>
-<p>On the other hand, the named lists should not include time indices.</p>
-<p>See <code><a href='sfcr_sim.html'>sfcr_sim</a></code> for further information.</p>
+    <p>Add scenario(s) to a model generated with <code><a href='sfcr_baseline.html'>sfcr_baseline()</a></code> functions.</p>
+<p>This function inherits the block structure from the steady state model. See
+<code><a href='sfcr_baseline.html'>sfcr_baseline</a></code> for futher details on the algorithms.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='sfcr_baseline.html'>sfcr_baseline</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>João Macalós, <a href='mailto:joaomacalos@gmail.com'>joaomacalos@gmail.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>eqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='va'>TX_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>TX_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>YD</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>W</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>*</span> <span class='va'>N_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>TX_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>C_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>alpha1</span> <span class='op'>*</span> <span class='va'>YD</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>alpha2</span> <span class='op'>*</span> <span class='va'>H_h</span><span class='op'>[</span><span class='va'>t</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>,
-  <span class='va'>H_h</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>YD</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>C_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>H_h</span><span class='op'>[</span><span class='va'>t</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>,
-  <span class='va'>N_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>N_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>N_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>Y</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>/</span> <span class='va'>W</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>C_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>C_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>G_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>G_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>Y</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>C_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>G_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>TX_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>theta</span> <span class='op'>*</span> <span class='va'>W</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>*</span> <span class='va'>N_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span>,
-  <span class='va'>H_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>~</span> <span class='va'>G_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>TX_d</span><span class='op'>[</span><span class='va'>t</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>H_s</span><span class='op'>[</span><span class='va'>t</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>
+    <pre class="examples"><div class='input'><span class='va'>eqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span>
+  <span class='va'>TX_s</span> <span class='op'>~</span> <span class='va'>TX_d</span>,
+  <span class='va'>YD</span> <span class='op'>~</span> <span class='va'>W</span> <span class='op'>*</span> <span class='va'>N_s</span> <span class='op'>-</span> <span class='va'>TX_s</span>,
+  <span class='va'>C_d</span> <span class='op'>~</span> <span class='va'>alpha1</span> <span class='op'>*</span> <span class='va'>YD</span> <span class='op'>+</span> <span class='va'>alpha2</span> <span class='op'>*</span> <span class='va'>H_h</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>,
+  <span class='va'>H_h</span> <span class='op'>~</span> <span class='va'>YD</span> <span class='op'>-</span> <span class='va'>C_d</span> <span class='op'>+</span> <span class='va'>H_h</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>,
+  <span class='va'>N_s</span> <span class='op'>~</span> <span class='va'>N_d</span>,
+  <span class='va'>N_d</span> <span class='op'>~</span> <span class='va'>Y</span> <span class='op'>/</span> <span class='va'>W</span>,
+  <span class='va'>C_s</span> <span class='op'>~</span> <span class='va'>C_d</span>,
+  <span class='va'>G_s</span> <span class='op'>~</span> <span class='va'>G_d</span>,
+  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>C_s</span> <span class='op'>+</span> <span class='va'>G_s</span>,
+  <span class='va'>TX_d</span> <span class='op'>~</span> <span class='va'>theta</span> <span class='op'>*</span> <span class='va'>W</span> <span class='op'>*</span> <span class='va'>N_s</span>,
+  <span class='va'>H_s</span> <span class='op'>~</span> <span class='va'>G_d</span> <span class='op'>-</span> <span class='va'>TX_d</span> <span class='op'>+</span> <span class='va'>H_s</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>
 <span class='op'>)</span>
 
-<span class='va'>exg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"G_d"</span> <span class='op'>=</span> <span class='fl'>20</span>, <span class='st'>"W"</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"alpha1"</span> <span class='op'>=</span> <span class='fl'>0.6</span>, <span class='st'>"alpha2"</span> <span class='op'>=</span> <span class='fl'>0.4</span>, <span class='st'>"theta"</span> <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
+<span class='va'>external</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span><span class='va'>G_d</span> <span class='op'>~</span> <span class='fl'>20</span>, <span class='va'>W</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>alpha1</span> <span class='op'>~</span> <span class='fl'>0.6</span>, <span class='va'>alpha2</span> <span class='op'>~</span> <span class='fl'>0.4</span>, <span class='va'>theta</span> <span class='op'>~</span> <span class='fl'>0.2</span><span class='op'>)</span>
 
 <span class='co'># t is set to 10 to run faster. A usual model should run at least 50 periods to find a steady state</span>
-<span class='va'>steady_state</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfcr_sim.html'>sfcr_sim</a></span><span class='op'>(</span>equations <span class='op'>=</span> <span class='va'>eqs</span>, t <span class='op'>=</span> <span class='fl'>10</span>, exogenous <span class='op'>=</span> <span class='va'>exg</span>,
-                         parameters <span class='op'>=</span> <span class='va'>params</span>, initial <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='va'>steady_state</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfcr_baseline.html'>sfcr_baseline</a></span><span class='op'>(</span><span class='va'>eqs</span>, <span class='va'>external</span>, periods <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 
-<span class='co'># Increase G_d from 20 to 30</span>
-<span class='fu'>sfcr_scenario</span><span class='op'>(</span><span class='va'>steady_state</span>, <span class='va'>eqs</span>, t <span class='op'>=</span> <span class='fl'>10</span>, <span class='va'>exg</span>, <span class='va'>params</span>, shock_exg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"G_d"</span> <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># Increase G_d from 20 to 30 between periods 5 and 10</span>
+<span class='va'>shock1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfcr_shock.html'>sfcr_shock</a></span><span class='op'>(</span><span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span><span class='va'>G_d</span> <span class='op'>~</span> <span class='fl'>30</span><span class='op'>)</span>, <span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span>
+
+<span class='fu'>sfcr_scenario</span><span class='op'>(</span><span class='va'>steady_state</span>, scenario <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>shock1</span><span class='op'>)</span>, <span class='fl'>10</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 10 x 17</span><span>
-#&gt;        t  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s   G_d
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>     1  16.8  67.2  64.0  62.4  84.0  84.0  64.0    20  84.0  16.8  62.4    20
-#&gt; </span><span style='color: #555555;'> 2</span><span>     2  17.3  69.2  66.5  65.1  86.5  86.5  66.5    20  86.5  17.3  65.2    20
-#&gt; </span><span style='color: #555555;'> 3</span><span>     3  17.7  70.8  68.6  67.4  88.6  88.6  68.6    20  88.6  17.7  67.4    20
-#&gt; </span><span style='color: #555555;'> 4</span><span>     4  18.1  72.3  70.3  69.4  90.3  90.3  70.3    20  90.3  18.1  69.4    20
-#&gt; </span><span style='color: #555555;'> 5</span><span>     5  18.4  73.4  71.8  71.0  91.8  91.8  71.8    20  91.8  18.4  71.0    20
-#&gt; </span><span style='color: #555555;'> 6</span><span>     6  22.5  89.8  82.3  78.5 112.  112.   82.3    30 112.   22.5  78.6    30
-#&gt; </span><span style='color: #555555;'> 7</span><span>     7  23.6  94.5  88.1  84.9 118.  118.   88.1    30 118.   23.6  84.9    30
-#&gt; </span><span style='color: #555555;'> 8</span><span>     8  24.6  98.4  93.0  90.3 123.  123.   93.0    30 123.   24.6  90.3    30
-#&gt; </span><span style='color: #555555;'> 9</span><span>     9  25.4 102.   97.2  94.9 127.  127.   97.2    30 127.   25.4  94.9    30
-#&gt; </span><span style='color: #555555;'>10</span><span>    10  26.1 105.  101.   98.7 131.  131.  101.     30 131.   26.1  98.8    30
-#&gt; </span><span style='color: #555555;'># … with 4 more variables: W </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, theta </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
-<span class='co'># Increase alpha1 from 0.6 to 0.8</span>
-<span class='fu'>sfcr_scenario</span><span class='op'>(</span><span class='va'>steady_state</span>, <span class='va'>eqs</span>, t <span class='op'>=</span> <span class='fl'>10</span>, <span class='va'>exg</span>, <span class='va'>params</span>, shock_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"alpha1"</span> <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 10 x 17</span><span>
-#&gt;        t  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s   G_d
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>     1  16.8  67.2  64.0  62.4  84.0  84.0  64.0    20  84.0  16.8  62.4    20
-#&gt; </span><span style='color: #555555;'> 2</span><span>     2  17.3  69.2  66.5  65.1  86.5  86.5  66.5    20  86.5  17.3  65.2    20
-#&gt; </span><span style='color: #555555;'> 3</span><span>     3  17.7  70.8  68.6  67.4  88.6  88.6  68.6    20  88.6  17.7  67.4    20
-#&gt; </span><span style='color: #555555;'> 4</span><span>     4  18.1  72.3  70.3  69.4  90.3  90.3  70.3    20  90.3  18.1  69.4    20
-#&gt; </span><span style='color: #555555;'> 5</span><span>     5  18.4  73.4  71.8  71.0  91.8  91.8  71.8    20  91.8  18.4  71.0    20
-#&gt; </span><span style='color: #555555;'> 6</span><span>     6  26.9 107.  114.   64.1 134.  134.  114.     20 134.   26.9  64.2    20
-#&gt; </span><span style='color: #555555;'> 7</span><span>     7  25.3 101.  107.   58.7 127.  127.  107.     20 127.   25.3  58.8    20
-#&gt; </span><span style='color: #555555;'> 8</span><span>     8  24.1  96.5 101.   54.5 121.  121.  101.     20 121.   24.1  54.7    20
-#&gt; </span><span style='color: #555555;'> 9</span><span>     9  23.2  92.8  96.1  51.3 116.  116.   96.1    20 116.   23.2  51.5    20
-#&gt; </span><span style='color: #555555;'>10</span><span>    10  22.5  90.0  92.5  48.8 112.  112.   92.5    20 112.   22.5  49.0    20
-#&gt; </span><span style='color: #555555;'># … with 4 more variables: W </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, theta </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
+#&gt;    period  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s
+#&gt;  </span><span style='color: #555555;'>*</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>      1  16.8  67.1  63.8  62.2  83.8  83.8  63.8    20  83.8  16.8  62.2
+#&gt; </span><span style='color: #555555;'> 2</span><span>      2  17.3  69.1  66.3  64.9  86.3  86.3  66.3    20  86.3  17.3  64.9
+#&gt; </span><span style='color: #555555;'> 3</span><span>      3  17.7  70.7  68.4  67.3  88.4  88.4  68.4    20  88.4  17.7  67.3
+#&gt; </span><span style='color: #555555;'> 4</span><span>      4  18.0  72.2  70.2  69.2  90.2  90.2  70.2    20  90.2  18.0  69.2
+#&gt; </span><span style='color: #555555;'> 5</span><span>      5  22.2  88.8  80.9  77.0 111.  111.   80.9    30 111.   22.2  77.0
+#&gt; </span><span style='color: #555555;'> 6</span><span>      6  23.4  93.6  87.0  83.6 117.  117.   87.0    30 117.   23.4  83.6
+#&gt; </span><span style='color: #555555;'> 7</span><span>      7  24.4  97.6  92.0  89.2 122.  122.   92.0    30 122.   24.4  89.2
+#&gt; </span><span style='color: #555555;'> 8</span><span>      8  25.3 101.   96.3  94.0 126.  126.   96.3    30 126.   25.3  94.0
+#&gt; </span><span style='color: #555555;'> 9</span><span>      9  26.0 104.  100.   98.0 130.  130.  100.     30 130.   26.0  98.0
+#&gt; </span><span style='color: #555555;'>10</span><span>     10  26.6 106.  103.  101.  133.  133.  103.     30 133.   26.6 101. 
+#&gt; </span><span style='color: #555555;'># … with 5 more variables: G_d </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, W </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   theta </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
 <span class='co'># Increase W to 2, alpha2 to 0.5, and decrease theta to 0.15</span>
-<span class='fu'>sfcr_scenario</span><span class='op'>(</span><span class='va'>steady_state</span>, <span class='va'>eqs</span>, t <span class='op'>=</span> <span class='fl'>10</span>, <span class='va'>exg</span>, <span class='va'>params</span>, shock_exg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"W"</span> <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-              shock_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"alpha2"</span> <span class='op'>=</span> <span class='fl'>0.5</span>, <span class='st'>"theta"</span> <span class='op'>=</span> <span class='fl'>0.15</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>shock2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfcr_shock.html'>sfcr_shock</a></span><span class='op'>(</span>
+  variables <span class='op'>=</span> <span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span>
+  <span class='va'>W</span> <span class='op'>~</span> <span class='fl'>2</span>,
+  <span class='va'>alpha2</span> <span class='op'>~</span> <span class='fl'>0.5</span>,
+  <span class='va'>theta</span> <span class='op'>~</span> <span class='fl'>0.15</span>
+  <span class='op'>)</span>,
+  start <span class='op'>=</span> <span class='fl'>5</span>,
+  end <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+
+<span class='fu'>sfcr_scenario</span><span class='op'>(</span><span class='va'>steady_state</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>shock2</span><span class='op'>)</span>, <span class='fl'>10</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 10 x 17</span><span>
-#&gt;        t  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s   G_d
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>     1  16.8  67.2  64.0  62.4  84.0  84.0  64.0    20  84.0  16.8  62.4    20
-#&gt; </span><span style='color: #555555;'> 2</span><span>     2  17.3  69.2  66.5  65.1  86.5  86.5  66.5    20  86.5  17.3  65.2    20
-#&gt; </span><span style='color: #555555;'> 3</span><span>     3  17.7  70.8  68.6  67.4  88.6  88.6  68.6    20  88.6  17.7  67.4    20
-#&gt; </span><span style='color: #555555;'> 4</span><span>     4  18.1  72.3  70.3  69.4  90.3  90.3  70.3    20  90.3  18.1  69.4    20
-#&gt; </span><span style='color: #555555;'> 5</span><span>     5  18.4  73.4  71.8  71.0  91.8  91.8  71.8    20  91.8  18.4  71.0    20
-#&gt; </span><span style='color: #555555;'> 6</span><span>     6  17.0  96.3  93.3  74.0  56.6  56.6  93.3    20 113.   17.0  74.0    20
-#&gt; </span><span style='color: #555555;'> 7</span><span>     7  17.5  98.9  96.3  76.6  58.2  58.2  96.3    20 116.   17.5  76.6    20
-#&gt; </span><span style='color: #555555;'> 8</span><span>     8  17.8 101.   98.9  78.7  59.5  59.5  98.9    20 119.   17.8  78.7    20
-#&gt; </span><span style='color: #555555;'> 9</span><span>     9  18.2 103.  101.   80.6  60.6  60.6 101.     20 121.   18.2  80.6    20
-#&gt; </span><span style='color: #555555;'>10</span><span>    10  18.5 105.  103.   82.1  61.5  61.5 103.     20 123.   18.5  82.1    20
-#&gt; </span><span style='color: #555555;'># … with 4 more variables: W </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, theta </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
+#&gt;    period  TX_s    YD   C_d   H_h   N_s   N_d   C_s   G_s     Y  TX_d   H_s
+#&gt;  </span><span style='color: #555555;'>*</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>      1  16.8  67.1  63.8  62.2  83.8  83.8  63.8    20  83.8  16.8  62.2
+#&gt; </span><span style='color: #555555;'> 2</span><span>      2  17.3  69.1  66.3  64.9  86.3  86.3  66.3    20  86.3  17.3  64.9
+#&gt; </span><span style='color: #555555;'> 3</span><span>      3  17.7  70.7  68.4  67.3  88.4  88.4  68.4    20  88.4  17.7  67.3
+#&gt; </span><span style='color: #555555;'> 4</span><span>      4  18.0  72.2  70.2  69.2  90.2  90.2  70.2    20  90.2  18.0  69.2
+#&gt; </span><span style='color: #555555;'> 5</span><span>      5  16.7  94.7  91.5  72.5  55.7  55.7  91.5    20 111.   16.7  72.5
+#&gt; </span><span style='color: #555555;'> 6</span><span>      6  17.2  97.6  94.8  75.3  57.4  57.4  94.8    20 115.   17.2  75.3
+#&gt; </span><span style='color: #555555;'> 7</span><span>      7  17.6 100.   97.6  77.6  58.8  58.8  97.6    20 118.   17.6  77.6
+#&gt; </span><span style='color: #555555;'> 8</span><span>      8  18.0 102.  100.   79.6  60.0  60.0 100.     20 120.   18.0  79.6
+#&gt; </span><span style='color: #555555;'> 9</span><span>      9  18.3 104.  102.   81.3  61.0  61.0 102.     20 122.   18.3  81.3
+#&gt; </span><span style='color: #555555;'>10</span><span>     10  18.6 105.  104.   82.8  61.9  61.9 104.     20 124.   18.6  82.8
+#&gt; </span><span style='color: #555555;'># … with 5 more variables: G_d </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, W </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, alpha2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   theta </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
 
 </div></span></pre>
   </div>
@@ -256,7 +289,7 @@ be accompanied by period of evaluation indication.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joao Pedro Macalos.</p>
+  <p>Developed by Joao Macalos.</p>
 </div>
 
 <div class="pkgdown">

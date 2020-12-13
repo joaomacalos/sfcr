@@ -2,6 +2,14 @@ pandoc: '2.2'
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  sfcr: sfcr.html
-last_built: 2020-10-25T10:19Z
+  articles/bmw: bmw.html
+  articles/dis: dis.html
+  articles/growth: growth.html
+  articles/insout: insout.html
+  articles/lp: lp.html
+  articles/open: open.html
+  articles/open12: open12.html
+  articles/pc: pc.html
+  articles/sim: sim.html
+last_built: 2020-12-13T18:05Z
 
