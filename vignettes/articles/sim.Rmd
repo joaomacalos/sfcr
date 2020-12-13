@@ -1,5 +1,8 @@
 ---
 title: "SIM Model"
+output: 
+  rmarkdown::html_document:
+    toc: true
 references:
 - id: godley2007monetary
   title: >
@@ -33,7 +36,9 @@ library(tidyverse)
 ```
 
 
-## SIM Model
+# SIM Model
+
+## Equations
 
 The first step is to write down the equations, exogenous variables, and parameters:
 
@@ -61,7 +66,10 @@ sim_ext <- sfcr_set(
 )
 ```
 
-With these objects defined, we can simulate the SIM model. We will make it run for 100 periods. We will also define the hidden equation before hand, ensuring that the model is written correctly:
+
+## Baseline
+
+With these objects defined, we can simulate the SIM model. We will make it run for 100 periods. We will also define the hidden equation beforehand, ensuring that the model is written correctly:
 
 ```{r}
 system.time(sim <- sfcr_baseline(
@@ -69,36 +77,10 @@ system.time(sim <- sfcr_baseline(
   external = sim_ext, 
   periods = 100, 
   hidden = c("Hh" = "Hs"),
-  method = "Gauss")
+  method = "Broyden")
   )
 
 ```
-
-
-
-
-
-
-```{r}
-sim %>%
-  mutate(d = abs(Hh - Hs)) %>%
-  select(Hh, Hs, d) %>%
-  .round()
-```
-
-
-
-```{r}
-system.time(sim2 <- sfcr_baseline(
-  equations = sim_eqs, 
-  external = sim_ext, 
-  periods = 100, 
-  hidden = c("Hh" = "Hs"), 
-  method = "Newton")
-  )
-```
-
-
 
 We can check that the model generates the same long-run results as the model presented in page 69 @godley2007monetary..
 
@@ -110,6 +92,8 @@ sim %>%
   round(digits = 0)
   
 ```
+
+
 
 ### A permanent increase in government expenditures
 
@@ -126,6 +110,7 @@ shock1 <- sfcr_shock(
 
 sim2 <- sfcr_scenario(sim, list(shock1), 50)
 ```
+
 To visualize the consequences of the shock with the `ggplot2` package, we need to first transform the model into long format. We can do it with `pivot_longer()` function from `dplyr`. 
 
 The syntax might look complicated but it is actually simple. With the `pivot_longer()` function we want to transform all columns from the `sim2` object into the long format, indexed by the `period` column. That's why in cols we "remove" the period column.
@@ -152,6 +137,7 @@ sim2_long %>%
   ggplot(aes(x = period, y = value)) +
   geom_line(aes(linetype = name))
 ```
+
 
 ## SIMEX model
 
@@ -199,37 +185,73 @@ simex2_long %>%
 
 An attentive reader would notice that the Figure above is not the same as Figure 3.8 of @godley2007monetary. That's because Figure 3.8 shocks the SIM model and not the SIMEX model. I'll leave as an exercise for the reader to generate Figure 3.8.
 
+# Extra functionalities of the `sfcr` package
+
+## Matrices of model SIM
+
+The `sfcr` package also provides functions to write and validate the balance-sheet and transactions-flow matrices of any SFC model. It further ensures that the model is stock-flow consistent. Here, the main functions are `sfcr_matrix()`, to write the matrices, and `sfcr_validate()`, to check whether the matrix is consistent with the simulated model.
+
+The balance-sheet matrix of model SIM is too simple, however, and not worth presenting here as it would require us to create two extra variables that are missing variables: the wealth of households, and public debt. These entries are important because all columns in the balance-sheet matrix must sum to zero.
+
+### Transactions-flow matrix
+
+```{r}
+tfm_sim <- sfcr_matrix(
+  columns = c("Households", "Firms", "Government"),
+  codes = c("h", "f", "g"),
+  c("Consumption", h = "-Cd", f = "+Cs"),
+  c("Govt. Exp.", f = "+Gs", g = "-Gd"),
+  c("Factor Income", h = "W * Ns", f = "-W * Ns"),
+  c("Taxes", h = "-TXs", g = "+TXd"),
+  c("Ch. Money", h = "-d(Hh)", g = "d(Hs)")
+)
+```
+
+
+```{r}
+sfcr_validate(tfm_sim, sim, which = "tfm")
+```
+
+### Sankey's diagram
+
+Another benefit of having a transactions-flow matrix that is validated in the model is that we can confidently construct a Sankey's representation of this matrix with the `sfcr_sankey()` function:
+
+```{r}
+sfcr_sankey(tfm_sim, sim)
+```
+
+## DAG: The structure of the model
+
+The `sfcr` package also provides a built-in function to visualize the DAG representation of the equations in the model:
+
+```{r}
+sfcr_dag_cycles_plot(sim_eqs, size = 10)
+```
+
+
 ## Blocks of independent equations
 
-If the user is interested, she or he can check how many iterations was necessary per block to converge to a result by checking the `matrix` attribute of the `sim` object. The blocks of independently estimated equations can be obtained by checking the `calls` attribute. The other attributes are inherited from the `tbl_df` class.
+If the user is interested, she or he can check how many iterations was necessary per block to converge to a result by calling the `sfcr_get_matrix()` function on the `sim` object. 
 
 ```{r}
-# Check all attributes of a `sfcr_sim` model:
-names(attributes(sim))
+sim_matrix <- sfcr_get_matrix(sim)
+
+round(head(sim_matrix), digits = 2)
 ```
+
+To check which variables are included in each block, the user should use the `sfcr_get_blocks()` function:
 
 ```{r}
-attr(sim, 'calls')
+sfcr_get_blocks(sim)
 ```
-We can see that there are three independent blocks of equations. In practice, this means that the model first calculates the value of $G_s$, that depends only on a exogenous variable, than it calculates together the values of $TX_s$ until $TX_d$. These variables are calculated together because they constitute a **cycle**, i.e., they are determined simultaneously. Finally, the variables $H_h$ and $H_s$ are calculated in the final block, as they are defined outside the cycle,
 
-Variables inside a cycle usually take much longer to converge. We can see it by checking the `block` columns on the `matrix` attribute of `sim`:
+It is also possible to visualize the block structure of the model with the `sfcr_dag_blocks_plot()` function:
 
 ```{r}
-tibble(data.frame(attr(sim, "matrix"))) %>%
-  mutate(period = row_number()) %>%
-  select(period, contains("block"))
+sfcr_dag_blocks_plot(sim_eqs)
 ```
 
-This can be compared with the SIMEX model, which does not have any cylce:
-
-```{r}
-tibble(data.frame(attr(simex, "matrix"))) %>%
-  mutate(period = row_number()) %>%
-  select(period, contains("block"))
-```
-
-As can be seen, this model has much more blocks, meaning that the endogenous variables are identified one after the other, and requires much less iterations to converge.
+All of the solvers included in the `sfcr` package first organize the model in blocks, using the two depth-first searches provided by the `igraph` package. The simultaneous equations solvers ("Gauss", "Broyden", or "Newton") are only called to solve for the values of the cyclical variables in the model.
 
 # References
 
