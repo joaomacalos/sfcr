@@ -2,10 +2,10 @@ language: r
 cache: packages
 
 before_install:
-  #- tlmgr update --all || true     # one package fails to update but that doesn't affect the outcome
+  - tlmgr update --all || true     # one package fails to update but that doesn't affect the outcome
   #- tlmgr install index
   #- tlmgr install unicode-math lualatex-math pdftexcmds infwarerr luaotfload
-  - luaotfload-tool --update
+  #- luaotfload-tool --update
 
 after_success:
   - Rscript -e 'pkgdown::build_site()'
@@ -15,11 +15,11 @@ addons:
     packages:
       - libharfbuzz-dev
       - libfribidi-dev
-      - unicode-math
-      - lualatex-math
-      - pdftexcmds
-      - infwarerr
-      - luaotfload
+      #- unicode-math
+      #- lualatex-math
+      #- pdftexcmds
+      #- infwarerr
+      #- luaotfload
 
 deploy:
   provider: pages
