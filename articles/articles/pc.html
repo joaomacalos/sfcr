@@ -80,7 +80,13 @@
     <li>
       <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
     </li>
+    <li>
+      <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
+    </li>
   </ul>
+</li>
+<li>
+  <a href="../../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -539,8 +545,8 @@ Ch. Bills
 <p>Here, it is crucial to have the matrix validated in order to assure that the diagram is correctly specified. Luckily, we already saw that it was the case earlier in this notebook:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_pc</span>, <span class="va">pc</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-9870603d821f14bd8d82" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9870603d821f14bd8d82">{"x":{"links":{"source":[8,10,9,10,11,8,8,8,12,0,1,2,3,3,4,5,6,7],"target":[0,1,2,3,4,5,6,7,7,14,14,13,13,16,15,15,17,15],"value":[43.418278,20,63.418278,0.796236,0.300973,12.782708,2.863079,4.849477,2.863079,43.418278,20,63.418278,0.495263,0.300973,0.300973,12.782708,2.863079,7.712555]},"nodes":{"name":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"],"group":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>We can now move to simulation of different scenarios.</p>
+<div id="htmlwidget-a8b86d8fd5c9414de643" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a8b86d8fd5c9414de643">{"x":{"links":{"source":[8,10,9,10,11,8,8,8,12,0,1,2,3,3,4,5,6,7],"target":[0,1,2,3,4,5,6,7,7,14,14,13,13,16,15,15,17,15],"value":[43.418278,20,63.418278,0.796236,0.300973,12.782708,2.863079,4.849477,2.863079,43.418278,20,63.418278,0.495263,0.300973,0.300973,12.782708,2.863079,7.712555]},"nodes":{"name":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"],"group":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>We can now move to simulation of different scenarios.</p>
 </div>
 </div>
 <div id="scenario-1-increase-in-the-rate-of-interest-on-bills" class="section level1">
@@ -683,9 +689,9 @@ Ch. Bills
   <span class="fu">labs</span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"In the book it is written 'lagged' wealth but it is wealth actually."</span><span class="op">)</span></code></pre></div>
 <p><img src="pc_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 </div>
-<div id="the-puzzling-impact-of-interet-rates-reconsidered" class="section level3">
+<div id="the-puzzling-impact-of-interest-rates-reconsidered" class="section level3">
 <h3 class="hasAnchor">
-<a href="#the-puzzling-impact-of-interet-rates-reconsidered" class="anchor"></a>The puzzling impact of interet rates reconsidered</h3>
+<a href="#the-puzzling-impact-of-interest-rates-reconsidered" class="anchor"></a>The puzzling impact of interest rates reconsidered</h3>
 <p>What would happen with model PCEX2 if the propensity to consume (to save) becomes dependent on the rate of interest on bills?</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pc_eqs4</span> <span class="op">&lt;-</span> <span class="va">pc_eqs3</span>
