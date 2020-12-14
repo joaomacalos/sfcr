@@ -1,5 +1,5 @@
 ---
-title: "Model GROWTH"
+title: "Chapter 11: Model GROWTH"
 output: 
   rmarkdown::html_document:
     toc: true

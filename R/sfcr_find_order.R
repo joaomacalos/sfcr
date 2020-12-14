@@ -7,6 +7,8 @@
 #'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .eq_as_tb <- function(equations) {
   vars <- purrr::map(equations, ~paste0(deparse(.x, width.cutoff = 500), collapse = "")) %>%
     unlist
@@ -22,11 +24,21 @@
 #'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .add_time_stamps <- function(eq_as_tb) {
   eq_as_tb %>%
     dplyr::mutate(rhs = gsub("\\[-1\\]", "___", .data$rhs))
 }
 
+#' Find dependencies and order the equations
+#'
+#' @param x A vector to modify
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .add_time2 <- function(x) {
   gsub("\\[-1\\]", "___", x)
 }
@@ -34,15 +46,30 @@
 #' Pattern replacement var
 #' @param x vector of variables
 #'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .pvar <- function(x) {paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(x, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|\\_)")}
 
 #' Pattern replacement lag
 #' @param x vector of variables
 #'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .pvarlag <- function(x) {paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(x, collapse = "|"), ")(?=___)")}
 
 
-
+#' Find adjacency matrix for a system of equations
+#'
+#' @param equations A system of equations already time stamped
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .sfcr_find_adjacency <- function(equations) {
 
   km <- matrix(nrow = length(equations$lhs), ncol = length(equations$lhs))
@@ -51,17 +78,9 @@
 
   km[is.na(km)] <- 0
 
-  # Detect all endogenous vars
-  #ken <- paste0("(?<![[:alnum:]]|\\_|\\.)(", paste0(equations$lhs, collapse = '|'), ")(?![[:alnum:]]|\\_|\\.)")
-
   # Extract them from equations
   k3 <- equations %>%
     dplyr::mutate(rhs = stringr::str_extract_all(.data$rhs, .pvar(equations$lhs)))
-
-  #k3 <- equations %>%
-  #  dplyr::mutate(rhs = stringr::str_extract_all(.data$rhs, ken))# %>%
-    #dplyr::rowwise() %>%
-    #dplyr::filter(vctrs::vec_size(.data$rhs) > 0)
 
   # Loop to fill the adjacency matrix
   for (var in seq_along(k3$lhs)) {
@@ -71,9 +90,13 @@
   return(km)
 }
 
-#' Find blocks of independent equations
+#' Find blocks of independent equations (wrapper around \code{igraph} functions)
 #'
 #' @param adj Adjacency matrix
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
 #'
 .find_blocks <- function(adj) {
   g <- igraph::graph.adjacency(adjmatrix = t(adj),mode = "directed")
@@ -94,14 +117,14 @@
 #'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .sfcr_find_order <- function(equations) {
 
   k1 <- .eq_as_tb(equations)
 
   k2 <- k1 %>%
     dplyr::mutate(rhs = .add_time2(.data$rhs))
-
-  # k2 <- .add_time_stamps(k1)
 
   # STEP 1
   # Create adjacency matrix
@@ -113,12 +136,6 @@
 
   blocks <- .find_blocks(km)
 
-  #blocks <- .find_blocks3(km)
-
-  #blocks <- sort(blocks)
-  #ordered <- names(sort(blocks))
-
-  #k2 <- k2[match(ordered, k2$lhs), ]
   k2[['block']] <- blocks
 
   return(k2)

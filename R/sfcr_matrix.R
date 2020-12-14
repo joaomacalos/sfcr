@@ -1,7 +1,35 @@
+#' Take arguments and make them a row of a tibble
+#'
+#' @arg The arguments to transform
+#' @tb The Tibble that will receive the rows
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .args_to_row <- function(arg, tb) {
   purrr::imap_dfr(arg, ~dplyr::mutate(tb, !!.y := .x)) %>%
     dplyr::summarize(dplyr::across(dplyr::everything(), ~dplyr::first(.x[!is.na(.x)]))) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), ~tidyr::replace_na(.x, "")))
+}
+
+
+#' Abort if typo on the codes of columns
+#'
+#' @nms Incorrect codes detected
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
+.abort_typo_code <- function(nms) {
+
+  if (length(nms) == 1) {
+    message = paste0("There's a mispelled code in row `", nms, "`. Please check the matrix and try again.")
+  } else {
+    message = paste0("There are mispelled codes in rows `", paste0(nms, collapse = ", "), "`. Please check the matrix and try again.")
+  }
+  rlang::abort(message)
 }
 
 
@@ -41,6 +69,8 @@
 #'
 #' @example inst/examples/example_sfcr_matrix.R
 #'
+#' @author João Macalós, \email{joaomacalos@@gmail.com}
+#'
 #' @export
 #'
 sfcr_matrix <- function(columns, codes, ...) {
@@ -59,65 +89,21 @@ sfcr_matrix <- function(columns, codes, ...) {
 
   colnames(tb2) <- c("name", columns)
 
+  # Check if there's a mispelled code
+  is_a_problem <- purrr::map_lgl(colnames(tb2), ~is.na(.x))
+
+  if (any(is_a_problem)) {
+    prob_column <- which(is_a_problem)
+
+    prob_row <- purrr::map_dbl(purrr::map(tb2[, prob_column], ~!is.na(.x)), which)
+
+    nm_prob_row <- tb2[prob_row, ]$name
+
+    .abort_typo_code(nm_prob_row)
+  }
+
+
   return(tb2)
 }
 
 
-.find_names <- function(matrix) {
-  p1 <- matrix %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("\\+|\\-|\\*|\\/|\\(|\\)|\\[-1\\]", " ", .x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_squish(.x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_split(.x, " "))) %>%
-    dplyr::mutate(dplyr::across(-1, ~purrr::map(.x, function(y) unique(y))))
-
-  nms <- unlist(p1[, -1])
-
-  nms[purrr::map_lgl(nms, ~!(.x %in% c("", "0")))]
-}
-
-.to_latex_style <- function(matrix, nms) {
-
-  # Dictionary to remove numbers from names
-  words <- c("_zero_", "_one_", "_two_", "_three_", "_four_", "_five_", "_six_", "_seven_", "_eight_", "_nine_")
-  n_words <- as.character(0:9)
-
-  names(n_words) <- words
-  names(words) <- n_words
-
-  # Load existing names in the matrix
-  v <- nms
-
-  # English numbers
-  v <- stringr::str_replace_all(v, purrr::imap_chr(words, ~{.y = .x}))
-
-  v2 <- as.character(seq_along(v))
-  names(v2) <- v
-  v2 <- rev(v2[order(nchar(names(v2)), v2)])
-
-  v3 <- v
-  names(v3) <- as.character(seq_along(v))
-
-  #pat <- "\\(([[:digit:]]{1,})-[[:digit:]]{1,}\\[-1\\]\\)"
-  pat <- "\\(([[:digit:]]{1,})-[[:digit:]]{1,}\\[-_one_\\]\\)"
-
-  matrix <- matrix %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(" ", "", .x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, purrr::imap_chr(words, function(x, y) y = x)))) %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, purrr::imap_chr(v2, function(x, y) y = x)))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(pat, "\\\\Delta \\1", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, purrr::imap_chr(rev(v3), function(x, y) y = x)))) %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, purrr::imap_chr(n_words, function(x, y) y = x)))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("(.*)", "$\\1$", .x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("\\$\\$", "", .x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("\\*", "\\\\cdot ", .x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("\\[-1\\]", "_{-1}", .x)))
-
-  zero_row <- matrix[1, ]
-  zero_row <- purrr::modify(zero_row, ~ "$0$")
-  zero_row[[1]] <- "$\\sum$"
-
-  matrix <- matrix %>%
-    rbind(zero_row)
-
-  return(matrix)
-}

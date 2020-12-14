@@ -6,6 +6,8 @@
 #'  * "start": Fifth and fourth periods.
 #'  * "end": last two periods of the simulation (stationary state).
 #'
+#' @author João Macalós
+#'
 #' @export
 #'
 sfcr_sankey <- function(tfm, baseline, when = "start") {

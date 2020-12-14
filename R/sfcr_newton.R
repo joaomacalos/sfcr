@@ -13,6 +13,8 @@
 #'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .sfcr_newton <- function(m, equations, periods, max_ite, tol, ...) {
 
   blocks <- unique(sort(equations$block))
@@ -29,7 +31,6 @@
     dplyr::mutate(rhs2 = paste0(.data$rhs, " - ", .data$lhs2)) %>%
     dplyr::mutate(lhs2 = stringr::str_replace_all(.data$lhs2, c("\\[" = "\\\\[", "\\]" = "\\\\]")))
 
-  #blk <- purrr::map(blocks, ~dplyr::filter(eqs2, block == .x))
   blk <- purrr::map(blocks, ~eqs2[eqs2$block == .x,])
 
   blk <- purrr::map(blk, .prep_broyden)
@@ -43,7 +44,6 @@
   exs_l <- purrr::map(blk, function(.X) purrr::map(.X$rhs, ~rlang::parse_expr(.x)))
 
   block_foo <- function(.x) {
-    #block_foo <- function(.x) {
     .y <- numeric(length(exs))
     for (.id in seq_along(exs)) {
       .y[.id] <- eval(exs[[.id]])

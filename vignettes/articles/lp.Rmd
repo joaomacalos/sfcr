@@ -1,5 +1,5 @@
 ---
-title: "Liquidity Preference Model"
+title: "Chapter 5: Model LP"
 output: 
   rmarkdown::html_document:
     toc: true

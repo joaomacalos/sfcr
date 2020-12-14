@@ -10,6 +10,8 @@
 #'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .sfcr_make_scenario_matrix <- function(baseline, scenario, periods) {
 
   steady <- utils::tail(attributes(baseline)$matrix, n = 1)
@@ -46,6 +48,10 @@
 #'
 #' @param baseline A baseline model
 #' @param periods The total number of periods to run the model
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
 #'
 .extend_baseline_matrix <- function(baseline, periods) {
   steady <- utils::tail(attributes(baseline)$matrix, n = 1)

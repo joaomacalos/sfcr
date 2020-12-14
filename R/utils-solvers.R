@@ -6,6 +6,9 @@
 #' \code{.eq_as_tb()} function.
 #'
 #' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .prep_equations <- function(ordered_eqs, external) {
 
   # pend <- paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(ordered_eqs$lhs, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|\\_)")
@@ -60,6 +63,8 @@
 #' @param initial Initial values, if supplied.
 #'
 #' @author João Macalós
+#'
+#' @keyword Internal
 #'
 .make_matrix <- function(equations, external, periods, initial = NULL) {
 
@@ -129,6 +134,14 @@
   return(m1)
 }
 
+#' Prep equations for Broyden and Newton solvers
+#'
+#' @param .block Blocks of equations
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .prep_broyden <- function(.block) {
   for (.i in seq_len(vctrs::vec_size(.block))) {
     .block$rhs2 <- gsub(.block$lhs2[[.i]], paste0(".x\\[", .i, "\\]"), .block$rhs2)

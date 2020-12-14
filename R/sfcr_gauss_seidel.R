@@ -7,15 +7,17 @@
 #'
 #' @inheritParams sfcr_baseline
 #'
-#' @details This is the main algorithm of the package. It simulates the model
-#' by recursion with the help of four nested for loops. At each round of
-#' iteration, the values calculated are compared to the previous values. If
-#' the difference is below 1e-4, the round of calculations have converged
+#' @details This algorithm simulates the model by recursion by using
+#' nested for loops. At each round of iteration, the values calculated
+#' are compared to the previous values. If the difference is below
+#' a tolerance value set by the user, the round of calculations have converged
 #' and the algorithm jump to the next block of equations.
 #'
 #' The algorithm modifies a matrix in place to optimize its performance.
 #'
 #' @author João Macalós
+#'
+#' @keyword Internal
 #'
 .sfcr_gauss_seidel <- function(m, equations, periods, max_ite, tol) {
 

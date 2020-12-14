@@ -4,6 +4,11 @@
 #'
 #' @importFrom expm `%^%`
 #'
+#' @note See Networks: an introduction from M.E.J. Newman, 2010, p. 136-139
+#' for a reference on this algorithm.
+#'
+#' @keyword Internal
+#'
 .return_loops <- function(m) {
   loops <- numeric()
 
@@ -184,6 +189,8 @@ sfcr_dag_blocks_plot <- function(equations, title = NULL, size = 10) {
 #' Plot the DAG with cycles information
 #'
 #' @inheritParams sfcr_dag_blocks_plot
+#'
+#' @author João Macalós
 #'
 #' @export
 #'

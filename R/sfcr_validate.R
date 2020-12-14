@@ -1,7 +1,36 @@
+#' Check if all values in x are equal
+#'
+#' @param x A numeric vector
+#' @param tol Tolerance to declare equality
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .all_equal <- function(x, tol) {diff(range(x)) < tol}
 
+
+#' Check if two values are equal
+#'
+#' @param x,y numeric values
+#' @param tol Tolerance to declare equality
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .is_equal <- function(x, y, tol) {abs(x - y) < tol}
 
+
+#' Abort if row validation is not fulfilled
+#'
+#' @param r2names Names of offending rows
+#' @param which Balance-sheet or transactions-flow matrix?
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .abort_water_leakr <- function(r2names, which) {
 
   if (which == "tfm") {
@@ -23,6 +52,15 @@
 }
 
 
+#' Abort if column validation is not fulfilled
+#'
+#' @param c2names Names of offending columns
+#' @param which Balance-sheet or transactions-flow matrix?
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .abort_water_leakc <- function(c2names, which) {
 
   if (which == "tfm") {
@@ -46,8 +84,17 @@
 
 
 
-
-.get_matrix <- function(mtrx, baseline, bl1, bl2) {
+#' Get numeric matrix for evaluation from balance-sheet or
+#' transactions-flow matrices
+#'
+#' @param mtrx Balance-sheet or transactions-flow matrix
+#' @param bl1 calls from baseline model
+#' @param bl2 external from baseline model
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+.get_matrix <- function(mtrx, bl1, bl2) {
 
   nms <- colnames(mtrx)
   colnames(mtrx) <- c("name", nms[2:length(nms)])
@@ -64,6 +111,19 @@
 }
 
 
+#' Validate a balance-sheet or transactions-flow matrix on the simulated data
+#'
+#' @param mtrx A balance-sheet or transactions-flow matrix
+#' @param m A baseline model in matrix format -- get from attributes or with
+#' \code{sfcr_get_matrix()} function.
+#' @param which A balance-sheet or a transactions-flow matrix?
+#' @param tol Tolerance for convergence
+#' @param rtol Relative tolerance?
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 .validate_matrix <- function(mtrx, m, which = "tfm", tol, rtol = FALSE) {
   match.arg(which, c("tfm", "bs"))
 
@@ -274,6 +334,8 @@
 #' @details The absolute discrepancy set with \code{tol} should be enough to validate
 #' a stationary SFC Model.
 #'
+#' @author João Macalós
+#'
 #' @export
 sfcr_validate <- function(matrix, baseline, which, tol = 1, rtol = FALSE) {
 
@@ -286,7 +348,7 @@ sfcr_validate <- function(matrix, baseline, which, tol = 1, rtol = FALSE) {
   # If TFM
 
   if (which == "tfm") {
-    tfm <- .get_matrix(matrix, baseline, bl1, bl2)
+    tfm <- .get_matrix(matrix, bl1, bl2)
 
     .validate_matrix(tfm, m, "tfm", tol = tol, rtol = rtol)
 
@@ -294,7 +356,7 @@ sfcr_validate <- function(matrix, baseline, which, tol = 1, rtol = FALSE) {
   }
 
   else {
-    bs <- .get_matrix(matrix, baseline, bl1, bl2)
+    bs <- .get_matrix(matrix, bl1, bl2)
 
     .validate_matrix(bs, m, "bs", tol = tol, rtol = rtol)
 

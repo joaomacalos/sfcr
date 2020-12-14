@@ -1,6 +1,11 @@
 #' sfcr_set constructor
-#'
+#
 #' @param list A list
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 new_sfcr_set <- function(list) {
   stopifnot(inherits(list, "list"))
 
@@ -75,12 +80,14 @@ sfcr_set <- function(..., exclude = NULL) {
   UseMethod("sfcr_set")
 }
 
-#' S3 method for sfcr_set
+#' @method
 #'
 #' @param ... The formulas used to define the equations and external
 #' values of the system
 #' @param exclude One or more indices of equations to be excluded. The
 #' correct indices can be found with \code{sfcr_set_index()}.
+#'
+#' @author João Macalós
 #'
 #'
 #' @export
@@ -96,11 +103,13 @@ sfcr_set.formula <- function(..., exclude = NULL) {
   return(formulas)
 }
 
-#' S3 method for sfcr_set
+#' @method
 #'
 #' @param ... A sfcr_set and new formulas to be added
 #' @param exclude One or more indices of equations to be excluded. The
 #' correct indices can be found with \code{sfcr_set_index()}.
+#'
+#' @author João Macalós
 #'
 #' @export
 #'

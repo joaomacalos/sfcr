@@ -4,6 +4,8 @@
 #'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .sfcr_eqs_check <- function(m, equations) {
 
   exprs <- purrr::map(equations$rhs, function(x) parse(text=x))
@@ -34,6 +36,11 @@
 #' @param matrix a Matrix
 #' @param calls Calls tibble
 #' @param external Vector with external names
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 new_sfcr_tbl <- function(tbl, matrix, calls, external) {
   stopifnot(inherits(tbl, "tbl_df"))
   stopifnot(inherits(matrix, "matrix"))
@@ -52,6 +59,8 @@ new_sfcr_tbl <- function(tbl, matrix, calls, external) {
 #'
 #' @param sfcr_tbl A \code{sfcr_tbl} object.
 #'
+#' @author João Macalós
+#'
 #' @export
 #'
 sfcr_get_matrix <- function(sfcr_tbl) {
@@ -64,6 +73,8 @@ sfcr_get_matrix <- function(sfcr_tbl) {
 #' Get Matrix form of \code{sfcr_tbl} object
 #'
 #' @param sfcr_tbl A \code{sfcr_tbl} object.
+#'
+#' @author João Macalós
 #'
 #' @export
 #'

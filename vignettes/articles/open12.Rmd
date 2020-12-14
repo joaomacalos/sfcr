@@ -1,5 +1,5 @@
 ---
-title: "Model Advanced OPEN Economy"
+title: "Chapter 12: Model Advanced OPEN"
 output: 
   rmarkdown::html_document:
     toc: true

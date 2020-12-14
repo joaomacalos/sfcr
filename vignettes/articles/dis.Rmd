@@ -1,5 +1,5 @@
 ---
-title: "Chapter 9: Model DIS"
+title: "Chapter 9: Model DIS and DISINF"
 output: 
   rmarkdown::html_document:
     toc: true
@@ -32,9 +32,11 @@ library(sfcr)
 library(tidyverse)
 ```
 
-# Model DISequilibrium
+# Model DIS
 
-As it is usual, we start by defining the equations, exogenous values, and paramenters of the model:
+## Equations
+
+As it is usual, we start by defining the equations, exogenous values, and parameters of the model:
 
 ```{r}
 dis_eqs <- sfcr_set(
@@ -98,6 +100,9 @@ dis_ext <- sfcr_set(
 
 ```
 
+
+## Baseline
+
 And then we simulate the model:
 
 ```{r}
@@ -118,13 +123,78 @@ dis %>%
   labs(title = "DIS: reasonable steady state")
 ```
 
+## DAG structure
+
 Let's take a look on the structure of the model:
 
 ```{r}
-sfcr_dag_blocks_plot(dis_eqs)
+sfcr_dag_cycles_plot(dis_eqs)
 ```
 
 As we can see, the model is fully recursive, which means that every variable can be determined independently once the variables above it has been determined (and the external variables were supplied). Not surprisingly, it is incredibly fast to estimate this model.
+
+## Matrices of model DIS
+
+### Balance-sheet matrix
+
+```{r}
+bs_dis <- sfcr_matrix(
+  columns = c("Households", "Production firms", "Banks", "Sum"),
+  codes = c("h", "p", "b", "s"),
+  c("Money", h = "+Mh", b = "-Ms"),
+  c("Loans", p = "-Ld", b = "+Ls"),
+  c("Inventories", p = "+INV", s = "+INV"),
+  c("Balance", h = "-Mh", s = "-Mh")
+)
+```
+
+Display:
+```{r}
+sfcr_matrix_display(bs_dis)
+```
+
+
+Validate:
+```{r}
+sfcr_validate(bs_dis, dis, "bs")
+```
+
+### Transactions-flow
+
+```{r}
+tfm_dis <- sfcr_matrix(
+  columns = c("Households", "Firms_current", "Firms_capital", "Banks_current", "Banks_capital"),
+  codes = c("h", "fc", "fk", "bc", "bk"),
+  c("Consumption", h = "-C", fc = "+C"),
+  c("Ch. Inventories", fc = "+d(INV)", fk = "-d(INV)"),
+  c("Wages", h = "+WB", fc = "-WB"),
+  c("Interest on loans", fc = "-rl[-1] * Ld[-1]", bc = "rl[-1] * Ls[-1]"),
+  c("Entrepreneurial Profits", h = "+EF", fc = "-EF"),
+  c("Banks profits", h = "+EFb", bc = "-EFb"),
+  c("Interest on deposits", h = "+rm[-1] * Mh[-1]", bc = "-rm[-1] * Mh[-1]"),
+  c("Change loans", fk = "+d(Ld)", bk = "-d(Ls)"),
+  c("Change deposits", h = "-d(Mh)", bk = "+d(Ms)")
+)
+```
+
+Display:
+
+```{r}
+sfcr_matrix_display(tfm_dis, "tfm")
+```
+
+Validate:
+```{r}
+sfcr_validate(tfm_dis, dis, "tfm")
+```
+
+## Sankey's diagram
+
+```{r}
+sfcr_sankey(tfm_dis, dis)
+```
+
+# Scenarios
 
 Before seeing how this model reacts to changes in some of its parameters, let's write a helper function to generate some useful ratios, convert the model to the long format, and provide a skeleton of the `ggplot2` call:
 
@@ -146,7 +216,7 @@ do_plot <- function(model, variables) {
 ```
 
 
-## One-shot increase in the costing margin
+## Scenario 1: One-shot increase in the costing margin
 
 Simulate a new scenario with a shock:
 
@@ -160,7 +230,7 @@ shock1 <- sfcr_shock(
 )
 
 dis1 <- sfcr_scenario(baseline = dis,
-                      scenario = list(shock1),
+                      scenario = shock1,
                       periods = 40)
 ```
 
@@ -174,7 +244,7 @@ dis1 %>%
 ```
 It is interesting to note that the impact on consumption is quite negligible. the costing margin increased from 25% to 35% but the real consumption fell from 79.8 to 79.4.
 
-## Increase in the target inventories to sales ratio
+## Scenario 2: Increase in the target inventories to sales ratio
 
 ```{r}
 shock2 <- sfcr_shock(
@@ -185,7 +255,7 @@ shock2 <- sfcr_shock(
   end = 50
 )
 
-dis2 <- sfcr_scenario(dis, list(shock2), 50)
+dis2 <- sfcr_scenario(dis, shock2, 50)
 ```
 
 ```{r}
@@ -207,6 +277,8 @@ This Figure shows one inconsistency of the model simulated in @godley2007monetar
 However, the figure above clearly shows the opposite: it is the desired variation (`delta_inv_E`) that remains systematically below the real variation of inventories. In turn, this result makes absolute sense, as it shows that after a shock that triggers an increase in the inventories, the firms systematically produce *above* their expectations. This behavior leads to a correction in the next period until a steady state is achieved. If the reverse was true, the firms would be systematically wrong by producing *less* than expected, and would correct upwards, which would lead the model to an explosive path.
 
 # Model DISINF
+
+## Baseline
 
 1. Set the equations and the external variables:
 
@@ -309,6 +381,8 @@ disinf <- sfcr_baseline(equations = disinf_eqs,
 disinf %>% do_plot(variables = c("y"))
 ```
 
+## Scenario 1: Increase in the costing margins
+
 The main aspect of this model is that households take into consideration the erosion of their wealth that arise as a consequence of inflation. Hence, there shouldn't be any real long-term consequence of inflation in this model. Let's check it out:
 
 ```{r}
@@ -321,7 +395,7 @@ shock1 <- sfcr_shock(
 )
 
 disinf1 <- sfcr_scenario(baseline = disinf,
-                         scenario = list(shock1),
+                         scenario = shock1,
                          periods = 100,
                          tol = 1e-15)
 ```
@@ -348,6 +422,8 @@ disinf1 %>%
        subtitle = "Real consequences")
 ```
 
+## Scenario 2: Increase in the target real wage
+
 What's the effect of the `Omega0` parameter in this model?
 
 ```{r}
@@ -360,7 +436,7 @@ shock2 <- sfcr_shock(
 )
 
 disinf2 <- sfcr_scenario(baseline = disinf,
-                         scenario = list(shock2),
+                         scenario = shock2,
                          periods = 100,
                          tol = 1e-20)
 ```
@@ -376,7 +452,7 @@ disinf2 %>%
   
 ```
 
-
+## Sensitivity test
 
 Let's check it out with a sensitivity test.
 
@@ -385,27 +461,17 @@ In this test, we are going to expand `Omega0` to generate many baseline models, 
 ```{r}
 Omega0 <- seq(-1.4, 2, 0.4)
 
-expand_disinf_ext <- sfcr_expand(modify = disinf_ext,
-                                 name = "Omega0",
-                                 value = Omega0)
+xdisinf_ext <- sfcr_expand(disinf_ext, variable = Omega0, value = Omega0)
 
-many_disinf <- sfcr_many_baseline(
-  equations = disinf_eqs,
-  expanded = expand_disinf_ext,
+xdisinf <- sfcr_multis(
+  xdisinf_ext,
+  disinf_eqs,
   initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1),
   periods = 100
   )
 ```
 
 ```{r, paged.print = F}
-# shock1 <- sfcr_shock(
-#   variables = sfcr_set(
-#     Omega0 ~ -1
-#   ),
-#   start = 1,
-#   end = 45
-# )
-
 shock2 <- sfcr_shock(
   variables = sfcr_set(
     phi ~ 0.3
@@ -414,9 +480,8 @@ shock2 <- sfcr_shock(
   end = 45
 )
 
-#exp_shock1 <- sfcr_expand(shock1, "Omega0", Omega0)
 
-dsf1 <- sfcr_many_scenario(many_disinf, list(shock2), periods = 45)
+xdsf1 <- sfcr_multis(xdisinf, shock2, periods = 45)
 ```
 
 
@@ -426,7 +491,7 @@ library(RColorBrewer)
 mypal <- colorRampPalette(brewer.pal(6, "GnBu")[3:6])
 mypal2 <- colorRampPalette(brewer.pal(6, "OrRd")[3:6])
 
-dsf1 %>%
+xdsf1 %>%
   bind_rows() %>%
   group_by(simulation) %>%
   mutate(ydhs_ss = alpha0 / (1 - alpha1 - alpha2*sigma_T * (UC/p))) %>%
@@ -444,7 +509,7 @@ dsf1 %>%
 
 The real consequences are precisely the same for every single parameter.
 
-## DISINF2: Increase in the real interest rate
+## Scenario 2: Increase in the real interest rate
 
 ```{r}
 shock2 <- sfcr_shock(
@@ -456,7 +521,7 @@ shock2 <- sfcr_shock(
 )
 
 disinf2 <- sfcr_scenario(baseline = disinf,
-                         scenario = list(shock2),
+                         scenario = shock2,
                          periods = 60,
                          tol = 1e-20)
 
@@ -480,30 +545,45 @@ disinf2 %>%
        subtitle = "Real consequences")
 ```
 
-## M.DISINF: The possibility of non-neutral inflation
+# Model MDISINF: The possibility of non-neutral inflation
 
 The final model we will estimate in this notebook is a modified version of DISINF model in which households are fooled by monetary illusion. In this model, the consumption function depends on the disposable income -- and not on the Haig-Simons disposable income.
 
 ```{r}
-mdisinf_eqs <- disinf_eqs
-mdisinf_eqs[[27]] <- c ~ alpha0 + alpha1 * yd + alpha2 * mh[-1]
+sfcr_set_index(disinf_eqs) %>%
+  filter(lhs == "c")
+
+mdisinf_eqs <- sfcr_set(
+  disinf_eqs,
+  c ~ alpha0 + alpha1 * yd + alpha2 * mh[-1],
+  exclude = 27
+)
+
+
 
 mdisinf <- sfcr_baseline(mdisinf_eqs,
                    disinf_ext,
                    periods = 200,
                    initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1),
-                   tol = 1e-15)
+                   tol = 1e-15,
+                   hidden = c("Mh" = "Ms"))
 
 ```
 
+## DAG
 
 ```{r}
-sfcr_dag_blocks_plot(mdisinf_eqs)
+sfcr_dag_cycles_plot(mdisinf_eqs)
 ```
+
+In opposition to the previous model, we can see that the model DISINF has a cycle in its core. In any case, the figure below shows that it arrives to a stable steady state
+
 ```{r}
 mdisinf %>%
   do_plot(variables = c("y"))
 ```
+
+## Scenario 1: Increase in the target real wage of workers
 
 ```{r}
 shock1 <- sfcr_shock(
@@ -517,7 +597,7 @@ shock1 <- sfcr_shock(
 
 mdisinf1 <- sfcr_scenario(
   baseline = mdisinf,
-  scenario = list(shock1),
+  scenario = shock1,
   periods = 70
 )
 ```
@@ -544,6 +624,8 @@ mdisinf1 %>%
   labs(title = "MDISINF: Increase in the target real wage of workers",
        subtitle = "Impact on inflation rates")
 ```
+
+## Scenario 2: Increase in the costing margins
 
 Are these effects the same if the increase in prices is led by an increase in the costing margins of firms?
 
@@ -559,7 +641,7 @@ shock2 <- sfcr_shock(
 
 mdisinf2 <- sfcr_scenario(
   baseline = mdisinf,
-  scenario = list(shock2),
+  scenario = shock2,
   periods = 70
 )
 ```
@@ -588,7 +670,7 @@ mdisinf2 %>%
 ```
 
 
-
+# References
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: "Portfolio Choice Model"
+title: "Chapter 4: Model PC"
 references:
 - id: godley2007monetary
   title: >
@@ -424,7 +424,6 @@ pc_multi_scn <- sfcr_multis(pc_multi_bl, shock1, periods = 50)
 # We also need to expand the color palettes
 colourCount <- 20 # number of levels
 getPalette <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(6, "GnBu")[c(3:6)])
-
 
 bind_rows(pc_multi_scn) %>%
   mutate(simulation = as_factor(simulation)) %>%

@@ -1,5 +1,5 @@
 ---
-title: "SIM Model"
+title: "Chapter 3: Model SIM"
 output: 
   rmarkdown::html_document:
     toc: true

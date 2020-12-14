@@ -1,15 +1,18 @@
-#' Broyden solver
+#' Broyden solver algorithm
 #'
 #' @param .x0 Vector with initial guess for x.
 #' @param .fn A function containing the system of equations.
 #' @param max_ite Maximum number of iterations allowed
 #' @param tol A numeric value indicating the accepted tolerance to declare convergence.
 #'
+#' @note Check https://www.math.usm.edu/lambers/mat419/lecture11.pdf for a quick reference
+#' on the algorithm.
+#'
 #' @author João Macalós
 #'
+#' @keyword Internal
+#'
 .broyden_solver <- function(.x0, .fn, max_ite, tol) {
-
-  #TODO: Rewrite the solver in C++ using RcppArmadillo or RcppEigen
 
   # First round
 
@@ -56,7 +59,7 @@
 
 
 
-#' Broyden solver
+#' Broyden solver wrapper
 #'
 #' @param m The initialized matrix obtained with \code{.make_matrix()}.
 #' @param equations Prepared equations with \code{.prep_equations()}.
@@ -69,6 +72,8 @@
 #' blocks of equations.
 #'
 #' @author João Macalós
+#'
+#' @keyword Internal
 #'
 .sfcr_broyden <- function(m, equations, periods, max_ite, tol) {
 

@@ -3,6 +3,9 @@
 #' @param multis A list with multiple \code{sfcr_tbl}
 #' @param fixed The fixed argument
 #'
+#' @author João Macalós
+#' @keyword Internal
+#'
 new_sfcr_mlt <- function(multis, fixed) {
   stopifnot(inherits(multis[[1]], "sfcr_tbl"))
   stopifnot(inherits(fixed, c("sfcr_set", "sfcr_tbl", "sfcr_shock")))
@@ -32,7 +35,7 @@ new_sfcr_mlt <- function(multis, fixed) {
 #' on the \code{expanded} argument. There are three possible methods:
 #'
 #' * \code{sfcr_mlt_set}:
-#'   When the \code{sfcr_multis()} takes an \code{sfcr_mlt_external} class
+#'   When the \code{sfcr_multis()} takes an \code{sfcr_mlt_set} class
 #'   as the input of \code{expanded}, it must take a list of equations of
 #'   the \code{sfcr_set} class as the \code{fixed} input. This method
 #'   simulates many baseline models that accept the same set of equations
@@ -75,6 +78,8 @@ sfcr_multis <- function(expanded, fixed, periods, ...) {
 
 #' @method sfcr_multis sfcr_mlt_set
 #'
+#' @author João Macalós
+#'
 #' @export
 #'
 sfcr_multis.sfcr_mlt_set <- function(expanded, fixed, periods = 50, ...) {
@@ -100,6 +105,8 @@ print.sfcr_mlt <- function(x, ...) {
 
 #' @method sfcr_multis sfcr_mlt_shock
 #'
+#' @author João Macalós
+#'
 #' @export
 #'
 sfcr_multis.sfcr_mlt_shock <- function(expanded, fixed, periods = 50, ...) {
@@ -117,6 +124,8 @@ sfcr_multis.sfcr_mlt_shock <- function(expanded, fixed, periods = 50, ...) {
 }
 
 #' @method sfcr_multis sfcr_mlt
+#'
+#' @author João Macalós
 #'
 #' @export
 #'

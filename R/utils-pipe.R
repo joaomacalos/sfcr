@@ -14,6 +14,11 @@ NULL
 #'
 #' @param cnd Condition to be evaluated.
 #' @param message Message to display if condition is false.
+#'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 abortifnot <- function(cnd, message = NULL) {
 
   if (isFALSE(cnd)) rlang::abort(message)

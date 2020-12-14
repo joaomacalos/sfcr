@@ -47,6 +47,9 @@ sfcr_expand <- function(x, variable, values) {
 #' @param x A expanded list of sfcr_set's
 #' @param original the original sfcr_set
 #'
+#' @author João Macalós
+#'
+#' @keyword Internal
 new_sfcr_mlt_set <- function(x, original) {
   stopifnot(inherits(x, "list"))
   stopifnot(inherits(original, "sfcr_set"))
@@ -60,6 +63,8 @@ new_sfcr_mlt_set <- function(x, original) {
 #' @method sfcr_expand sfcr_set
 #'
 #' @export
+#'
+#' @author João Macalós
 #'
 sfcr_expand.sfcr_set <- function(x, variable, values) {
 
@@ -97,6 +102,10 @@ sfcr_expand.sfcr_set <- function(x, variable, values) {
 #' @param x A expanded list of sfcr_shock's
 #' @param original the original sfcr_shock
 #'
+#' @author João Macalós
+#'
+#' @keyword Internal
+#'
 new_sfcr_mlt_shock <- function(x, original) {
   stopifnot(inherits(x, "list"))
   stopifnot(inherits(original, "sfcr_shock"))
@@ -108,6 +117,8 @@ new_sfcr_mlt_shock <- function(x, original) {
 
 
 #' @method sfcr_expand sfcr_shock
+#'
+#' @author João Macalós
 #'
 #' @export
 #'

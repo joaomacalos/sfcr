@@ -1,5 +1,8 @@
 ---
-title: "Model OPEN"
+title: "Chapter 6: Models REG and OPEN"
+output: 
+  rmarkdown::html_document:
+    toc: true
 references:
 - id: godley2007monetary
   title: >
@@ -23,13 +26,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+Required packages:
+
 ```{r setup}
 library(sfcr)
-library(tidyverse)
+#library(tidyverse)
 ```
 
 
-## Model REG
+# Model REG
 
 We start this notebook with the model **REG**, that represents a country with two regions and a single monetary and fiscal authority. This model is presented in @godley2007monetary [p. 171-187].
 
@@ -47,11 +52,12 @@ tbl <- tribble(
 knitr::kable(tbl, format = "html") %>% kableExtra::kable_styling(full_width = F)
 ```
 
+## Equations
 
 As usual, we start by writing down the equations, exogenous variables, and parameters:
 
 ```{r}
-reg_eqs <- list(
+reg_eqs <- sfcr_set(
   Y_N ~ C_N + G_N + X_N - IM_N,
   Y_S ~ C_S + G_S + X_S - IM_S,
   IM_N ~ mu_N * Y_N,
@@ -79,13 +85,10 @@ reg_eqs <- list(
   Bcb ~ Bs - Bh
 )
 
-reg_exg <- list(
+reg_ext <- sfcr_set(
   r ~ 0.025,
   G_S ~ 20,
-  G_N ~ 20
-)
-
-reg_prms <- list(
+  G_N ~ 20,
   mu_N ~ 0.15,
   mu_S ~ 0.15,
   alpha1_N ~ 0.7,
@@ -107,7 +110,7 @@ reg_prms <- list(
 We can now simulate the model, adding also the hidden equation to spot any errors in the equations^[To understand the importance of the `hidden` argument, I invite the reader to change the first equation to `Y_N ~ C_N + G_N + X_N + IM_N`. That's obviously a mistake as `IM_N` should be deducted from the model. However, it is a easy-to-make typo when copying the equations from the book. The model will run and converge to answers in each period but they will make little sense. Setting the hidden equation would throw an error instead, inviting the reader to re-check the equations.]:
 
 ```{r}
-reg <- sfcr_sim(reg_eqs, reg_exg, reg_prms, 100, hidden = c("Hh" = "Hs"))
+reg <- sfcr_baseline(reg_eqs, reg_ext, 100, hidden = c("Hh" = "Hs"))
 ```
 
 
@@ -182,22 +185,72 @@ $$
 
 Also, in this example, both regions are exactly balanced, with their sectoral balances equal to zero. This is, as @godley2007monetary [p. 179], a super stationary state that is achieved because all the parameters are the same for the both regions. There is nothing in the system that will lead to this result. The reader is invited to change the parameters by her/himself to check this claim.
 
-## Experiments with model REG
 
-### An increase in the propensity to import of the South
+## Matrices of model REG
+
+### Balance-sheet matrix
+
+```{r}
+bs_reg <- sfcr_matrix(
+  columns = c("North_HH", "South_HH", "Government", "Central Bank"),
+  codes = c("nh", "sh", "g", "cb"),
+  c("Money", nh = "+Hh_N", sh = "+Hh_S", cb = "-Hs"),
+  c("Bills", nh = "+Bh_N", sh = "+Bh_S", g = "-Bs", cb = "+Bcb"),
+  c("Wealth", nh = "-V_N", sh = "-V_S", g = "V_N + V_S")
+)
+```
+
+Validate:
+
+```{r}
+sfcr_validate(bs_reg, reg, "bs")
+```
+
+### Transactions-flow matrix
+
+```{r}
+tfm_reg <- sfcr_matrix(
+  columns = c("North_HH", "North_Firms", "South_HH", "South_Firms", "Government", "Central Bank"),
+  codes = c("nh", "nf", "sh", "sf", "g", "cb"),
+  c("Consumption", nh = "-C_N", nf = "+C_N", sh = "-C_S", sf = "+C_S"),
+  c("Govt. Exp", nf = "+G_N", sf = "+G_S", g = "-G"),
+  c("North X to South", nf = "+X_N", sf = "-IM_S"),
+  c("South X to North", nf = "-IM_N", sf = "+X_S"),
+  c("GDP", nh = "+Y_N", nf = "-Y_N", sh = "+Y_S", sf = "-Y_S"),
+  c("Interest payments", nh = "+r[-1] * Bh_N[-1]", sh = "+r[-1] * Bh_S[-1]", g = "-r[-1] * Bs[-1]", cb = "+r[-1] * Bcb[-1]"),
+  c("CB Profits", g = "+r[-1] * Bcb[-1]", cb = "-r[-1] * Bcb[-1]"),
+  c("Taxes", nh = "-TX_N", sh = "-TX_S", g = "+TX"),
+  c("Ch. cash", nh = "-d(Hh_N)", sh = "-d(Hh_S)", cb = "+d(Hs)"),
+  c("Ch. bills", nh = "-d(Bh_N)", sh = "-d(Bh_S)", g = "+d(Bs)", cb = "-d(Bcb)")
+)
+```
+
+Validate:
+
+```{r}
+sfcr_validate(tfm_reg, reg, "tfm")
+```
+
+### Sankey's diagram
+
+```{r}
+sfcr_sankey(tfm_reg, reg)
+```
+
+## Scenario 1: An increase in the propensity to import of the South
 
 To see what would happen if there was an increase in the propensity to import in the southern region, we calculate a scenario by adding a shock to `reg` model:
 
 ```{r}
 shock1 <- sfcr_shock(
-  variables = list(mu_S ~ 0.25),
+  variables = sfcr_set(mu_S ~ 0.25),
   start = 5,
   end = 60
 )
 
 reg_1 <- sfcr_scenario(
   reg,
-  scenario = list(shock1),
+  scenario = shock1,
   periods = 60
 )
 ```
@@ -227,18 +280,18 @@ reg_1long %>%
   geom_line(aes(linetype = name))
 ```
 
-### An increase in the government expenditures of the South
+## Scenario 2: An increase in the government expenditures of the South
 
 Before we saw that an exogenous increase of the Southern imports **caused** a higher government deficit in that region. What would happen if we exogenously increase the government deficit instead?
 
 ```{r}
 shock2 <- sfcr_shock(
-  variables = list(G_S ~ 25),
+  variables = sfcr_set(G_S ~ 25),
   start = 5,
   end = 60
 )
 
-reg_2 <- sfcr_scenario(reg, list(shock2), 60)
+reg_2 <- sfcr_scenario(reg, shock2, 60)
 reg_2long <- to_long(reg_2)
 ```
 
@@ -258,7 +311,7 @@ reg_2long %>%
   geom_line(aes(linetype = name))
 ```
 
-### An increase in the propensity to save of the Southern households
+## Scenario 3: An increase in the propensity to save of the Southern households
 
 One of the puzzling results of model PC was that an increase in the propensity to save led to higher long-run output. This results is in contrast with the post-Keynesian "paradox of thrift". what would happen in model REG if the households of one of its regions increased its propensity to save?
 
@@ -266,12 +319,12 @@ To check it, we add a shock to model REG, creating a new scenario:
 
 ```{r}
 shock3 <- sfcr_shock(
-  variables = list(alpha1_S ~ 0.6),
+  variables = sfcr_set(alpha1_S ~ 0.6),
   start = 5,
   end = 60
 )
 
-reg_3 <- sfcr_scenario(reg, list(shock3), periods = 60)
+reg_3 <- sfcr_scenario(reg, shock3, periods = 60)
 reg_3long <- to_long(reg_3)
 ```
 
@@ -297,18 +350,18 @@ reg_3long %>%
 
 The interesting feature of this exercise is that it shows that it is possible to have government deficits (or surpluses) at the same time as trade surpluses (deficits), but only in the transitional period to the new steady state.
 
-### A change in the liquidity preference of Southern households
+## Scenario 4: A change in the liquidity preference of Southern households
 
 The last exercise with this model is to check the effect of an increase in the liquidity preference of Northern households.
 
 ```{r}
 shock4 <- sfcr_shock(
-  variables = list(lambda0_S ~ 1),
+  variables = sfcr_set(lambda0_S ~ 1),
   start = 5,
   end = 60
 )
 
-reg_4 <- sfcr_scenario(reg, list(shock4), 60)
+reg_4 <- sfcr_scenario(reg, shock4, 60)
 reg_4long <- to_long(reg_4)
 ```
 
@@ -340,7 +393,7 @@ We are finally ready to create a model with two countries, two governments, two 
 Without further adue, let's write the equations, parameters, and exogenous values.
 
 ```{r}
-open_eqs <- list(
+open_eqs <- sfcr_set(
   Y_N ~ C_N + G_N + X_N - IM_N,
   Y_S ~ C_S + G_S + X_S - IM_S,
   IM_N ~ mu_N * Y_N,
@@ -373,16 +426,13 @@ open_eqs <- list(
 )
 
 
-open_exg <- list(
+open_ext <- sfcr_set(
   xr ~ 1,
   pg_N ~ 1,
   r_N ~ 0.025,
   r_S ~ 0.025,
   G_S ~ 20,
-  G_N ~ 20
-)
-
-open_prms <- list(
+  G_N ~ 20,
   mu_N ~ 0.15,
   mu_S ~ 0.15,
   alpha1_N ~ 0.7,
@@ -413,8 +463,7 @@ Note also that at least something must be different from one country to the othe
 We can simulate the model:
 
 ```{r}
-open <- sfcr_sim(open_eqs, open_exg, open_prms, periods = 60, hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
-open %>% select(period, deltaor_N, deltaor_S)
+open <- sfcr_baseline(open_eqs, open_ext, periods = 100, hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
 ```
 
 Let's also adapt our `to_long()` function to incorporate the new questions we want to investigate with the OPEN model:
@@ -456,20 +505,75 @@ open_long %>%
   facet_wrap(~country)
 ```
 
+## Matrices of model OPEN
+
+### Balance-sheet matrix
+
+The "Sum" column of the balance-sheet matrix does not sum to zero in all of its entries. Therefore, we must add a "Sum" column by hand with the `sfcr_matrix()` function in order to have it validated with `sfcr_validate()`.
+
+```{r}
+bs_open <- sfcr_matrix(
+  columns = c("North_HH", "North_Govt", "North_CB", "South_HH", "South_Govt", "South_CB", "Sum"),
+  codes = c("nh", "ng", "ncb", "sh", "sg", "scb", "s"),
+  c("Money", nh = "+Hh_N", ncb = "-Hs_N", sh = "+Hh_S", scb = "-Hs_S"),
+  c("Bills", nh = "+Bh_N", ng = "-Bs_N", ncb = "+Bcb_N", sh = "+Bh_S", sg = "-Bs_S", scb = "+Bcb_S"),
+  c("Gold", ncb = "+or_N * pg_N * xr", scb = "or_S * pg_S", s = "or_N * pg_N * xr + (or_S * pg_S)"),
+  c("Wealth", nh = "-V_N", ng = "Bs_N", sh = "-V_S", sg = "Bs_S", s = "-(or_N * pg_N * xr + (or_S * pg_S))")
+)
+```
+
+Validate:
+
+```{r}
+sfcr_validate(bs_open, open, "bs")
+```
+
+### Transactions-flow matrix
+
+```{r}
+tfm_open <- sfcr_matrix(
+  columns = c("N_Households", "N_Firms", "N_Govt", "N_CentralBank", "S_Households", "S_Firms", "S_Govt", "S_CentralBank"),
+  codes = c("nh", "nf", "ng", "ncb", "sh", "sf", "sg", "scb"),
+  c("Consumption", nh = "-C_N", nf = "+C_N", sh = "-C_S", sf = "+C_S"),
+  c("Govt. Exp", nf = "+G_N", ng = "-G_N", sf = "+G_S", sg = "-G_S"),
+  c("North X to South", nf = "+X_N * xr", sf = "-IM_S"),
+  c("South X to North", nf = "-IM_N * xr", sf = "+X_S"),
+  c("GDP", nh = "+Y_N", nf = "-Y_N", sh = "+Y_S", sf = "-Y_S"),
+  c("Interest payments", nh = "+r_N[-1] * Bh_N[-1]", ng = "-r_N[-1] * Bs_N[-1]", ncb = "+r_N[-1] * Bcb_N[-1]", sh = "+r_S[-1] * Bh_S[-1]", sg = "-r_S[-1] * Bs_S[-1]", scb = "+r_S[-1] * Bcb_S[-1]"),
+  c("CB Profits", ng = "+r_N[-1] * Bcb_N[-1]", ncb = "-r_N[-1] * Bcb_N[-1]", sg = "+r_S[-1] * Bcb_S[-1]", scb = "-r_S[-1] * Bcb_S[-1]"),
+  c("Taxes", nh = "-TX_N", ng = "+TX_N", sh = "-TX_S", sg = "+TX_S"),
+  c("Ch. cash", nh = "-d(Hh_N)", ncb = "+d(Hs_N)", sh = "-d(Hh_S)", scb = "+d(Hs_S)"),
+  c("Ch. bills", nh = "-d(Bh_N)", ng = "+d(Bs_N)", ncb = "-d(Bcb_N)", sh = "-d(Bh_S)", sg = "+d(Bs_S)", scb = "-d(Bcb_S)"),
+  c("Ch. Gold", ncb = "-d(or_N) * pg_N * xr", scb = "-d(or_S) * pg_S")
+)
+```
+
+Validate:
+
+```{r}
+sfcr_validate(tfm_open, open, "tfm")
+```
+## Sankey's diagram
+
+```{r}
+sfcr_sankey(tfm_open, open)
+```
+
+
 Perfect. Now let's play with scenarios.
 
-## Ever-falling gold reserves
+## Scenario 1: Ever-falling gold reserves
 
 What happens if there is an increase in the propensity to import in the South?
 
 ```{r}
 shock1 <- sfcr_shock(
-  variables = list(mu_S ~ 0.25),
+  variables = sfcr_set(mu_S ~ 0.25),
   start = 5,
   end = 60
 )
 
-open_1 <- sfcr_scenario(open, scenario = list(shock1), periods = 60)
+open_1 <- sfcr_scenario(open, scenario = shock1, periods = 60)
 open_1l <- to_long(open_1)
 ```
 
@@ -524,36 +628,47 @@ Let's slightly modify model OPEN to  introduce an adjustment mechanism through g
 
 
 ```{r}
-open2_eqs <- open_eqs
-
-open2_eqs <- c(
-  open2_eqs,
+open2_eqs <- sfcr_set(
+  open_eqs,
   G_N ~ G_N[-1] + phi_N * ( (or_N - or_N[-1]) * pg_N[-1] ),
   G_S ~ G_S[-1] + phi_S * ( (or_S - or_S[-1]) * pg_S[-1] )
 )
 
-open2_prms <- c(
-  open_prms,
-  phi_N ~ 0.25,
-  phi_S ~ 0.25
-)
 
 # Remove G_N and G_S from exogenous variables
-open2_exg <- open_exg[1:4]
 
-open2_initial <- list(
-  G_N ~ 20,
-  G_S ~ 20
+# Find the ids to exclude
+sfcr_set_index(open_ext) %>%
+  filter(lhs %in% c("G_N", "G_S"))
+
+
+open2_ext <- sfcr_set(
+  open_ext,
+  phi_N ~ 0.25,
+  phi_S ~ 0.25,
+  exclude = c(5, 6)
 )
 
-open2 <- sfcr_sim(open2_eqs, open2_exg, open2_prms, 60, initial = open2_initial, hidden = c("deltaor_N" = "deltaor_S"), .hidden_tol = 0.01)
+
+# open2_exg <- open_exg[1:4]
+# 
+
+# Add initial values to govt. expenditures
+open2_initial <- sfcr_set(
+   G_N ~ 20,
+   G_S ~ 20
+ )
+
+open2 <- sfcr_baseline(open2_eqs, open2_ext, 60, initial = open2_initial, hidden = c("deltaor_N" = "deltaor_S"), .hidden_tol = 0.01)
 
 ```
+
+## Scenario 1:
 
 We then add `shock1` to this model:
 
 ```{r}
-open2_1 <- sfcr_scenario(open2, list(shock1), 60)
+open2_1 <- sfcr_scenario(open2, shock1, 60)
 open2_1l <- to_long(open2_1)
 ```
 
@@ -568,7 +683,7 @@ open2_1l %>%
   facet_wrap(~country)
 ```
 
-## OPEN3: Adjustment through interest rates
+# Model OPEN3: Adjustment through interest rates
 
 International organizations like the IMF and the WB usually suggest monetary contraction together with fiscal austerity for countries dealing with balance of payments crisis. How would our model fare if we added an adjustment mechanism through interest rates instead?
 
@@ -580,20 +695,20 @@ Let's take a look at this developments.
 ```{r}
 #TODO here: the equations for model OPENM should have the percent change in gold reserves as a determinant of interest rates, rather than the absolute change in gold reserves (Source: Zezza)
 
-open3_eqs <- c(
-  open_eqs,
+sfcr_set_index(open_ext) %>%
+  filter(lhs %in% c("r_N", "r_S"))
+
+open3_ext <- sfcr_set(
+  open_ext,
   r_N ~ r_N[-1] - phi_N * ( ((or_N - or_N[-1])/or_N[-1]) * pg_N[-1] ),
   r_S ~ r_S[-1] - phi_S * ( ((or_S - or_S[-1])/or_S[-1]) * pg_S[-1] )
 )
 
-open3_exg <- c(
-  open_exg[c(1,2,5,6)]
-)
-
-open3_prms <- c(
-  open_prms,
+open3_ext <- sfcr_set(
+  open_ext,
   phi_N ~ 0.005,
-  phi_S ~ 0.005
+  phi_S ~ 0.005,
+  exclude = c(3, 4)
 )
 
 # We have to initialize the interest rates now
@@ -602,7 +717,7 @@ open3_initial <- list(
   r_S ~ 0.025
 )
 
-open3 <- sfcr_sim(open3_eqs, open3_exg, open3_prms, periods = 100, initial = open3_initial,
+open3 <- sfcr_baseline(open3_eqs, open3_ext, periods = 100, initial = open3_initial,
                   hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
 
 open3 %>% select(period, r_N, r_S)
@@ -622,17 +737,16 @@ It is even difficult to find a steady state for this model. Play as much as you 
 Let's try adding a buffer zone around the variation of the gold reserves that would trigger a interest rate increase:
 
 ```{r}
-open4_eqs <- c(
+open4_eqs <- sfcr_set(
   open_eqs,
   r_N ~ if (abs(( (or_N - or_N[-1]) * pg_N[-1] )) > 2) {r_N[-1] - phi_N * ( (or_N - or_N[-1]) * pg_N[-1] )} else {r_N[-1]},
   r_S ~ if (abs(( (or_S - or_S[-1]) * pg_S[-1] )) > 2) {r_S[-1] - phi_S * ( (or_S - or_S[-1]) * pg_S[-1] )} else {r_S[-1]}
 )
 
-open4 <- sfcr_sim(open4_eqs, open3_exg, open3_prms, periods = 50, initial = open3_initial,
-                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
-
-profvis::profvis(open4 <- sfcr_sim(open4_eqs, open3_exg, open3_prms, periods = 50, initial = open3_initial,
-                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01))
+# Broyden and Newton fails to solve -- very unstable model
+open4 <- sfcr_baseline(open4_eqs, open3_ext, periods = 50, initial = open3_initial,
+                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01,
+                  method = "Gauss")
 
 ```
 
@@ -656,7 +770,7 @@ shock1 <- sfcr_shock(
   end = 20
 )
 
-open4_1 <- sfcr_scenario(open4, scenario = list(shock1), periods = 20)
+open4_1 <- sfcr_scenario(open4, scenario = shock1, periods = 20, method = "Gauss")
 open4_1l <- to_long(open4_1)
 ```
 
@@ -667,7 +781,7 @@ open4_1l %>%
   ggplot(aes(x = period, y = value)) +
   geom_line(aes(linetype = name))
 ```
-This model obviously explode and I had to decrease the number of periods to find some solution to it (as they do in the book).
+This model obviously explode and I had to use the Gauss-Seilde solver and decrease the number of periods to find some solution to it (as they do in the book).
 
 ```{r}
 open4_1l %>%
@@ -677,29 +791,36 @@ open4_1l %>%
 ```
 
 ```{r}
-p1 <- sfcr_dag_blocks_plot(open4_eqs)
+sfcr_dag_blocks_plot(open4_eqs)
 ```
 
 
-#### Making aggregate income dependent on interest rates
+## Scenario: Making aggregate income dependent on interest rates
 
 One possibility outlined in the book is to modify the propensity to consume out of disposable income to be a negative function on interest rates:
 
 ```{r}
-open4b_eqs <- c(
+open4b_eqs <- sfcr_set(
   open3_eqs,
   alpha1_S ~ alpha10_S - iota_S * r_S,
   alpha1_N ~ alpha10_N - iota_N * r_S
   )
 
-open4b_prms <- open3_prms
+# Alpha1 becomes endogenous. We need to remove it from the external set
 
-open4b_prms[[3]] <- alpha10_N ~ 0.7
-open4b_prms[[4]] <- alpha10_S ~ 0.8
-open4b_prms[[17]] <- iota_S ~ 0.5
-open4b_prms[[18]] <- iota_N ~ 0.35
+sfcr_set_index(open3_ext) %>%
+  filter(str_detect(lhs, "alpha1"))
 
-open4b <- sfcr_sim(open4b_eqs, open3_exg, open4b_prms, 100, initial = open3_initial, hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+open4b_ext <- sfcr_set(
+  open3_ext,
+  alpha10_N ~ 0.7,
+  alpha10_S ~ 0.8,
+  iota_S ~ 0.5,
+  iota_N ~ 0.35,
+  exclude = c(7, 8)
+)
+
+open4b <- sfcr_baseline(open4b_eqs, open4b_ext, 100, initial = open3_initial, hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
 
 open4b_l <- to_long(open4b)
 ```
@@ -724,6 +845,7 @@ open4b_l %>%
     title = "Model OPEN4B",
     subtitle = "No stationary state")
 ```
+
 ```{r}
 open4b_l %>%
   filter(str_detect(name, "TB|GB")) %>%
@@ -734,6 +856,7 @@ open4b_l %>%
     title = "Model OPEN4B",
     subtitle = "No stationary state")
 ```
+
 ```{r}
 open4b_l %>%
   filter(str_detect(name, "YD|V")) %>%
@@ -744,6 +867,7 @@ open4b_l %>%
     title = "Model OPEN4B",
     subtitle = "No stationary state")
 ```
+
 
 ```{r}
 open4b_l %>%
@@ -756,44 +880,51 @@ open4b_l %>%
     subtitle = "No stationary state")
 ```
 
-### A perverse reaction function? The puzzling effect of interes rates revisited
+## Scenario: A perverse reaction function? The puzzling effect of interes rates revisited
 
 Now, let's imagine a similar model, but where the central bank react to a trade deficit by **decreasing** interest rates:
 
 ```{r}
-open5_eqs <- c(
+open5_eqs <- sfcr_set(
   open_eqs,
   r_N ~ r_N[-1] + phi_N * ( (or_N - or_N[-1]) * pg_N[-1] ),
   r_S ~ r_S[-1] + phi_S * ( (or_S - or_S[-1]) * pg_S[-1] )
 )
 
-open5_exg <- c(
-  open_exg[c(1,2,5,6)]
-)
+sfcr_set_index(open_ext) %>%
+  filter(lhs %in% c("r_N", "r_S"))
 
-open5_prms <- c(
-  open_prms,
+open5_ext <- sfcr_set(
+  open_ext,
   phi_N ~ 0.002,
-  phi_S ~ 0.002
+  phi_S ~ 0.002,
+  exclude = c(3, 4)
 )
 
 # We have to initialize the interest rates now
-open5_initial <- list(
+open5_initial <- sfcr_set(
   r_N ~ 0.025,
   r_S ~ 0.025
 )
 
-open5 <- sfcr_sim(open5_eqs, open5_exg, open5_prms, periods = 100, initial = open3_initial,
-                  hidden = c("deltaor_S" = "deltaor_N"), .hidden_tol = 0.01)
+open5 <- sfcr_baseline(
+  equations = open5_eqs, 
+  external = open5_ext,
+  periods = 100, 
+  initial = open3_initial,
+  hidden = c("deltaor_S" = "deltaor_N"), 
+  .hidden_tol = 0.01)
+```
 
 
+```{r}
 shock1 <- sfcr_shock(
-  variables = list(mu_S ~ 0.2),
+  variables = sfcr_set(mu_S ~ 0.2),
   start = 5,
   end = 60
 )
 
-open5_1 <- sfcr_scenario(open5, scenario = list(shock1), periods = 60)
+open5_1 <- sfcr_scenario(open5, scenario = shock1, periods = 60)
 open5_1l <- to_long(open5_1)
 ```
 
