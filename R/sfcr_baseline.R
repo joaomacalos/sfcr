@@ -70,7 +70,7 @@ sfcr_get_matrix <- function(sfcr_tbl) {
 }
 
 
-#' Get Matrix form of \code{sfcr_tbl} object
+#' Get block structure of a \code{sfcr_tbl} object
 #'
 #' @param sfcr_tbl A \code{sfcr_tbl} object.
 #'
