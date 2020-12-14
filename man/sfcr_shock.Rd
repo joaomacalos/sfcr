@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfcr_shock.R
 \name{sfcr_shock}
 \alias{sfcr_shock}
-\title{Create schock(s) to add to a \code{sfcr_scenario()}.}
+\title{Create shock(s) to add to a \code{sfcr_scenario()}.}
 \usage{
 sfcr_shock(variables, start, end)
 }
@@ -16,7 +16,7 @@ hand side.}
 \item{end}{An integer indicating the period when the shock ends.}
 }
 \description{
-Create schock(s) to add to a \code{sfcr_scenario()}.
+Create shock(s) to add to a \code{sfcr_scenario()}.
 }
 \examples{
 

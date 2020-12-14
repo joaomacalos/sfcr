@@ -18,7 +18,7 @@ shock variable.}
 \description{
 The \code{sfcr_expand()} function is a s3 \strong{generic} that takes
 a list of external objects and returns a expanded set of these lists.
-It has methodsf or \code{sfcr_set} objects and \code{sfcr_shock} objects.
+It has methods for \code{sfcr_set} objects and for \code{sfcr_shock} objects.
 }
 \details{
 There are two available methods for the \code{sfcr_expand()} function:

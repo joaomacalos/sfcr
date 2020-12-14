@@ -81,7 +81,7 @@
 #' @details Add scenario(s) to a model generated with \code{sfcr_baseline()} functions.
 #'
 #' This function inherits the block structure from the steady state model. See
-#' \code{\link{sfcr_baseline}} for futher details on the algorithms.
+#' \code{\link{sfcr_baseline}} for further details on the algorithms.
 #'
 #' @seealso \code{\link{sfcr_baseline}}
 #'

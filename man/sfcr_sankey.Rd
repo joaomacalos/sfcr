@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfcr_sankey.R
 \name{sfcr_sankey}
 \alias{sfcr_sankey}
-\title{Plot Sankeys diagram representation of transactrions-flow matrix}
+\title{Plot Sankey's diagram representation of transactions-flow matrix}
 \usage{
 sfcr_sankey(tfm, baseline, when = "start")
 }
@@ -18,7 +18,7 @@ sfcr_sankey(tfm, baseline, when = "start")
 }}
 }
 \description{
-Plot Sankeys diagram representation of transactrions-flow matrix
+Plot Sankey's diagram representation of transactions-flow matrix
 }
 \author{
 João Macalós

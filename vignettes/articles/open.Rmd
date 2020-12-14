@@ -687,7 +687,7 @@ open2_1l %>%
 
 International organizations like the IMF and the WB usually suggest monetary contraction together with fiscal austerity for countries dealing with balance of payments crisis. How would our model fare if we added an adjustment mechanism through interest rates instead?
 
-The answer is simple: it will not adjust. This model inherits from model PC where there higher interest rates actually lead to higher economic activity. Therefore, adjusting the interest rate in response to the balance of payments disequilibrium will only aggravate the problem as it will lead to higher economic activity and hecenforth to higher imports. 
+The answer is simple: it will not adjust. This model inherits from model PC where there higher interest rates actually lead to higher economic activity. Therefore, adjusting the interest rate in response to the balance of payments disequilibrium will only aggravate the problem as it will lead to higher economic activity and henceforth to higher imports. 
 
 Let's take a look at this developments.
 
@@ -781,7 +781,7 @@ open4_1l %>%
   ggplot(aes(x = period, y = value)) +
   geom_line(aes(linetype = name))
 ```
-This model obviously explode and I had to use the Gauss-Seilde solver and decrease the number of periods to find some solution to it (as they do in the book).
+This model obviously explode and I had to use the Gauss-Seidel solver and decrease the number of periods to find some solution to it (as they do in the book).
 
 ```{r}
 open4_1l %>%
@@ -880,7 +880,7 @@ open4b_l %>%
     subtitle = "No stationary state")
 ```
 
-## Scenario: A perverse reaction function? The puzzling effect of interes rates revisited
+## Scenario: A perverse reaction function? The puzzling effect of interest rates revisited
 
 Now, let's imagine a similar model, but where the central bank react to a trade deficit by **decreasing** interest rates:
 

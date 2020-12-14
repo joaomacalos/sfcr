@@ -758,7 +758,7 @@ $$
 gr = \frac{-PSBR + (\Delta p) \cdot (B_{s-1} + BL_{s-1} * p_{bL-1})}{p}
 $$
 
-I think that the correct definition shoud be:
+I think that the correct definition should be:
 
 $$
 gr2 = \frac{-PSBR + tav \cdot (B_{s-1} + BL_{s-1} * p_{bL-1})}{p}

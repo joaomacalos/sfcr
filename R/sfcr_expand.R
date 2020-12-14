@@ -2,7 +2,7 @@
 #'
 #' The \code{sfcr_expand()} function is a s3 **generic** that takes
 #' a list of external objects and returns a expanded set of these lists.
-#' It has methodsf or \code{sfcr_set} objects and \code{sfcr_shock} objects.
+#' It has methods for \code{sfcr_set} objects and for \code{sfcr_shock} objects.
 #'
 #' @param x A external set created with \code{sfcr_set()} or
 #' a shock set created with \code{sfcr_shock()}

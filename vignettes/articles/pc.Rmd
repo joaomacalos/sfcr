@@ -330,7 +330,7 @@ pc3_long %>%
   labs(caption = "In the book it is written 'lagged' wealth but it is wealth actually.")
 ```
 
-### The puzzling impact of interet rates reconsidered
+### The puzzling impact of interest rates reconsidered
 
 What would happen with model PCEX2 if the propensity to consume (to save) becomes dependent on the rate of interest on bills?
 

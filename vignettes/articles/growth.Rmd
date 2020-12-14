@@ -1122,7 +1122,7 @@ do_plot(growthib, "Rl")
 ```
 
 
-# Model GROWTH2: Endogenizing monetary policy
+# Model GROWTH2: Making monetary policy endogenous
 
 ```{r}
 growth_eqs2 <- growth_eqs

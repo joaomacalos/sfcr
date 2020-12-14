@@ -1,4 +1,4 @@
-#' Create schock(s) to add to a \code{sfcr_scenario()}.
+#' Create shock(s) to add to a \code{sfcr_scenario()}.
 #'
 #' @param variables A list with formula(e) containing the name of the variable(s)
 #' that will be shocked on the left-hand side and their new values on the right-

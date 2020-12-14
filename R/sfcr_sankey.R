@@ -1,4 +1,4 @@
-#' Plot Sankeys diagram representation of transactrions-flow matrix
+#' Plot Sankey's diagram representation of transactions-flow matrix
 #'
 #' @param tfm A transactions-flow matrix
 #' @param baseline A baseline model
