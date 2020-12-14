@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot the DAG with cycles information — sfcr_dag_cycles_plot • sfcr</title>
+<title>Transform entries into latex style — .to_latex_style • sfcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Plot the DAG with cycles information — sfcr_dag_cycles_plot" />
-<meta property="og:description" content="Plot the DAG with cycles information" />
+<meta property="og:title" content="Transform entries into latex style — .to_latex_style" />
+<meta property="og:description" content="Transform entries into latex style" />
 
 
 
@@ -144,33 +144,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot the DAG with cycles information</h1>
-    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_plots.R'><code>R/sfcr_plots.R</code></a></small>
-    <div class="hidden name"><code>sfcr_dag_cycles_plot.Rd</code></div>
+    <h1>Transform entries into latex style</h1>
+    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_matrix_display.R'><code>R/sfcr_matrix_display.R</code></a></small>
+    <div class="hidden name"><code>dot-to_latex_style.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot the DAG with cycles information</p>
+    <p>Transform entries into latex style</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfcr_dag_cycles_plot</span><span class='op'>(</span><span class='va'>equations</span>, title <span class='op'>=</span> <span class='cn'>NULL</span>, size <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.to_latex_style</span><span class='op'>(</span><span class='va'>matrix</span>, <span class='va'>nms</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>equations</th>
-      <td><p>A <code>sfcr_set</code> containing all the equations of the model to be simulated. The equations
-must be written with the R formula syntax, with the left-hand side separated from the right-hand side
-by a twiddle <code><a href='https://rdrr.io/r/base/tilde.html'>~</a></code>.</p></td>
+      <th>matrix</th>
+      <td><p>a balance-sheet or transactions-flow matrix</p></td>
     </tr>
     <tr>
-      <th>title</th>
-      <td><p>Title of the plot.</p></td>
-    </tr>
-    <tr>
-      <th>size</th>
-      <td><p>Size of the points.</p></td>
+      <th>nms</th>
+      <td><p>Cleaned names with <code><a href='.find_names.html'>.find_names()</a></code></p></td>
     </tr>
     </table>
 
