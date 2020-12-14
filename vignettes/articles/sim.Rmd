@@ -102,13 +102,13 @@ What happens if there is a permanent increase in government expenditures? To che
 ```{r}
 shock1 <- sfcr_shock(
   variables = list(
-    G_d ~ 25
+    Gd ~ 25
   ),
   start = 5,
   end = 50
 )
 
-sim2 <- sfcr_scenario(sim, list(shock1), 50)
+sim2 <- sfcr_scenario(sim, shock1, 50)
 ```
 
 To visualize the consequences of the shock with the `ggplot2` package, we need to first transform the model into long format. We can do it with `pivot_longer()` function from `dplyr`. 
@@ -143,32 +143,37 @@ sim2_long %>%
 
 The SIMEX model expands model SIM by introducing expectations into the model. Technically, it modifies one of the equations and add two new equations.
 
-To do it, we first create a copy of `sim_eqs`, and then modify this list in place.
+We use the `sfcr_set()` function as well to modify a set of equations. To modify an existing equation, we must write its new version and exclude the old one from the set with the `exclude` argument. To find the correct id to exclude, we can use the `sfcr_set_index()` function and then `filter` the `lhs` of the original set:
 
 ```{r}
-simex_eqs <- sim_eqs
+sfcr_set_index(sim_eqs) %>%
+  filter(lhs == "Cd")
 
-simex_eqs[[3]] <- C_d ~ alpha1 * YDE + alpha2 * H_h[-1]
-simex_eqs[[12]] <- H_d ~ H_d[-1] + YDE - C_d
-simex_eqs[[13]] <- YDE ~ YD[-1]
+simex_eqs <- sfcr_set(
+  sim_eqs,
+  Cd ~ alpha1 * YDE + alpha2 * Hh[-1],
+  Hd ~ Hd[-1] + YDE - Cd,
+  YDE ~ YD[-1],
+  exclude = 3
+)
 ```
 
 We use these new equations to simulate the SIMEX model:
 
 ```{r}
-simex <- sfcr_sim(simex_eqs, sim_exg, sim_prms, 50, hidden = c("H_h" = "H_s"))
+simex <- sfcr_baseline(simex_eqs, sim_ext, 50, hidden = c("Hh" = "Hs"))
 ```
 
 And immediately add a shock to propensity to consume in this model:
 
 ```{r}
 shock2 <- sfcr_shock(
-  variables = list(alpha1 ~ 0.7),
+  variables = sfcr_set(alpha1 ~ 0.7),
   start = 5,
   end = 50
 )
 
-simex2 <- sfcr_scenario(simex, list(shock2), 50)
+simex2 <- sfcr_scenario(simex, shock2, 50)
 ```
 
 We then wrap up this article by plotting the consequences of an increase in the propensity to consume on consumption, disposable income, and wealth:

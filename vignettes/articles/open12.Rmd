@@ -25,6 +25,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+This notebook replicates the models in chapter 12 of @godley2007monetary.
+
 ```{r setup}
 library(sfcr)
 library(tidyverse)
@@ -1031,26 +1033,5 @@ openflex3 %>%
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Final remarks
-
-```{r}
-
-```
+# References
 

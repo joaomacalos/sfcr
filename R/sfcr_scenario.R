@@ -101,26 +101,28 @@ sfcr_scenario <- function(baseline, scenario, periods, max_iter = 350, tol = 1e-
     scenario <- list(scenario)
   }
 
-  # Check that all shocks are created with sfcr_shock
-
-  check_all_shocks <- purrr::map_lgl(scenario, ~inherits(.x, "sfcr_shock"))
-
-  if (mean(check_all_shocks) < 1 && !is.null(scenario)) rlang::abort("Please use `sfcr_shock()` to create shocks.")
-
   # Load calls
   eqs <- attr(baseline, "calls")
 
-  # Check if variables in the shock are valid
-  ends_names <- eqs$lhs
-  all_names <- colnames(baseline)
-  exgs_names <- all_names[which(!(all_names %in% ends_names))]
+  # Check that all shocks are created with sfcr_shock
 
-  all_shock_vars <- unlist(purrr::map(scenario, ~.eq_as_tb(.x$variables)$lhs))
-  check_valid_vars <- purrr::map_lgl(all_shock_vars, ~{.x %in% exgs_names})
+  if (!is.null(scenario)) {
+    check_all_shocks <- purrr::map_lgl(scenario, ~inherits(.x, "sfcr_shock"))
 
-  if (mean(check_valid_vars) < 1) {
-    wrong_var <- all_shock_vars[!check_valid_vars]
-    .abort_wrong_shock_var(wrong_var)
+    if (mean(check_all_shocks) < 1) rlang::abort("Please use `sfcr_shock()` to create shocks.")
+
+    # Check if variables in the shock are valid
+    ends_names <- eqs$lhs
+    all_names <- colnames(baseline)
+    exgs_names <- all_names[which(!(all_names %in% ends_names))]
+
+    all_shock_vars <- unlist(purrr::map(scenario, ~.eq_as_tb(.x$variables)$lhs))
+    check_valid_vars <- purrr::map_lgl(all_shock_vars, ~{.x %in% exgs_names})
+
+    if (mean(check_valid_vars) < 1) {
+      wrong_var <- all_shock_vars[!check_valid_vars]
+      .abort_wrong_shock_var(wrong_var)
+    }
   }
 
 

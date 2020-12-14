@@ -30,7 +30,7 @@ Required packages:
 
 ```{r setup}
 library(sfcr)
-#library(tidyverse)
+library(tidyverse)
 ```
 
 
@@ -698,8 +698,8 @@ Let's take a look at this developments.
 sfcr_set_index(open_ext) %>%
   filter(lhs %in% c("r_N", "r_S"))
 
-open3_ext <- sfcr_set(
-  open_ext,
+open3_eqs <- sfcr_set(
+  open_eqs,
   r_N ~ r_N[-1] - phi_N * ( ((or_N - or_N[-1])/or_N[-1]) * pg_N[-1] ),
   r_S ~ r_S[-1] - phi_S * ( ((or_S - or_S[-1])/or_S[-1]) * pg_S[-1] )
 )

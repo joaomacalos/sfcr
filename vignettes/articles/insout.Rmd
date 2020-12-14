@@ -488,37 +488,15 @@ insout <- sfcr_baseline(
   periods = 210,
   initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1, BPM ~ 0.0035),
   hidden = c("Hbd" = "Hbs"),
-  tol = 1e-25,
-  method = "Gauss"
-)
-
-insout2 <- sfcr_baseline(
-  equations = insout_eqs,
-  external = insout_ext,
-  periods = 210,
-  initial = sfcr_set(p ~ 1, W ~ 1, UC ~ 1, BPM ~ 0.0035),
-  hidden = c("Hbd" = "Hbs"),
-  tol = 1e-25,
-  method = "nleq2"
+  tol = 1e-15
 )
 ```
 
-```{r, paged.print = F}
-insout %>%
-  select(period, Hbs, Hbd, BLRN, z3, z5, rm, everything()) %>%
-  .round()
-```
-
-```{r, paged.print = F}
-insout2 %>%
-  select(period, Hbs, Hbd, BLRN, z3, z5, rm, everything()) %>%
-  .round()
-```
 
 Fulfilling the hidden equation is a good sign. But did the model arrive to a sensible steady state?
 
 ```{r}
-insout2 %>%
+insout %>%
   pivot_longer(cols = -period) %>%
   filter(name %in% c("Y", "y", "s", "inv", "pi", "Bs", "M1s", "M2s", "V", "INV", "FXf", "FXb")) %>%
   ggplot(aes(x = period, y = value)) +
@@ -554,7 +532,7 @@ Ping pong is bad because it prevents a stable steady state where we wanna run ou
 Setting `top` to 0.1 solves the problem:
 
 ```{r}
-insout2 %>%
+insout %>%
   do_plot(variables = c("BLRN", "bot", "top")) +
   ylim(0, 0.1)
 ```
@@ -563,7 +541,7 @@ insout2 %>%
 What about `BPM` and `toppm` and `botpm`?
 
 ```{r}
-insout2 %>%
+insout %>%
   do_plot(variables = c("BPM", "toppm", "botpm")) +
   ylim(0, 0.01)
 ```
@@ -685,9 +663,9 @@ sigma0 <- seq(0.37, 0.55, 0.02)
 
 m.shock1 <- sfcr_expand(shock1, "sigma0", sigma0)
 
-m.insout1 <- sfcr_many_scenario(
-  baseline = insout, 
-  external = m.shock1, 
+m.insout1 <- sfcr_multis(
+  expanded = m.shock1,
+  fixed = insout, 
   periods = 70
   )
 ```
