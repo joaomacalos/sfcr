@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfcr_baseline.R
 \name{sfcr_get_blocks}
 \alias{sfcr_get_blocks}
-\title{Get Matrix form of \code{sfcr_tbl} object}
+\title{Get block structure of a \code{sfcr_tbl} object}
 \usage{
 sfcr_get_blocks(sfcr_tbl)
 }
@@ -10,7 +10,7 @@ sfcr_get_blocks(sfcr_tbl)
 \item{sfcr_tbl}{A \code{sfcr_tbl} object.}
 }
 \description{
-Get Matrix form of \code{sfcr_tbl} object
+Get block structure of a \code{sfcr_tbl} object
 }
 \author{
 João Macalós
