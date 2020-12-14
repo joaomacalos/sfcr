@@ -18,3 +18,7 @@ new_sfcr_tbl(tbl, matrix, calls, external)
 \description{
 new_sfcr_tbl constructor
 }
+\author{
+João Macalós
+}
+\keyword{internal}

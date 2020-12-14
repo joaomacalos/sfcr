@@ -14,3 +14,7 @@ new_sfcr_mlt_shock(x, original)
 \description{
 sfcr_mlt_shock constructor
 }
+\author{
+João Macalós
+}
+\keyword{internal}

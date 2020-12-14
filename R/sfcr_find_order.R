@@ -7,7 +7,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .eq_as_tb <- function(equations) {
   vars <- purrr::map(equations, ~paste0(deparse(.x, width.cutoff = 500), collapse = "")) %>%
@@ -24,7 +24,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .add_time_stamps <- function(eq_as_tb) {
   eq_as_tb %>%
@@ -37,7 +37,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .add_time2 <- function(x) {
   gsub("\\[-1\\]", "___", x)
@@ -48,7 +48,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .pvar <- function(x) {paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(x, collapse = "|"), ")(?![[:alnum:]]|\\[|\\.|\\_)")}
 
@@ -57,7 +57,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .pvarlag <- function(x) {paste0("(?<![[:alnum:]]|\\.|\\_)(", paste0(x, collapse = "|"), ")(?=___)")}
 
@@ -68,7 +68,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_find_adjacency <- function(equations) {
 
@@ -96,7 +96,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .find_blocks <- function(adj) {
   g <- igraph::graph.adjacency(adjmatrix = t(adj),mode = "directed")
@@ -117,7 +117,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_find_order <- function(equations) {
 

@@ -14,3 +14,7 @@ abortifnot(cnd, message = NULL)
 \description{
 Abort if not
 }
+\author{
+João Macalós
+}
+\keyword{internal}

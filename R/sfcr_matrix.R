@@ -1,11 +1,11 @@
 #' Take arguments and make them a row of a tibble
 #'
-#' @arg The arguments to transform
-#' @tb The Tibble that will receive the rows
+#' @param arg The arguments to transform
+#' @param tb The Tibble that will receive the rows
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .args_to_row <- function(arg, tb) {
   purrr::imap_dfr(arg, ~dplyr::mutate(tb, !!.y := .x)) %>%
@@ -16,11 +16,11 @@
 
 #' Abort if typo on the codes of columns
 #'
-#' @nms Incorrect codes detected
+#' @param nms Incorrect codes detected
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .abort_typo_code <- function(nms) {
 

@@ -6,7 +6,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .find_names <- function(matrix) {
   p1 <- matrix %>%
@@ -28,7 +28,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .to_latex_style <- function(matrix, nms) {
 

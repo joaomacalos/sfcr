@@ -29,3 +29,4 @@ blocks of equations. It relies on the \code{multiroot()} function from \code{roo
 \author{
 João Macalós
 }
+\keyword{internal}

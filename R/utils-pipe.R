@@ -17,7 +17,7 @@ NULL
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 abortifnot <- function(cnd, message = NULL) {
 

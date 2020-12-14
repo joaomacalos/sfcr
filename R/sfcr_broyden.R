@@ -10,7 +10,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .broyden_solver <- function(.x0, .fn, max_ite, tol) {
 
@@ -73,7 +73,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_broyden <- function(m, equations, periods, max_ite, tol) {
 

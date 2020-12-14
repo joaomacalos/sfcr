@@ -12,3 +12,7 @@
 \description{
 Pattern replacement lag
 }
+\author{
+João Macalós
+}
+\keyword{internal}

@@ -4,7 +4,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_eqs_check <- function(m, equations) {
 
@@ -39,7 +39,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 new_sfcr_tbl <- function(tbl, matrix, calls, external) {
   stopifnot(inherits(tbl, "tbl_df"))

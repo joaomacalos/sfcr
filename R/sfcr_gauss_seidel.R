@@ -17,7 +17,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_gauss_seidel <- function(m, equations, periods, max_ite, tol) {
 

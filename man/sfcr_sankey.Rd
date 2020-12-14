@@ -20,3 +20,6 @@ sfcr_sankey(tfm, baseline, when = "start")
 \description{
 Plot Sankeys diagram representation of transactrions-flow matrix
 }
+\author{
+João Macalós
+}

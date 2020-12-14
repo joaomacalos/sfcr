@@ -7,7 +7,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .prep_equations <- function(ordered_eqs, external) {
 
@@ -64,7 +64,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .make_matrix <- function(equations, external, periods, initial = NULL) {
 
@@ -140,7 +140,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .prep_broyden <- function(.block) {
   for (.i in seq_len(vctrs::vec_size(.block))) {

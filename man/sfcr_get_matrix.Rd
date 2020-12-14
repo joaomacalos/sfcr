@@ -12,3 +12,6 @@ sfcr_get_matrix(sfcr_tbl)
 \description{
 Get Matrix form of \code{sfcr_tbl} object
 }
+\author{
+João Macalós
+}

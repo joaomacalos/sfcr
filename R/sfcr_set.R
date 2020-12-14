@@ -4,7 +4,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 new_sfcr_set <- function(list) {
   stopifnot(inherits(list, "list"))
@@ -80,7 +80,9 @@ sfcr_set <- function(..., exclude = NULL) {
   UseMethod("sfcr_set")
 }
 
-#' @method
+#' S3 method for sfcr_set
+#'
+#' @method sfcr_set formula
 #'
 #' @param ... The formulas used to define the equations and external
 #' values of the system
@@ -103,7 +105,9 @@ sfcr_set.formula <- function(..., exclude = NULL) {
   return(formulas)
 }
 
-#' @method
+#' S3 method for sfcr_set
+#'
+#' @method sfcr_set sfcr_set
 #'
 #' @param ... A sfcr_set and new formulas to be added
 #' @param exclude One or more indices of equations to be excluded. The

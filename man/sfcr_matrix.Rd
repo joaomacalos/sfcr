@@ -69,3 +69,6 @@ tfm_pc <- sfcr_matrix(
   c("Ch. Bills", h = "-(Bh - Bh[-1])", g = "+(Bs - Bs[-1])", cbk = "-(Bcb - Bcb[-1])")
 )
 }
+\author{
+João Macalós, \email{joaomacalos@gmail.com}
+}

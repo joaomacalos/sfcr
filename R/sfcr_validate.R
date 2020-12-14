@@ -5,7 +5,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .all_equal <- function(x, tol) {diff(range(x)) < tol}
 
@@ -17,7 +17,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .is_equal <- function(x, y, tol) {abs(x - y) < tol}
 
@@ -29,7 +29,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .abort_water_leakr <- function(r2names, which) {
 
@@ -59,7 +59,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .abort_water_leakc <- function(c2names, which) {
 
@@ -93,7 +93,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 .get_matrix <- function(mtrx, bl1, bl2) {
 
   nms <- colnames(mtrx)
@@ -122,7 +122,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .validate_matrix <- function(mtrx, m, which = "tfm", tol, rtol = FALSE) {
   match.arg(which, c("tfm", "bs"))

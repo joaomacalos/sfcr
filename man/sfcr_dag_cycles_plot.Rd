@@ -18,3 +18,6 @@ by a twiddle \code{~}.}
 \description{
 Plot the DAG with cycles information
 }
+\author{
+João Macalós
+}

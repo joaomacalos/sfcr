@@ -16,3 +16,7 @@ This function is called if a scenario is to be created that just
 continues with the baseline specification. It is useful to create
 a benchmark model to compare new scenarios.
 }
+\author{
+João Macalós
+}
+\keyword{internal}

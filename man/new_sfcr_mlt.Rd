@@ -14,3 +14,7 @@ new_sfcr_mlt(multis, fixed)
 \description{
 sfcr_mlt constructor
 }
+\author{
+João Macalós
+}
+\keyword{internal}

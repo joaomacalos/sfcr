@@ -12,3 +12,7 @@ new_sfcr_set(list)
 \description{
 sfcr_set constructor
 }
+\author{
+João Macalós
+}
+\keyword{internal}

@@ -17,3 +17,4 @@ Check for missing endogenous variables
 \author{
 João Macalós
 }
+\keyword{internal}

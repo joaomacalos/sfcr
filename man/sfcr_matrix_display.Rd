@@ -46,3 +46,6 @@ bs_insout <- sfcr_matrix(
 
 sfcr_matrix_display(bs_insout, "bs")
 }
+\author{
+João Macalós
+}

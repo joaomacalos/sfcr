@@ -15,3 +15,6 @@ correct indices can be found with \code{sfcr_set_index()}.}
 \description{
 S3 method for sfcr_set
 }
+\author{
+João Macalós
+}

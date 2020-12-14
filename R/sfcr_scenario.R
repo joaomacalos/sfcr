@@ -10,7 +10,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_make_scenario_matrix <- function(baseline, scenario, periods) {
 
@@ -51,7 +51,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .extend_baseline_matrix <- function(baseline, periods) {
   steady <- utils::tail(attributes(baseline)$matrix, n = 1)

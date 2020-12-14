@@ -13,7 +13,7 @@
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 .sfcr_newton <- function(m, equations, periods, max_ite, tol, ...) {
 

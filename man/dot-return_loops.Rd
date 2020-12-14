@@ -12,3 +12,8 @@
 \description{
 Find cyclical nodes
 }
+\note{
+See Networks: an introduction from M.E.J. Newman, 2010, p. 136-139
+for a reference on this algorithm.
+}
+\keyword{internal}

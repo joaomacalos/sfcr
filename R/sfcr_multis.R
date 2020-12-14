@@ -4,7 +4,7 @@
 #' @param fixed The fixed argument
 #'
 #' @author João Macalós
-#' @keyword Internal
+#' @keywords internal
 #'
 new_sfcr_mlt <- function(multis, fixed) {
   stopifnot(inherits(multis[[1]], "sfcr_tbl"))

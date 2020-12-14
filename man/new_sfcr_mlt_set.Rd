@@ -14,3 +14,7 @@ new_sfcr_mlt_set(x, original)
 \description{
 sfcr_mlt_set constructor
 }
+\author{
+João Macalós
+}
+\keyword{internal}

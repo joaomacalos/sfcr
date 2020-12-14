@@ -49,7 +49,7 @@ sfcr_expand <- function(x, variable, values) {
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 new_sfcr_mlt_set <- function(x, original) {
   stopifnot(inherits(x, "list"))
   stopifnot(inherits(original, "sfcr_set"))
@@ -104,7 +104,7 @@ sfcr_expand.sfcr_set <- function(x, variable, values) {
 #'
 #' @author João Macalós
 #'
-#' @keyword Internal
+#' @keywords internal
 #'
 new_sfcr_mlt_shock <- function(x, original) {
   stopifnot(inherits(x, "list"))

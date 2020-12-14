@@ -20,3 +20,4 @@ the expressions inside the Gauss Seidel algorithm
 \author{
 João Macalós
 }
+\keyword{internal}

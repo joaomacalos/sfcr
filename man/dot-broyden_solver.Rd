@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfcr_broyden.R
 \name{.broyden_solver}
 \alias{.broyden_solver}
-\title{Broyden solver}
+\title{Broyden solver algorithm}
 \usage{
 .broyden_solver(.x0, .fn, max_ite, tol)
 }
@@ -16,8 +16,13 @@
 \item{tol}{A numeric value indicating the accepted tolerance to declare convergence.}
 }
 \description{
-Broyden solver
+Broyden solver algorithm
+}
+\note{
+Check https://www.math.usm.edu/lambers/mat419/lecture11.pdf for a quick reference
+on the algorithm.
 }
 \author{
 João Macalós
 }
+\keyword{internal}

@@ -45,3 +45,6 @@ prior to this evaluation.
 The absolute discrepancy set with \code{tol} should be enough to validate
 a stationary SFC Model.
 }
+\author{
+João Macalós
+}

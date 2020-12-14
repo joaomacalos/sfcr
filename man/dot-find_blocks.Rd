@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfcr_find_order.R
 \name{.find_blocks}
 \alias{.find_blocks}
-\title{Find blocks of independent equations}
+\title{Find blocks of independent equations (wrapper around \code{igraph} functions)}
 \usage{
 .find_blocks(adj)
 }
@@ -10,5 +10,9 @@
 \item{adj}{Adjacency matrix}
 }
 \description{
-Find blocks of independent equations
+Find blocks of independent equations (wrapper around \code{igraph} functions)
 }
+\author{
+João Macalós
+}
+\keyword{internal}

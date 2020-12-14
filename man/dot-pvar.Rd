@@ -12,3 +12,7 @@
 \description{
 Pattern replacement var
 }
+\author{
+João Macalós
+}
+\keyword{internal}

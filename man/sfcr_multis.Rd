@@ -33,7 +33,7 @@ The available methods for the \code{sfcr_multis()} function depends
 on the \code{expanded} argument. There are three possible methods:
 \itemize{
 \item \code{sfcr_mlt_set}:
-When the \code{sfcr_multis()} takes an \code{sfcr_mlt_external} class
+When the \code{sfcr_multis()} takes an \code{sfcr_mlt_set} class
 as the input of \code{expanded}, it must take a list of equations of
 the \code{sfcr_set} class as the \code{fixed} input. This method
 simulates many baseline models that accept the same set of equations

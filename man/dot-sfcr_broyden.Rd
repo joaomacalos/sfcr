@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfcr_broyden.R
 \name{.sfcr_broyden}
 \alias{.sfcr_broyden}
-\title{Broyden solver}
+\title{Broyden solver wrapper}
 \usage{
 .sfcr_broyden(m, equations, periods, max_ite, tol)
 }
@@ -18,7 +18,7 @@
 \item{tol}{Tolerance accepted to determine convergence.}
 }
 \description{
-Broyden solver
+Broyden solver wrapper
 }
 \details{
 This function implements the Broyden method to solve the cyclical
@@ -27,3 +27,4 @@ blocks of equations.
 \author{
 João Macalós
 }
+\keyword{internal}
