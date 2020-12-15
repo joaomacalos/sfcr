@@ -129,17 +129,17 @@ sim2_long %>%
 
 To plot multiple variables in the same plot, we need to filter not for a specific variable, but for a group of variables. We do it by using the R operator `%in%` instead of `==`. 
 
-Let's see how to plot $YD$, $C_d$, and $H_h$:
+Let's see how to plot $YD$, $Cd$, and $Hh$:
 
 ```{r}
 sim2_long %>%
-  filter(name %in% c("YD", "C_d", "H_h")) %>%
+  filter(name %in% c("YD", "Cd", "Hh")) %>%
   ggplot(aes(x = period, y = value)) +
-  geom_line(aes(linetype = name))
+  geom_line(aes(linetype = name, color = name))
 ```
 
 
-## SIMEX model
+# SIMEX model
 
 The SIMEX model expands model SIM by introducing expectations into the model. Technically, it modifies one of the equations and add two new equations.
 
@@ -183,7 +183,7 @@ simex2_long <- simex2 %>%
   pivot_longer(cols = -period)
 
 simex2_long %>%
-  filter(name %in% c("C_d", "YD", "H_h")) %>%
+  filter(name %in% c("Cd", "YD", "Hh")) %>%
   ggplot(aes(x = period, y = value)) +
   geom_line(aes(linetype = name))
 ```
