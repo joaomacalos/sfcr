@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,14 +106,14 @@
 
       
 
-      </header><script src="open12_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="open12_files/d3-4.5.0/d3.min.js"></script><script src="open12_files/sankey-1/sankey.js"></script><script src="open12_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl9-open12_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl9-open12_files/d3-4.5.0/d3.min.js"></script><script src="gl9-open12_files/sankey-1/sankey.js"></script><script src="gl9-open12_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 12: Model Advanced OPEN</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/open12.Rmd"><code>vignettes/articles/open12.Rmd</code></a></small>
-      <div class="hidden name"><code>open12.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl9-open12.Rmd"><code>vignettes/articles/gl9-open12.Rmd</code></a></small>
+      <div class="hidden name"><code>gl9-open12.Rmd</code></div>
 
     </div>
 
@@ -700,15 +700,15 @@
 <a href="#open-fix-dag" class="anchor"></a>OPEN FIX DAG</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">openfix_eqs</span>, size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-8-1.png" width="864"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-8-1.png" width="864"></p>
 </div>
 <div id="sankeys-diagram-open-fix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sankeys-diagram-open-fix" class="anchor"></a>Sankey’s diagram: OPEN FIX</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_openfix</span>, <span class="va">openfix</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-2c7e51f5382ceb7e659c" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2c7e51f5382ceb7e659c">{"x":{"links":{"source":[13,17,15,19,14,18,14,18,13,17,15,19,16,20,13,17,13,13,16,17,20,0,0,1,1,2,3,4,4,5,5,6,6,6,7,7,7,7,8,8,9,9,10,10,11],"target":[0,0,1,1,2,3,4,4,5,5,6,7,8,8,9,9,10,11,11,11,11,22,26,22,26,26,22,21,25,23,27,21,24,25,21,24,25,28,23,27,24,28,23,25,27],"value":[77.850122,77.860437,15.303641,15.303912,11.409865,11.409136,93.153035,93.165078,19.462637,19.465165,4.169455,4.170644,0.008999,0.008955,2.1e-05,1.1e-05,0.000298,0.000106,0.000164,0.000156,1.1e-05,77.850122,77.860437,15.303641,15.303912,11.409865,11.409136,93.153035,93.165078,19.462637,19.465165,3.066293,0.000771,1.095262,1.094776,0.000771,3.065813,0.008955,0.008999,0.008955,2.1e-05,1.1e-05,0.000298,5.6e-05,0.000437]},"nodes":{"name":["Consumption","Govt. Exp","Trade","Trade2","GDP","Taxes","Interest payments","Interest payments2","Cb profits","Ch. Money","Ch. uk bills","Ch. us bills","Gold","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us"],"group":["Consumption","Govt. Exp","Trade","Trade2","GDP","Taxes","Interest payments","Interest payments2","Cb profits","Ch. Money","Ch. uk bills","Ch. us bills","Gold","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>Helper plot function</p>
+<div id="htmlwidget-d762022b68a92f7fc856" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d762022b68a92f7fc856">{"x":{"links":{"source":[13,17,15,19,14,18,14,18,13,17,15,19,16,20,13,17,13,13,16,17,20,0,0,1,1,2,3,4,4,5,5,6,6,6,7,7,7,7,8,8,9,9,10,10,11],"target":[0,0,1,1,2,3,4,4,5,5,6,7,8,8,9,9,10,11,11,11,11,22,26,22,26,26,22,21,25,23,27,21,24,25,21,24,25,28,23,27,24,28,23,25,27],"value":[77.850122,77.860437,15.303641,15.303912,11.409865,11.409136,93.153035,93.165078,19.462637,19.465165,4.169455,4.170644,0.008999,0.008955,2.1e-05,1.1e-05,0.000298,0.000106,0.000164,0.000156,1.1e-05,77.850122,77.860437,15.303641,15.303912,11.409865,11.409136,93.153035,93.165078,19.462637,19.465165,3.066293,0.000771,1.095262,1.094776,0.000771,3.065813,0.008955,0.008999,0.008955,2.1e-05,1.1e-05,0.000298,5.6e-05,0.000437]},"nodes":{"name":["Consumption","Govt. Exp","Trade","Trade2","GDP","Taxes","Interest payments","Interest payments2","Cb profits","Ch. Money","Ch. uk bills","Ch. us bills","Gold","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us"],"group":["Consumption","Govt. Exp","Trade","Trade2","GDP","Taxes","Interest payments","Interest payments2","Cb profits","Ch. Money","Ch. uk bills","Ch. us bills","Gold","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us","Households_uk","Firms_uk","Govt_uk","Central bank_uk","Households_us","Firms_us","Govt_us","Central bank_us"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>Helper plot function</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># (b_ukus_d_2/xr_us_2)/v_uk_2 b_ukus_d_2/v_uk_2</span>
@@ -746,7 +746,7 @@
 <code class="sourceCode R"><span class="va">openfix1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cab_uk"</span>, <span class="st">"nafa_uk"</span>, <span class="st">"gab_uk"</span>, <span class="st">"tab_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
 <div id="figure-12-1b" class="section level3">
 <h3 class="hasAnchor">
@@ -756,7 +756,7 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cab_uk"</span>, <span class="st">"dres_uk"</span>, <span class="st">"dbcb_uk"</span>, <span class="st">"dh_uk"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
 <div id="figure-12-1c" class="section level3">
 <h3 class="hasAnchor">
@@ -765,7 +765,7 @@
 <code class="sourceCode R"><span class="va">openfix1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"by_uk"</span>, <span class="st">"by_us"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-2-a-one-step-devaluation-after-an-increase-in-the-uk-propensity-to-import" class="section level2">
@@ -782,7 +782,7 @@
 <code class="sourceCode R"><span class="va">openfix2</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tab_uk"</span>, <span class="st">"cab_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 </div>
 <div id="figure-12-4b" class="section level3">
 <h3 class="hasAnchor">
@@ -792,7 +792,7 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y_k_uk"</span>, <span class="st">"xr_uk"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 </div>
 </div>
@@ -875,7 +875,7 @@
 <code class="sourceCode R"><span class="va">openfixr1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cab_uk"</span>, <span class="st">"kabp_uk"</span>, <span class="st">"tab_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 </div>
 </div>
 <div id="figure-12-2b" class="section level2">
@@ -886,7 +886,7 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"by_uk"</span>, <span class="st">"r_uk"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-open-fix-g" class="section level1">
@@ -969,7 +969,7 @@
 <code class="sourceCode R"><span class="va">openfixg1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y_k_us"</span>, <span class="st">"y_k_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
 </div>
 <div id="figure-12-3b" class="section level3">
 <h3 class="hasAnchor">
@@ -978,7 +978,7 @@
 <code class="sourceCode R"><span class="va">openfixg1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cab_uk"</span>, <span class="st">"tab_uk"</span>, <span class="st">"kabp_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 </div>
 <div id="figure-12-3c" class="section level3">
 <h3 class="hasAnchor">
@@ -987,7 +987,7 @@
 <code class="sourceCode R"><span class="va">openfixg1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cab_uk"</span>, <span class="st">"gab_uk"</span>, <span class="st">"nafa_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 </div>
 </div>
 <div id="figure-12-3d" class="section level2">
@@ -997,7 +997,7 @@
 <code class="sourceCode R"><span class="va">openfixg1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"by_us"</span>, <span class="st">"by_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-open-flex" class="section level1">
@@ -1052,7 +1052,7 @@
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cab_uk"</span>, <span class="st">"tab_uk"</span>, <span class="st">"psbr_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
 </div>
 <div id="figure-12-5b" class="section level3">
 <h3 class="hasAnchor">
@@ -1060,7 +1060,7 @@
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"xr_uk"</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 </div>
 <div id="figure-12-5c" class="section level3">
 <h3 class="hasAnchor">
@@ -1068,7 +1068,7 @@
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pm_uk"</span>, <span class="st">"px_uk"</span>, <span class="st">"pds_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 </div>
 <div id="figure-12-5d" class="section level3">
 <h3 class="hasAnchor">
@@ -1076,7 +1076,7 @@
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y_k_uk"</span>, <span class="st">"y_k_us"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-2-a-step-increase-in-us-government-expenditures" class="section level2">
@@ -1091,7 +1091,7 @@
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y_k_us"</span>, <span class="st">"y_k_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 </div>
 <div id="figure-12-6b" class="section level3">
 <h3 class="hasAnchor">
@@ -1099,7 +1099,7 @@
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nafa_us"</span>, <span class="st">"psbr_us"</span>, <span class="st">"cab_us"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 </div>
 <div id="figure-12-6c" class="section level3">
 <h3 class="hasAnchor">
@@ -1107,7 +1107,7 @@
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"bukus_p"</span>, <span class="st">"bukus_d"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
 </div>
 <div id="figure-12-6d" class="section level3">
 <h3 class="hasAnchor">
@@ -1115,7 +1115,7 @@
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"xr_us"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-3---increase-in-the-desire-to-hold-us-treasury-bills" class="section level2">
@@ -1130,7 +1130,7 @@
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"xr_us"</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
 </div>
 <div id="figure-12-7b" class="section level3">
 <h3 class="hasAnchor">
@@ -1138,7 +1138,7 @@
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"bukus_p"</span>, <span class="st">"bukus_d"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 </div>
 <div id="figure-12-7c" class="section level3">
 <h3 class="hasAnchor">
@@ -1146,7 +1146,7 @@
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y_k_us"</span>, <span class="st">"y_k_uk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
 </div>
 <div id="figure-12-7d" class="section level3">
 <h3 class="hasAnchor">
@@ -1154,7 +1154,7 @@
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">openflex3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"psbr_us"</span>, <span class="st">"cab_us"</span>, <span class="st">"nafa_us"</span>, <span class="st">"tab_us"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open12_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
+<p><img src="gl9-open12_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
 </div>
 </div>
 </div>

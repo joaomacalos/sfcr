@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,15 +106,15 @@
 
       
 
-      </header><script src="pc_files/kePrint-0.0.1/kePrint.js"></script><link href="pc_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<script src="pc_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="pc_files/d3-4.5.0/d3.min.js"></script><script src="pc_files/sankey-1/sankey.js"></script><script src="pc_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl2-pc_files/kePrint-0.0.1/kePrint.js"></script><link href="gl2-pc_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="gl2-pc_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl2-pc_files/d3-4.5.0/d3.min.js"></script><script src="gl2-pc_files/sankey-1/sankey.js"></script><script src="gl2-pc_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 4: Model PC</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/pc.Rmd"><code>vignettes/articles/pc.Rmd</code></a></small>
-      <div class="hidden name"><code>pc.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl2-pc.Rmd"><code>vignettes/articles/gl2-pc.Rmd</code></a></small>
+      <div class="hidden name"><code>gl2-pc.Rmd</code></div>
 
     </div>
 
@@ -530,12 +530,12 @@ Ch. Bills
 <p>Let’s use the <code><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot()</a></code> function to see the structure of the model:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">pc_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>As can be seen, there’s a cycle in this model. The <code>sfcr</code> package relies on the <code>igraph</code> package to identify the best ordering of the equations, reducing the the its computational burden. The blocks of independent equations and the iterations needed at each block to simulate the model can be retrieved by calling the <code><a href="../../reference/sfcr_get_matrix.html">sfcr_get_matrix()</a></code> and <code><a href="../../reference/sfcr_get_blocks.html">sfcr_get_blocks()</a></code> equations.</p>
 <p>Alternatively, it is also possible to use the <code><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot()</a></code> function to visualize this structure:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot</a></span><span class="op">(</span><span class="va">pc_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div id="sankeys-diagram" class="section level2">
 <h2 class="hasAnchor">
@@ -544,8 +544,8 @@ Ch. Bills
 <p>Here, it is crucial to have the matrix validated in order to assure that the diagram is correctly specified. Luckily, we already saw that it was the case earlier in this notebook:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_pc</span>, <span class="va">pc</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-9f0043ebcd07329a818a" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9f0043ebcd07329a818a">{"x":{"links":{"source":[8,10,9,10,11,8,8,8,12,0,1,2,3,3,4,5,6,7],"target":[0,1,2,3,4,5,6,7,7,14,14,13,13,16,15,15,17,15],"value":[43.418278,20,63.418278,0.796236,0.300973,12.782708,2.863079,4.849477,2.863079,43.418278,20,63.418278,0.495263,0.300973,0.300973,12.782708,2.863079,7.712555]},"nodes":{"name":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"],"group":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>We can now move to simulation of different scenarios.</p>
+<div id="htmlwidget-b40f1ee693c994559eb4" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b40f1ee693c994559eb4">{"x":{"links":{"source":[8,10,9,10,11,8,8,8,12,0,1,2,3,3,4,5,6,7],"target":[0,1,2,3,4,5,6,7,7,14,14,13,13,16,15,15,17,15],"value":[43.418278,20,63.418278,0.796236,0.300973,12.782708,2.863079,4.849477,2.863079,43.418278,20,63.418278,0.495263,0.300973,0.300973,12.782708,2.863079,7.712555]},"nodes":{"name":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"],"group":["Consumption","Govt. Expenditures","Income","Int. payments","CB profits","Taxes","Ch. Money","Ch. Bills","Households","Firms","Government","CB current","CB capital","Households","Firms","Government","CB current","CB capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>We can now move to simulation of different scenarios.</p>
 </div>
 </div>
 <div id="scenario-1-increase-in-the-rate-of-interest-on-bills" class="section level1">
@@ -583,7 +583,7 @@ Ch. Bills
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">name</span>, scales <span class="op">=</span> <span class="st">'free_y'</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Wealth alocation"</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pc2_long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"YD"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -591,7 +591,7 @@ Ch. Bills
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Evolution of disposable income and household consumption"</span>,
        subtitle <span class="op">=</span> <span class="st">"Following an increase of 100 points in the rate of interest"</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <div id="pcex1-random-shocks-to-expected-disposable-income" class="section level2">
 <h2 class="hasAnchor">
 <a href="#pcex1-random-shocks-to-expected-disposable-income" class="anchor"></a>PCEX1: Random shocks to expected disposable income</h2>
@@ -634,7 +634,7 @@ Ch. Bills
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Evolution of stocks"</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pcex_long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"delta_Hh"</span>, <span class="st">"delta_Hd"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -642,7 +642,7 @@ Ch. Bills
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Variation"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 </div>
 <div id="pcex2-adaptive-expectations" class="section level2">
 <h2 class="hasAnchor">
@@ -679,14 +679,14 @@ Ch. Bills
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Evolution of National income"</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pc3_long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"C"</span>, <span class="st">"YDE"</span>, <span class="st">"V"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"In the book it is written 'lagged' wealth but it is wealth actually."</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 </div>
 <div id="the-puzzling-impact-of-interest-rates-reconsidered" class="section level3">
 <h3 class="hasAnchor">
@@ -715,14 +715,14 @@ Ch. Bills
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"V"</span>, <span class="st">"YD"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pcex3_1_long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"GExp"</span>, <span class="st">"TX"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 </div>
 </div>
 <div id="appendix-visualizing-the-sensitivity-to-parameters-values" class="section level2">
@@ -773,7 +773,7 @@ Ch. Bills
     values <span class="op">=</span> <span class="fu">getPalette</span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">name</span>, scales <span class="op">=</span> <span class="st">'free_y'</span><span class="op">)</span></code></pre></div>
-<p><img src="pc_files/figure-html/unnamed-chunk-33-1.png" width="864"></p>
+<p><img src="gl2-pc_files/figure-html/unnamed-chunk-33-1.png" width="864"></p>
 <p>We can see that the changing the <code>alpha10</code> parameter affects the level of the variables but do not change its underlying dynamics.</p>
 </div>
 </div>

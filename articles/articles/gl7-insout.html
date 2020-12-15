@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,15 +106,15 @@
 
       
 
-      </header><script src="insout_files/kePrint-0.0.1/kePrint.js"></script><link href="insout_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<script src="insout_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="insout_files/d3-4.5.0/d3.min.js"></script><script src="insout_files/sankey-1/sankey.js"></script><script src="insout_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl7-insout_files/kePrint-0.0.1/kePrint.js"></script><link href="gl7-insout_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="gl7-insout_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl7-insout_files/d3-4.5.0/d3.min.js"></script><script src="gl7-insout_files/sankey-1/sankey.js"></script><script src="gl7-insout_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 10: Model INSOUT</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/insout.Rmd"><code>vignettes/articles/insout.Rmd</code></a></small>
-      <div class="hidden name"><code>insout.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl7-insout.Rmd"><code>vignettes/articles/gl7-insout.Rmd</code></a></small>
+      <div class="hidden name"><code>gl7-insout.Rmd</code></div>
 
     </div>
 
@@ -1409,7 +1409,7 @@ Ch. bonds
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT"</span>, subtitle <span class="op">=</span> <span class="st">"Stable steady state"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>So far, so good. But what about the variables that depend on <code>bot</code>, <code>top</code>, <code>botpm</code>, <code>toppm</code>? We need to check that the margins are not too tight. If they are, BLRN becomes a ping pong, as in the example below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout_ext</span><span class="op">$</span><span class="va">top</span> <span class="op">&lt;-</span> <span class="va">top</span> <span class="op">~</span> <span class="fl">0.03</span>
@@ -1429,31 +1429,31 @@ Ch. bonds
 <span class="va">pingpong</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLRN"</span>, <span class="st">"bot"</span>, <span class="st">"top"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html">ylim</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Ping pong is bad because it prevents a stable steady state where we wanna run our scenarios.</p>
 <p>Setting <code>top</code> to 0.1 solves the problem:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLRN"</span>, <span class="st">"bot"</span>, <span class="st">"top"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>What about <code>BPM</code> and <code>toppm</code> and <code>botpm</code>?</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BPM"</span>, <span class="st">"toppm"</span>, <span class="st">"botpm"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.01</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>Here we see that the margins are fine.</p>
 <p>We can use the <code>sfcr</code> package to visualize the transactions-flow matrix as a Sankey’s diagram:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_insout</span>, <span class="va">insout</span>, <span class="st">"start"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-d75693d02628a95bf363" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d75693d02628a95bf363">{"x":{"links":{"source":[20,23,22,21,21,21,26,24,26,26,23,23,27,20,27,27,20,20,25,27,20,0,1,2,3,4,5,6,7,9,10,11,11,11,12,14,15,16,17,18,19],"target":[0,1,2,3,4,5,6,7,9,10,11,12,14,15,15,16,17,18,18,18,19,29,29,29,31,28,28,28,31,29,28,28,32,34,28,30,33,28,35,31,31],"value":[23.96648,25.927834,0.397948,9.978863,34.415903,6.386997,0.411524,0.097802,0.4895,0.185905,1.42998,0.207498,0.397948,0.967192,0.481475,0.794522,5.609276,7.018212,1.448668,3.935331,5.086437,23.96648,25.927834,0.397948,9.978863,34.415903,6.386997,0.411524,0.097802,0.4895,0.185905,0.245249,0.097802,1.086929,0.207498,0.397948,1.448668,0.794522,5.609276,12.40221,5.086437]},"nodes":{"name":["Consumption","Govt. Expenditures","Ch. Inv","Taxes","Wages","Entrepreneurial profits","Bank profits","CB profits","int. advances","int. loans","int. deposits","int. bills","int. bonds","Ch. advances","Ch. loans","Ch. cash","Ch. M","Ch. M2","Ch. bills","Ch. bonds","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital"],"group":["Consumption","Govt. Expenditures","Ch. Inv","Taxes","Wages","Entrepreneurial profits","Bank profits","CB profits","int. advances","int. loans","int. deposits","int. bills","int. bonds","Ch. advances","Ch. loans","Ch. cash","Ch. M","Ch. M2","Ch. bills","Ch. bonds","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>Let’s take a look at the structure of this model:</p>
+<div id="htmlwidget-0a2531283890727fb283" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0a2531283890727fb283">{"x":{"links":{"source":[20,23,22,21,21,21,26,24,26,26,23,23,27,20,27,27,20,20,25,27,20,0,1,2,3,4,5,6,7,9,10,11,11,11,12,14,15,16,17,18,19],"target":[0,1,2,3,4,5,6,7,9,10,11,12,14,15,15,16,17,18,18,18,19,29,29,29,31,28,28,28,31,29,28,28,32,34,28,30,33,28,35,31,31],"value":[23.96648,25.927834,0.397948,9.978863,34.415903,6.386997,0.411524,0.097802,0.4895,0.185905,1.42998,0.207498,0.397948,0.967192,0.481475,0.794522,5.609276,7.018212,1.448668,3.935331,5.086437,23.96648,25.927834,0.397948,9.978863,34.415903,6.386997,0.411524,0.097802,0.4895,0.185905,0.245249,0.097802,1.086929,0.207498,0.397948,1.448668,0.794522,5.609276,12.40221,5.086437]},"nodes":{"name":["Consumption","Govt. Expenditures","Ch. Inv","Taxes","Wages","Entrepreneurial profits","Bank profits","CB profits","int. advances","int. loans","int. deposits","int. bills","int. bonds","Ch. advances","Ch. loans","Ch. cash","Ch. M","Ch. M2","Ch. bills","Ch. bonds","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital"],"group":["Consumption","Govt. Expenditures","Ch. Inv","Taxes","Wages","Entrepreneurial profits","Bank profits","CB profits","int. advances","int. loans","int. deposits","int. bills","int. bonds","Ch. advances","Ch. loans","Ch. cash","Ch. M","Ch. M2","Ch. bills","Ch. bonds","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital","Households","Firms current","Firms capital","Govt.","CB current","CB capital","Banks current","Banks capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>Let’s take a look at the structure of this model:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">insout_eqs</span>, size <span class="op">=</span> <span class="fl">7.5</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span>
 <span class="va">p1</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-14-1.png" width="1056"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-14-1.png" width="1056"></p>
 <p>As can be seen, this model is entirely acyclical.</p>
 <p>This plot shows a common problem in plotting SFC models as DAGs: they become too cluttered to be understandable. I provided a small workaround by changing the size of the points in the plots.</p>
 <p>Let’s add scenarios to this model:</p>
@@ -1479,13 +1479,13 @@ Ch. bonds
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"INV"</span>, <span class="st">"Ls"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">'INSOUT1'</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of inventories and bank loans"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"yr"</span>, <span class="st">"cr"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of real consumption and output"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&gt;</span> <span class="fl">2</span>, <span class="va">period</span> <span class="op">&lt;</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -1493,46 +1493,46 @@ Ch. bonds
   <span class="co">#facet_wrap(~name, scales = "free_y") +</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of household wealth and its components"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"rb"</span>, <span class="st">"rm"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of short-term interest rates"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&gt;</span> <span class="fl">3</span>, <span class="va">period</span> <span class="op">&lt;</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dM"</span>, <span class="st">"dLs"</span>, <span class="st">"dAs"</span>, <span class="st">"dHbs"</span>, <span class="st">"dBbd"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of banks' balance sheet"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLRN"</span>, <span class="st">"bot"</span>, <span class="st">"top"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of net bank liquidity ratio"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BPM"</span>, <span class="st">"toppm"</span>, <span class="st">"botpm"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of the bank profitability margin"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"dGb"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of the government budget balance"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"Bcb"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of the stock of treasury bills hend by the central bank"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <p>I’ll run one sensitivity test here to show that there’s nothing in the model that prevents the interest rate on deposits to become higher than the interest rate on bills:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sigma0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.37</span>, <span class="fl">0.55</span>, <span class="fl">0.02</span><span class="op">)</span>
@@ -1573,7 +1573,7 @@ Ch. bonds
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT1"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of short-term interest rates"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">guides</span><span class="op">(</span>color <span class="op">=</span> <span class="fu">guide_legend</span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
 <p>This experiment shows that nothing <strong>prevents</strong> the interest rate on deposits to cross the interest rate on bills. However, one should also wonder about the economic meaning of the different <code>sigma0</code> values when judging the model.</p>
 </div>
 <div id="simulation-2-an-increase-in-pure-government-expenditure" class="section level2">
@@ -1596,14 +1596,14 @@ Ch. bonds
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"v"</span>, <span class="st">"ydr"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">'INSOUT2'</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of HH. real consumption, disp. income, and wealth"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="co">#mutate(PSBR = PSBR / p) %&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dPSBR"</span>, <span class="st">"PSBR"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of deflated PSBR"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 <p>The next experiment checks the impact of an increase in government expenditures on the inflation rate. When I first tried this experiment, I defined <code>Nfe</code> as <code>s / pr</code>, as in model DISINF. With this definition, I was getting the strange result that an increase in <code>g</code> was actually deflationary. When I defined <code>Nfe</code> as an exogenous variable, the result was similar to the one found in <span class="citation">Godley and Lavoie (2007)</span>.</p>
 <p>The reason is that <code>g</code> directly affect <code>s</code> is model INSOUT. Hence, an increase in <code>g</code> directly increase <code>Nfe</code>, while <code>N</code> reacts with a lag. The increase in the gap <code>N / Nfe</code> negatively affects <code>omegaT</code> (the target real wage of workers), which will ultimately lead to lower <code>W</code> and hence lower <code>UC</code>, affecting <code>NHUC</code> which ultimately affects <code>p</code>.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
@@ -1613,7 +1613,7 @@ Ch. bonds
     title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
     subtitle <span class="op">=</span> <span class="st">"Evolution of the price inflation rate"</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 <p>The following figure replicates Figure 10.2D in <span class="citation">Godley and Lavoie (2007, 353)</span>. However, I’m almost certain that there is a typo in the <em>real government budget balance</em> definition.</p>
 <p>In the book, it is defined as:</p>
 <p><span class="math display">\[
@@ -1631,7 +1631,7 @@ gr2 = \frac{-PSBR + tav \cdot (B_{s-1} + BL_{s-1} * p_{bL-1})}{p}
        subtitle <span class="op">=</span> <span class="st">"Evolution of the real budget balance"</span>,
        caption <span class="op">=</span> <span class="st">"Takes into account the capital gains due to the erosion of the public debt\n by price inflation."</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 3 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
 <p>A possible third definition would remove the bills and the advances held by the BCB from the inflation capital gains. It seems reasonable to me and consistent with equation 10.96 <span class="citation">(Godley and Lavoie 2007)</span> [p. 368] that describes the steady state with inflation:</p>
 <p><span class="math display">\[
 g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot \frac{UC}{p} \right] = \frac{T}{p} 
@@ -1641,46 +1641,46 @@ g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"BYR"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"rl"</span>, <span class="st">"rm"</span>, <span class="st">"rb"</span>, <span class="st">"rbl"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of interest rates"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&gt;</span> <span class="fl">3</span>, <span class="va">period</span> <span class="op">&lt;</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dBbd"</span>, <span class="st">"dM1s"</span>, <span class="st">"dM2s"</span>, <span class="st">"dLs"</span>, <span class="st">"dHbs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of banks' balance sheet"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLRN"</span>, <span class="st">"top"</span>, <span class="st">"bot"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of the net bank liquidity ratio"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BPM"</span>, <span class="st">"toppm"</span>, <span class="st">"botpm"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of the bank profitability margin"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dCB"</span>, <span class="st">"ddAs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of the central bank balance sheet"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout2</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">Bcb</span>, <span class="va">Bs</span>, <span class="va">Bhh</span>, <span class="va">Bbd</span><span class="op">)</span>, <span class="op">~</span><span class="va">.x</span> <span class="op">/</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Bcb"</span>, <span class="st">"Bs"</span>, <span class="st">"Bhh"</span>, <span class="st">"Bbd"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT2"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of deflated bills"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
 </div>
 <div id="simulation-3-an-increase-in-the-compulsory-reserve-ratios" class="section level2">
 <h2 class="hasAnchor">
@@ -1703,31 +1703,31 @@ g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dM"</span>, <span class="st">"dLs"</span>, <span class="st">"dAs"</span>, <span class="st">"dHbs"</span>, <span class="st">"dBbd"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT3"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of banks' balance sheet"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bot"</span>, <span class="st">"BLRN"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT3"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of net bank liquidity ratio"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"rm"</span>, <span class="st">"rb"</span>, <span class="st">"rl"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT3"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of interest rates"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"toppm"</span>, <span class="st">"botpm"</span>, <span class="st">"BPM"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT3"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of bank profitability margin"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout3</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT3"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of money deposits"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
 </div>
 <div id="simulation-4-an-increase-in-the-acceptable-bank-liquidity-ratio" class="section level2">
 <h2 class="hasAnchor">
@@ -1749,19 +1749,19 @@ g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot
   <span class="fu">map</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>, <span class="fl">0.06</span>, <span class="fl">0.2</span>, <span class="fl">0.24</span><span class="op">)</span>, <span class="op">~</span><span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT4"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of net bank liquidity ratio"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout4</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"rl"</span>, <span class="st">"rb"</span>, <span class="st">"rm"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT4"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of interest rates"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout4</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dM"</span>, <span class="st">"dLs"</span>, <span class="st">"dAs"</span>, <span class="st">"dHbs"</span>, <span class="st">"dBbd"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT4"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of banks' balance sheet"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
 </div>
 <div id="simulation-5-a-decrease-in-the-propensity-to-consume-out-of-real-disposable-income" class="section level2">
 <h2 class="hasAnchor">
@@ -1781,13 +1781,13 @@ g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ydr"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT5"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of consumption and income"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout5</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"gr2"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT5"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-51-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-51-1.png" width="700"></p>
 </div>
 <div id="simulation-6-an-exogenous-increase-in-the-rate-of-inflation" class="section level2">
 <h2 class="hasAnchor">
@@ -1806,24 +1806,24 @@ g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot
 <code class="sourceCode R"><span class="va">insout6</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"pi"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT6"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-53-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-53-1.png" width="700"></p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout6</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="st">"s"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT6"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of output and sales"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-54-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-54-1.png" width="700"></p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout6</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dPSBR"</span>, <span class="st">"PSBR"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT6"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of public sector borrowing requirements"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-55-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-55-1.png" width="700"></p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout6</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gr"</span>, <span class="st">"gr2"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-56-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-56-1.png" width="700"></p>
 </div>
 <div id="simulation-7-increase-in-the-target-real-wage-followed-by-an-increase-in-interest-rates" class="section level2">
 <h2 class="hasAnchor">
@@ -1851,25 +1851,25 @@ g + \breve{r} \left[ v - in \cdot \frac{UC}{p} \right] - tav \left[ v - in \cdot
 <code class="sourceCode R"><span class="va">insout7</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"pi"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT7"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-58-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-58-1.png" width="700"></p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout7</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"s"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT7"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-59-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-59-1.png" width="700"></p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout7</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>`Deflated government debt` <span class="op">=</span> <span class="op">(</span><span class="va">Bs</span> <span class="op">+</span> <span class="va">pbl</span> <span class="op">*</span> <span class="va">BLs</span><span class="op">)</span> <span class="op">/</span> <span class="va">p</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"v"</span>, <span class="st">"Deflated government debt"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT7"</span><span class="op">)</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">insout7</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>`deflated balance` <span class="op">=</span> <span class="op">-</span><span class="va">PSBR</span> <span class="op">/</span> <span class="va">p</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"deflated balance"</span>, <span class="st">"gr2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"INSOUT7"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="insout_files/figure-html/unnamed-chunk-61-1.png" width="700"></p>
+<p><img src="gl7-insout_files/figure-html/unnamed-chunk-61-1.png" width="700"></p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">

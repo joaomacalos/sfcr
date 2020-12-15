@@ -2,15 +2,15 @@ pandoc: '2.2'
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  articles/bmw: bmw.html
-  articles/dis: dis.html
-  articles/growth: growth.html
-  articles/insout: insout.html
-  articles/lp: lp.html
-  articles/open: open.html
-  articles/open12: open12.html
-  articles/pc: pc.html
-  articles/sim: sim.html
+  articles/gl1-sim: gl1-sim.html
+  articles/gl2-pc: gl2-pc.html
+  articles/gl3-lp: gl3-lp.html
+  articles/gl4-open: gl4-open.html
+  articles/gl5-bmw: gl5-bmw.html
+  articles/gl6-dis: gl6-dis.html
+  articles/gl7-insout: gl7-insout.html
+  articles/gl8-growth: gl8-growth.html
+  articles/gl9-open12: gl9-open12.html
   sfcr_multis: sfcr_multis.html
-last_built: 2020-12-15T08:46Z
+last_built: 2020-12-15T11:16Z
 

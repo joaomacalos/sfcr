@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,15 +106,15 @@
 
       
 
-      </header><script src="dis_files/kePrint-0.0.1/kePrint.js"></script><link href="dis_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<script src="dis_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="dis_files/d3-4.5.0/d3.min.js"></script><script src="dis_files/sankey-1/sankey.js"></script><script src="dis_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl6-dis_files/kePrint-0.0.1/kePrint.js"></script><link href="gl6-dis_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="gl6-dis_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl6-dis_files/d3-4.5.0/d3.min.js"></script><script src="gl6-dis_files/sankey-1/sankey.js"></script><script src="gl6-dis_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 9: Model DIS and DISINF</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/dis.Rmd"><code>vignettes/articles/dis.Rmd</code></a></small>
-      <div class="hidden name"><code>dis.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl6-dis.Rmd"><code>vignettes/articles/gl6-dis.Rmd</code></a></small>
+      <div class="hidden name"><code>gl6-dis.Rmd</code></div>
 
     </div>
 
@@ -216,7 +216,7 @@
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DIS: reasonable steady state"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="dag-structure" class="section level2">
 <h2 class="hasAnchor">
@@ -224,7 +224,7 @@
 <p>Let’s take a look on the structure of the model:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">dis_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>As we can see, the model is fully recursive, which means that every variable can be determined independently once the variables above it has been determined (and the external variables were supplied). Not surprisingly, it is incredibly fast to estimate this model.</p>
 </div>
 <div id="matrices-of-model-dis" class="section level2">
@@ -625,8 +625,8 @@ Change deposits
 <a href="#sankeys-diagram" class="anchor"></a>Sankey’s diagram</h2>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_dis</span>, <span class="va">dis</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-62ca4fe2cd059881df30" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-62ca4fe2cd059881df30">{"x":{"links":{"source":[9,11,10,12,10,9,9,13,9,0,1,2,3,4,5,6,7,8],"target":[0,1,2,3,4,5,6,7,8,15,15,14,15,14,17,17,16,18],"value":[25.628433,0.339607,20.765755,0.390021,5.592306,0.312017,0.078004,0.339607,0.339607,25.628433,0.339607,20.765755,0.390021,5.592306,0.312017,0.078004,0.339607,0.339607]},"nodes":{"name":["Consumption","Ch. Inventories","Wages","Interest on loans","Entrepreneurial Profits","Banks profits","Interest on deposits","Change loans","Change deposits","Households","Firms_current","Firms_capital","Banks_current","Banks_capital","Households","Firms_current","Firms_capital","Banks_current","Banks_capital"],"group":["Consumption","Ch. Inventories","Wages","Interest on loans","Entrepreneurial Profits","Banks profits","Interest on deposits","Change loans","Change deposits","Households","Firms_current","Firms_capital","Banks_current","Banks_capital","Households","Firms_current","Firms_capital","Banks_current","Banks_capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0ffcb9cb4e95cef1ede2" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0ffcb9cb4e95cef1ede2">{"x":{"links":{"source":[9,11,10,12,10,9,9,13,9,0,1,2,3,4,5,6,7,8],"target":[0,1,2,3,4,5,6,7,8,15,15,14,15,14,17,17,16,18],"value":[25.628433,0.339607,20.765755,0.390021,5.592306,0.312017,0.078004,0.339607,0.339607,25.628433,0.339607,20.765755,0.390021,5.592306,0.312017,0.078004,0.339607,0.339607]},"nodes":{"name":["Consumption","Ch. Inventories","Wages","Interest on loans","Entrepreneurial Profits","Banks profits","Interest on deposits","Change loans","Change deposits","Households","Firms_current","Firms_capital","Banks_current","Banks_capital","Households","Firms_current","Firms_capital","Banks_current","Banks_capital"],"group":["Consumption","Ch. Inventories","Wages","Interest on loans","Entrepreneurial Profits","Banks profits","Interest on deposits","Change loans","Change deposits","Households","Firms_current","Firms_capital","Banks_current","Banks_capital","Households","Firms_current","Firms_capital","Banks_current","Banks_capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="scenarios" class="section level1">
@@ -670,7 +670,7 @@ Change deposits
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"ydhs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DIS1: Increase in the costing margin"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on real consumption and Haig-Simons real disposable income"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-15-1.png" width="700"> It is interesting to note that the impact on consumption is quite negligible. the costing margin increased from 25% to 35% but the real consumption fell from 79.8 to 79.4.</p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-15-1.png" width="700"> It is interesting to note that the impact on consumption is quite negligible. the costing margin increased from 25% to 35% but the real consumption fell from 79.8 to 79.4.</p>
 </div>
 <div id="scenario-2-increase-in-the-target-inventories-to-sales-ratio" class="section level2">
 <h2 class="hasAnchor">
@@ -690,14 +690,14 @@ Change deposits
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ydhs"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DIS2: Increase in the target inventories to sales ratio"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on real consumption and Haig-Simons disposable income"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dis2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"delta_inv"</span>, <span class="st">"delta_inv_E"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DIS2: Increase in the target inventories to sales ratio"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of inventories and desired inventories"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>This Figure shows one inconsistency of the model simulated in <span class="citation">Godley and Lavoie (2007)</span>. The authors say that Figure 9.3 (see p. 298-299) “shows that the change in realized inventories is systematically inferior to the desired change, because of the adaptive expectations of households.”</p>
 <p>However, the figure above clearly shows the opposite: it is the desired variation (<code>delta_inv_E</code>) that remains systematically below the real variation of inventories. In turn, this result makes absolute sense, as it shows that after a shock that triggers an increase in the inventories, the firms systematically produce <em>above</em> their expectations. This behavior leads to a correction in the next period until a steady state is achieved. If the reverse was true, the firms would be systematically wrong by producing <em>less</em> than expected, and would correct upwards, which would lead the model to an explosive path.</p>
 </div>
@@ -798,7 +798,7 @@ Change deposits
                    tol <span class="op">=</span> <span class="fl">1e-20</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">disinf</span> <span class="op">%&gt;%</span> <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 </div>
 <div id="scenario-1-increase-in-the-costing-margins" class="section level2">
 <h2 class="hasAnchor">
@@ -823,20 +823,20 @@ Change deposits
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DISINF1: Increase in costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Inflationary consequences"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">disinf1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"p"</span>, <span class="st">"UC"</span>, <span class="st">"UCp"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DISINF1: Increase in costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Evolution of UC/p ratio"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">disinf1</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>ydhs_ss <span class="op">=</span> <span class="va">alpha0</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha1</span> <span class="op">-</span> <span class="va">alpha2</span><span class="op">*</span><span class="va">sigma_T</span> <span class="op">*</span> <span class="op">(</span><span class="va">UC</span><span class="op">/</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ydhs"</span>, <span class="st">"c"</span>, <span class="st">"s"</span>, <span class="st">"ydhs_ss"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DISINF1: Increase in costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Real consequences"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 </div>
 <div id="scenario-2-increase-in-the-target-real-wage" class="section level2">
 <h2 class="hasAnchor">
@@ -862,7 +862,7 @@ Change deposits
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DISINF2: Increase in target real wage"</span>,
        subtitle <span class="op">=</span> <span class="st">"Real consequences"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html">ylim</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">82</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
 </div>
 <div id="sensitivity-test" class="section level2">
 <h2 class="hasAnchor">
@@ -910,7 +910,7 @@ Change deposits
   <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">simulation</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_color_manual</span><span class="op">(</span><span class="st">""</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">mypal</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Omega0</span><span class="op">)</span><span class="op">)</span>, <span class="fu">mypal2</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Omega0</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"grey"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">Omega0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 <p>The real consequences are precisely the same for every single parameter.</p>
 </div>
 <div id="scenario-2-increase-in-the-real-interest-rate" class="section level2">
@@ -935,14 +935,14 @@ Change deposits
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DISINF2: Increase in the real interest rate"</span>,
        subtitle <span class="op">=</span> <span class="st">"Inflationary consequences"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
 <p>Interestingly, in this model, an interest rate hike leads to higher inflation.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">disinf2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ydhs"</span>, <span class="st">"c"</span>, <span class="st">"s"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"DISINF2: Increase in costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Real consequences"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-mdisinf-the-possibility-of-non-neutral-inflation" class="section level1">
@@ -976,12 +976,12 @@ Change deposits
 <a href="#dag" class="anchor"></a>DAG</h2>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">mdisinf_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 <p>In opposition to the previous model, we can see that the model DISINF has a cycle in its core. In any case, the figure below shows that it arrives to a stable steady state</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mdisinf</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 </div>
 <div id="scenario-1-increase-in-the-target-real-wage-of-workers" class="section level2">
 <h2 class="hasAnchor">
@@ -1006,20 +1006,20 @@ Change deposits
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"ydhs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"MDISINF: Increase in the target real wage of workers"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on real consumption and Haig-Simons disposable income"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mdisinf1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mh"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"MDISINF: Increase in the target real wage of workers"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on real wealth"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mdisinf1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"inflation"</span>, <span class="st">"pic"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"MDISINF: Increase in the target real wage of workers"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on inflation rates"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 </div>
 <div id="scenario-2-increase-in-the-costing-margins" class="section level2">
 <h2 class="hasAnchor">
@@ -1045,20 +1045,20 @@ Change deposits
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="st">"ydhs"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"MDISINF2: Increase in the costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on real consumption and Haig-Simons disposable income"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mdisinf2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mh"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"MDISINF2: Increase in the costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on real wealth"</span><span class="op">)</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mdisinf2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"inflation"</span>, <span class="st">"pic"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"MDISINF2: Increase in the costing margins"</span>,
        subtitle <span class="op">=</span> <span class="st">"Impact on inflation rates"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="dis_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<p><img src="gl6-dis_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

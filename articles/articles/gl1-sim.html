@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,14 +106,14 @@
 
       
 
-      </header><script src="sim_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="sim_files/d3-4.5.0/d3.min.js"></script><script src="sim_files/sankey-1/sankey.js"></script><script src="sim_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl1-sim_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl1-sim_files/d3-4.5.0/d3.min.js"></script><script src="gl1-sim_files/sankey-1/sankey.js"></script><script src="gl1-sim_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 3: Model SIM</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/sim.Rmd"><code>vignettes/articles/sim.Rmd</code></a></small>
-      <div class="hidden name"><code>sim.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl1-sim.Rmd"><code>vignettes/articles/gl1-sim.Rmd</code></a></small>
+      <div class="hidden name"><code>gl1-sim.Rmd</code></div>
 
     </div>
 
@@ -175,7 +175,7 @@
   method <span class="op">=</span> <span class="st">"Broyden"</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.195   0.024   0.219</span></code></pre></div>
+<span class="co">#&gt;   0.210   0.015   0.226</span></code></pre></div>
 <p>We can check that the model generates the same long-run results as the model presented in page 69 <span class="citation">Godley and Lavoie (2007)</span>..</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sim</span> <span class="op">%&gt;%</span>
@@ -215,20 +215,21 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="sim_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="gl1-sim_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>To plot multiple variables in the same plot, we need to filter not for a specific variable, but for a group of variables. We do it by using the R operator <code><a href="https://rdrr.io/r/base/match.html">%in%</a></code> instead of <code><a href="https://rdrr.io/r/base/Comparison.html">==</a></code>.</p>
-<p>Let’s see how to plot <span class="math inline">\(YD\)</span>, <span class="math inline">\(C_d\)</span>, and <span class="math inline">\(H_h\)</span>:</p>
+<p>Let’s see how to plot <span class="math inline">\(YD\)</span>, <span class="math inline">\(Cd\)</span>, and <span class="math inline">\(Hh\)</span>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sim2_long</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"YD"</span>, <span class="st">"C_d"</span>, <span class="st">"H_h"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"YD"</span>, <span class="st">"Cd"</span>, <span class="st">"Hh"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="sim_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="gl1-sim_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 </div>
-<div id="simex-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simex-model" class="anchor"></a>SIMEX model</h2>
+</div>
+<div id="simex-model" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simex-model" class="anchor"></a>SIMEX model</h1>
 <p>The SIMEX model expands model SIM by introducing expectations into the model. Technically, it modifies one of the equations and add two new equations.</p>
 <p>We use the <code><a href="../../reference/sfcr_set.html">sfcr_set()</a></code> function as well to modify a set of equations. To modify an existing equation, we must write its new version and exclude the old one from the set with the <code>exclude</code> argument. To find the correct id to exclude, we can use the <code><a href="../../reference/sfcr_set_index.html">sfcr_set_index()</a></code> function and then <code>filter</code> the <code>lhs</code> of the original set:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -264,12 +265,11 @@
   <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">period</span><span class="op">)</span>
 
 <span class="va">simex2_long</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"C_d"</span>, <span class="st">"YD"</span>, <span class="st">"H_h"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cd"</span>, <span class="st">"YD"</span>, <span class="st">"Hh"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="sim_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="gl1-sim_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>An attentive reader would notice that the Figure above is not the same as Figure 3.8 of <span class="citation">Godley and Lavoie (2007)</span>. That’s because Figure 3.8 shocks the SIM model and not the SIMEX model. I’ll leave as an exercise for the reader to generate Figure 3.8.</p>
-</div>
 </div>
 <div id="extra-functionalities-of-the-sfcr-package" class="section level1">
 <h1 class="hasAnchor">
@@ -302,8 +302,8 @@
 <p>Another benefit of having a transactions-flow matrix that is validated in the model is that we can confidently construct a Sankey’s representation of this matrix with the <code><a href="../../reference/sfcr_sankey.html">sfcr_sankey()</a></code> function:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_sim</span>, <span class="va">sim</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-bb30e9433b47b89246c6" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bb30e9433b47b89246c6">{"x":{"links":{"source":[5,7,6,5,5,0,1,2,3,4],"target":[0,1,2,3,4,9,9,8,10,10],"value":[42.718392,20,62.718392,12.543678,7.456322,42.718392,20,62.718392,12.543678,7.456322]},"nodes":{"name":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"],"group":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-77016015e3abb5400dbe" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-77016015e3abb5400dbe">{"x":{"links":{"source":[5,7,6,5,5,0,1,2,3,4],"target":[0,1,2,3,4,9,9,8,10,10],"value":[42.718392,20,62.718392,12.543678,7.456322,42.718392,20,62.718392,12.543678,7.456322]},"nodes":{"name":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"],"group":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="dag-the-structure-of-the-model" class="section level2">
@@ -312,7 +312,7 @@
 <p>The <code>sfcr</code> package also provides a built-in function to visualize the DAG representation of the equations in the model:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">sim_eqs</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p><img src="sim_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<p><img src="gl1-sim_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
 <div id="blocks-of-independent-equations" class="section level2">
 <h2 class="hasAnchor">
@@ -356,7 +356,7 @@
 <p>It is also possible to visualize the block structure of the model with the <code><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot()</a></code> function:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot</a></span><span class="op">(</span><span class="va">sim_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="sim_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="gl1-sim_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>All of the solvers included in the <code>sfcr</code> package first organize the model in blocks, using the two depth-first searches provided by the <code>igraph</code> package. The simultaneous equations solvers (“Gauss”, “Broyden”, or “Newton”) are only called to solve for the values of the cyclical variables in the model.</p>
 </div>
 </div>

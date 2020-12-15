@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,15 +106,15 @@
 
       
 
-      </header><script src="lp_files/kePrint-0.0.1/kePrint.js"></script><link href="lp_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<script src="lp_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="lp_files/d3-4.5.0/d3.min.js"></script><script src="lp_files/sankey-1/sankey.js"></script><script src="lp_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl3-lp_files/kePrint-0.0.1/kePrint.js"></script><link href="gl3-lp_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="gl3-lp_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl3-lp_files/d3-4.5.0/d3.min.js"></script><script src="gl3-lp_files/sankey-1/sankey.js"></script><script src="gl3-lp_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 5: Model LP</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/lp.Rmd"><code>vignettes/articles/lp.Rmd</code></a></small>
-      <div class="hidden name"><code>lp.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl3-lp.Rmd"><code>vignettes/articles/gl3-lp.Rmd</code></a></small>
+      <div class="hidden name"><code>gl3-lp.Rmd</code></div>
 
     </div>
 
@@ -223,7 +223,7 @@
 <a href="#dag-structure-of-the-model" class="anchor"></a>DAG structure of the model</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">lp_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>As we can see, there’s no cycle in this model.</p>
 </div>
 <div id="matrices-of-model-lp" class="section level2">
@@ -632,8 +632,8 @@ Ch. bonds
 <a href="#sankeys-representation-of-the-tfm-matrix" class="anchor"></a>Sankey’s representation of the TFM matrix</h2>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_lp</span>, <span class="va">lp</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-3cd48c7e81b4054671a7" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3cd48c7e81b4054671a7">{"x":{"links":{"source":[10,12,11,12,12,13,10,10,10,14,10,0,1,2,3,3,4,5,6,7,8,9],"target":[0,1,2,3,4,5,6,7,8,8,9,16,16,15,15,18,15,17,17,19,17,17],"value":[40.013662,20,60.013662,0.855562,0.574746,0.510488,11.808909,0.511125,4.301309,0.511125,4.298478,40.013662,20,60.013662,0.345075,0.510488,0.574746,0.510488,11.808909,0.511125,4.812434,4.298478]},"nodes":{"name":["Consumption","Gov. Exp.","Income","Int. bills","Int. bonds","CB profits","Taxes","Ch. money","Ch. bills","Ch. bonds","Households","Firms","Government","CB_current","CB_capital","Households","Firms","Government","CB_current","CB_capital"],"group":["Consumption","Gov. Exp.","Income","Int. bills","Int. bonds","CB profits","Taxes","Ch. money","Ch. bills","Ch. bonds","Households","Firms","Government","CB_current","CB_capital","Households","Firms","Government","CB_current","CB_capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8e6eafdb02859ef9f67b" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8e6eafdb02859ef9f67b">{"x":{"links":{"source":[10,12,11,12,12,13,10,10,10,14,10,0,1,2,3,3,4,5,6,7,8,9],"target":[0,1,2,3,4,5,6,7,8,8,9,16,16,15,15,18,15,17,17,19,17,17],"value":[40.013662,20,60.013662,0.855562,0.574746,0.510488,11.808909,0.511125,4.301309,0.511125,4.298478,40.013662,20,60.013662,0.345075,0.510488,0.574746,0.510488,11.808909,0.511125,4.812434,4.298478]},"nodes":{"name":["Consumption","Gov. Exp.","Income","Int. bills","Int. bonds","CB profits","Taxes","Ch. money","Ch. bills","Ch. bonds","Households","Firms","Government","CB_current","CB_capital","Households","Firms","Government","CB_current","CB_capital"],"group":["Consumption","Gov. Exp.","Income","Int. bills","Int. bonds","CB profits","Taxes","Ch. money","Ch. bills","Ch. bonds","Households","Firms","Government","CB_current","CB_capital","Households","Firms","Government","CB_current","CB_capital"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="scenario-1" class="section level2">
 <h2 class="hasAnchor">
@@ -724,7 +724,7 @@ Ch. bonds
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">'Periods'</span>, y <span class="op">=</span> <span class="st">'Wealth to disposable income ratio'</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>Next, we plot disposable income (YD_r) and consumption (C) (Figure 5.3):</p>
 <p>Now, instead of using <code><a href="https://rdrr.io/r/base/Comparison.html">==</a></code>, we use <code><a href="https://rdrr.io/r/base/match.html">%in%</a></code> to select two variables. We map <code>linetype</code> to <code>variable</code> in the <code>geom_line()</code> aesthetics to have the multiple lines:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -732,14 +732,14 @@ Ch. bonds
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"YDr"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p>Finally, we plot the evolution of bonds to wealth ratio and the evolution of bills to wealth ratio:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp2_long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLV_r"</span>, <span class="st">"BhV_r"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-lp2" class="section level1">
@@ -879,7 +879,7 @@ Ch. bonds
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.505</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.495</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <p>We also can visualize the evolution of interest rates (Figure 5.5):</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp2_s1_long</span> <span class="op">%&gt;%</span>
@@ -888,7 +888,7 @@ Ch. bonds
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 </div>
 <div id="scenario-2" class="section level2">
 <h2 class="hasAnchor">
@@ -924,7 +924,7 @@ Ch. bonds
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pbl"</span>, <span class="st">"pebl"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">variable</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 <p>This shock to the expected price of bonds cause the long-term interest rate to rise, as a consequence of the target proportion of bonds in the total government debt aimed by the government:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp2_s2_long</span> <span class="op">%&gt;%</span>
@@ -934,7 +934,7 @@ Ch. bonds
   <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.505</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.495</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">annotate</span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">15</span>, y <span class="op">=</span> <span class="fl">0.490</span>, label <span class="op">=</span> <span class="st">"Share of bonds in \ngovernemnt debt \nheld by households"</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp2_s2_long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"rbl"</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -942,7 +942,7 @@ Ch. bonds
   <span class="fu">geom_line</span><span class="op">(</span>linetype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">annotate</span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">25</span>, y <span class="op">=</span> <span class="fl">0.05195</span>,
            label <span class="op">=</span> <span class="st">"Long-term interest rate"</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-lp3-making-government-expenditures-endogenous" class="section level1">
@@ -1047,7 +1047,7 @@ Ch. bonds
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 <p>This result contrasts with the long-run effect of a reduction in the propensity to consume arrived with the LP model:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp1_s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sfcr_scenario.html">sfcr_scenario</a></span><span class="op">(</span>
@@ -1062,7 +1062,7 @@ Ch. bonds
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
 <p>In the LP model, the steady-state output level is higher than before the shock because the consumption out of the wealth ends up more than compensating the initial fall in output.</p>
 <p>In model LP3, however, the initial fall in output increases the government deficit, and this causes the government to reduce its expenditures:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
@@ -1072,7 +1072,7 @@ Ch. bonds
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">variable</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="lp_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p><img src="gl3-lp_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">

@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,15 +106,15 @@
 
       
 
-      </header><script src="growth_files/kePrint-0.0.1/kePrint.js"></script><link href="growth_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<script src="growth_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="growth_files/d3-4.5.0/d3.min.js"></script><script src="growth_files/sankey-1/sankey.js"></script><script src="growth_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl8-growth_files/kePrint-0.0.1/kePrint.js"></script><link href="gl8-growth_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="gl8-growth_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl8-growth_files/d3-4.5.0/d3.min.js"></script><script src="gl8-growth_files/sankey-1/sankey.js"></script><script src="gl8-growth_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 11: Model GROWTH</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/growth.Rmd"><code>vignettes/articles/growth.Rmd</code></a></small>
-      <div class="hidden name"><code>growth.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl8-growth.Rmd"><code>vignettes/articles/gl8-growth.Rmd</code></a></small>
+      <div class="hidden name"><code>gl8-growth.Rmd</code></div>
 
     </div>
 
@@ -603,7 +603,7 @@
 <code class="sourceCode R"><span class="va">growth</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Uk"</span>, <span class="st">"Bsk"</span>, <span class="st">"VK"</span>, <span class="st">'GRk'</span>, <span class="st">"PI"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>As we can see, the hidden equation is fulfilled (up to certain amount of computational error), key ratios and growth rations are stable. We can now check the balance-sheet and the transactions-flow matrices:</p>
 </div>
 <div id="matrices-of-model-growth" class="section level2">
@@ -1526,15 +1526,15 @@ Loan defaults
 <a href="#sankeys-diagram" class="anchor"></a>Sankey’s diagram:</h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_growth</span>, <span class="va">growth</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-5ac2e5662210ff2996a5" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5ac2e5662210ff2996a5">{"x":{"links":{"source":[20,23,22,22,20,21,21,21,26,20,26,23,23,27,20,27,20,20,25,27,20,20,27,0,1,2,3,4,5,6,7,7,7,8,8,9,10,11,11,11,12,13,13,14,15,16,17,18,19],"target":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,15,16,16,16,17,18,19,29,29,29,29,31,28,34,28,30,34,28,35,34,28,28,32,34,28,28,30,33,35,31,31,30,30],"value":[59851849.038083,19057477.702335,19279193.609916,207514.874837,19382156.979446,77296668.009386,755614.973263,20343752.242522,1908097.077895,1516611.532135,847822.501516,1625411.64271,944660.275135,1434734.593609,93774.520918,87574.86714,1751497.3428,1072863.50073,181349.388058,330310.689862,482535.335798,1492924.517489,350485.344161,59851849.038083,19057477.702335,19279193.609916,207514.874837,19382156.979446,77296668.009386,755614.973263,3000219.652606,17007053.721049,336478.868867,1456488.925923,451608.151972,1516611.532135,847822.501516,1299863.711279,178333.724872,147214.205146,944660.275135,798489.691555,636244.902054,181349.388058,1751497.3428,1584523.580064,482535.335798,1492924.517489,350485.344161]},"nodes":{"name":["Consumption","Govt. Exp.","Investment","Inventories","Taxes","Wages","Inventory financing cost","Entr. Profits","Banks Profits","Int. hh loans","Int. deposits","Int. bills","Int. bonds","Ch. loans","Ch. cash","Ch. deposits","Ch. bills","Ch. bonds","Ch. equities","Loan defaults","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap.","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap."],"group":["Consumption","Govt. Exp.","Investment","Inventories","Taxes","Wages","Inventory financing cost","Entr. Profits","Banks Profits","Int. hh loans","Int. deposits","Int. bills","Int. bonds","Ch. loans","Ch. cash","Ch. deposits","Ch. bills","Ch. bonds","Ch. equities","Loan defaults","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap.","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap."]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-903437399544af1e73c3" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-903437399544af1e73c3">{"x":{"links":{"source":[20,23,22,22,20,21,21,21,26,20,26,23,23,27,20,27,20,20,25,27,20,20,27,0,1,2,3,4,5,6,7,7,7,8,8,9,10,11,11,11,12,13,13,14,15,16,17,18,19],"target":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,15,16,16,16,17,18,19,29,29,29,29,31,28,34,28,30,34,28,35,34,28,28,32,34,28,28,30,33,35,31,31,30,30],"value":[59851849.038083,19057477.702335,19279193.609916,207514.874837,19382156.979446,77296668.009386,755614.973263,20343752.242522,1908097.077895,1516611.532135,847822.501516,1625411.64271,944660.275135,1434734.593609,93774.520918,87574.86714,1751497.3428,1072863.50073,181349.388058,330310.689862,482535.335798,1492924.517489,350485.344161,59851849.038083,19057477.702335,19279193.609916,207514.874837,19382156.979446,77296668.009386,755614.973263,3000219.652606,17007053.721049,336478.868867,1456488.925923,451608.151972,1516611.532135,847822.501516,1299863.711279,178333.724872,147214.205146,944660.275135,798489.691555,636244.902054,181349.388058,1751497.3428,1584523.580064,482535.335798,1492924.517489,350485.344161]},"nodes":{"name":["Consumption","Govt. Exp.","Investment","Inventories","Taxes","Wages","Inventory financing cost","Entr. Profits","Banks Profits","Int. hh loans","Int. deposits","Int. bills","Int. bonds","Ch. loans","Ch. cash","Ch. deposits","Ch. bills","Ch. bonds","Ch. equities","Loan defaults","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap.","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap."],"group":["Consumption","Govt. Exp.","Investment","Inventories","Taxes","Wages","Inventory financing cost","Entr. Profits","Banks Profits","Int. hh loans","Int. deposits","Int. bills","Int. bonds","Ch. loans","Ch. cash","Ch. deposits","Ch. bills","Ch. bonds","Ch. equities","Loan defaults","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap.","Households","Firms curr.","Firms cap.","Govt.","CB curr.","CB cap.","Banks curr.","Banks cap."]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="structure-of-the-model-dag" class="section level2">
 <h2 class="hasAnchor">
 <a href="#structure-of-the-model-dag" class="anchor"></a>Structure of the model (DAG)</h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_cycles_plot.html">sfcr_dag_cycles_plot</a></span><span class="op">(</span><span class="va">growth_eqs</span>, size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-11-1.png" width="1056"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-11-1.png" width="1056"></p>
 </div>
 <div id="scenario-benchmark-a-continuation-of-baseline-model" class="section level2">
 <h2 class="hasAnchor">
@@ -1573,7 +1573,7 @@ Loan defaults
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PI"</span>, <span class="st">"wi"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>To generate the comparison of Figure 11.2A, we need to compare model <code>growth1</code> against the counterfactual baseline evolution <code>growthbl</code>. The code below creates two helper functions that will divide the selected variables by their counterparts in the <code>growthbl</code> model and then apply the <code>do_plot</code> function to it.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">do_cbind</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">variables</span><span class="op">)</span> <span class="op">{</span>
@@ -1598,7 +1598,7 @@ Loan defaults
 <a href="#figure-11-2b" class="anchor"></a>Figure 11.2B</h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growtha</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ik"</span>, <span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-1-second-experiment" class="section level2">
@@ -1628,14 +1628,14 @@ Loan defaults
 <code class="sourceCode R"><span class="va">growthab</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>Rrb <span class="op">=</span> <span class="va">Rb</span> <span class="op">-</span> <span class="va">PI</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"Rrb"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
 <div id="figure-11-2d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-2d" class="anchor"></a>Figure 11.2D</h3>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthab</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yk"</span><span class="op">)</span>, plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-2-one-period-only-increase-in-the-growth-rate-of-pure-government-expenditures" class="section level2">
@@ -1661,7 +1661,7 @@ Loan defaults
 <a href="#figure-11-3a" class="anchor"></a>Figure 11.3A</h3>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthb</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yk"</span>, <span class="st">"Gk"</span><span class="op">)</span>, plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yk"</span>, <span class="st">"Gk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 </div>
 <div id="figure-11-3b" class="section level3">
 <h3 class="hasAnchor">
@@ -1669,21 +1669,21 @@ Loan defaults
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthb</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ER"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">map</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.02</span>, <span class="fl">0.98</span><span class="op">)</span>, <span class="op">~</span><span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">.x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 </div>
 <div id="figure-11-3c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-3c" class="anchor"></a>Figure 11.3C</h3>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthb</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PSBR"</span>, <span class="st">"Y"</span>, <span class="st">"GD"</span><span class="op">)</span>, plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DefY"</span>, <span class="st">"GDY"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 </div>
 <div id="figure-11-3d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-3d" class="anchor"></a>Figure 11.3D</h3>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthb</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Lfd"</span>, <span class="st">"IN"</span>, <span class="st">"BLR"</span><span class="op">)</span>, plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"LIN"</span>, <span class="st">"BLR"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-2-b-one-shot-decrease-in-the-income-tax" class="section level2">
@@ -1709,7 +1709,7 @@ Loan defaults
 <a href="#figure-11-3e" class="anchor"></a>Figure 11.3E</h3>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthbb</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-3-a-permanent-increase-in-the-growth-rate-of-pure-government-expenditures" class="section level2">
@@ -1736,7 +1736,7 @@ Loan defaults
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthc</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ER"</span>, <span class="st">"PI"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 </div>
 <div id="figure-11-4b" class="section level3">
 <h3 class="hasAnchor">
@@ -1744,7 +1744,7 @@ Loan defaults
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthc</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"GRg"</span>, <span class="st">"GRk"</span>, <span class="st">"GRy"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 </div>
 <div id="figure-11-4c" class="section level3">
 <h3 class="hasAnchor">
@@ -1752,7 +1752,7 @@ Loan defaults
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthc</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DefY"</span>, <span class="st">"GDY"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-4-a-permanent-increase-in-the-bill-rate-of-interest" class="section level2">
@@ -1777,35 +1777,35 @@ Loan defaults
 <code class="sourceCode R"><span class="va">growthd</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">period</span> <span class="op">&lt;</span> <span class="fl">80</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rl"</span>, <span class="st">"Rbl"</span>, <span class="st">"Rb"</span>, <span class="st">"Rm"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
 </div>
 <div id="figure-11-5b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-5b" class="anchor"></a>Figure 11.5B</h3>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthd</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
 </div>
 <div id="figure-11-5c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-5c" class="anchor"></a>Figure 11.5C</h3>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthd</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"GD"</span>, <span class="st">"Y"</span><span class="op">)</span>, p <span class="op">=</span> <span class="st">"GDY"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
 </div>
 <div id="figure-11-5d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-5d" class="anchor"></a>Figure 11.5D</h3>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthd</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"LhYDr"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 </div>
 <div id="figure-11-5e" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-5e" class="anchor"></a>Figure 11.5E</h3>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthd</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BUR"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-5-increase-in-the-propensity-to-consume-out-of-regular-income" class="section level2">
@@ -1820,28 +1820,28 @@ Loan defaults
 <a href="#figure-11-7a" class="anchor"></a>Figure 11.7A</h3>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Yk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
 </div>
 <div id="figure-11-7b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-7b" class="anchor"></a>Figure 11.7B</h3>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="st">"Vk"</span>, p <span class="op">=</span> <span class="st">"Vk"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 </div>
 <div id="figure-11-7c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-7c" class="anchor"></a>Figure 11.7C</h3>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="st">'PI'</span>, p <span class="op">=</span> <span class="st">"PI"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 </div>
 <div id="figure-11-7d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-7d" class="anchor"></a>Figure 11.7D</h3>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NHUC"</span>, <span class="st">"phi"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NHUC"</span>, <span class="st">"phi"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
 <p>I invite the reader to make a smaller shock above and see what happens. Instead of making <code>alpha1</code> equal to 0.80, make it equal to 0.77. This might come as a surprise…</p>
 </div>
 <div id="figure-11-7e" class="section level3">
@@ -1849,21 +1849,21 @@ Loan defaults
 <a href="#figure-11-7e" class="anchor"></a>Figure 11.7E</h3>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FUf"</span>, <span class="st">"INV"</span>, <span class="st">"INk"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FUfInv"</span>, <span class="st">"INk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
 </div>
 <div id="figure-11-7f" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-7f" class="anchor"></a>Figure 11.7F</h3>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"GD"</span>, <span class="st">"PSBR"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DefY"</span>, <span class="st">"GDY"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 </div>
 <div id="figure-11-7g" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-7g" class="anchor"></a>Figure 11.7G</h3>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthe</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="st">'PE'</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="st">"PE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-7-an-increase-in-the-gross-new-loans-to-personal-income-ratio" class="section level2">
@@ -1879,35 +1879,35 @@ Loan defaults
 <code class="sourceCode R"><span class="va">growthf</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"LhYDr"</span>, <span class="st">"BUR"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
 </div>
 <div id="figure-11-8b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-8b" class="anchor"></a>Figure 11.8B</h3>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthf</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yk"</span>, <span class="st">"Ck"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Yk"</span>, <span class="st">"Ck"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
 </div>
 <div id="figure-11-8c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-8c" class="anchor"></a>Figure 11.8C</h3>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthf</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLR"</span>, <span class="st">"CAR"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLR"</span>, <span class="st">"CAR"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
 </div>
 <div id="figure-11-8d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-8d" class="anchor"></a>Figure 11.8D</h3>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthf</span>, <span class="st">"Rl"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-49-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-49-1.png" width="700"></p>
 </div>
 <div id="figure-11-8e" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-8e" class="anchor"></a>Figure 11.8E</h3>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthf</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"PSBR"</span>, <span class="st">"GD"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DefY"</span>, <span class="st">"GDY"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-8-an-increase-in-the-desire-to-hold-equities" class="section level2">
@@ -1922,21 +1922,21 @@ Loan defaults
 <a href="#figure-11-9a" class="anchor"></a>Figure 11.9A</h3>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthg</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="st">"PE"</span>, <span class="st">"Ekd"</span>, <span class="st">"Pe"</span>, <span class="st">"Vfma"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="st">"PE"</span>, <span class="st">"EqFMA"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-52-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-52-1.png" width="700"></p>
 </div>
 <div id="figure-11-9b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-9b" class="anchor"></a>Figure 11.9B</h3>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthg</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Vk"</span>, <span class="st">"Yk"</span>, <span class="st">"Ik"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ck"</span>, <span class="st">"Vk"</span>, <span class="st">"Yk"</span>, <span class="st">"Ik"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-53-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-53-1.png" width="700"></p>
 </div>
 <div id="figure-11-9c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-9c" class="anchor"></a>Figure 11.9C</h3>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthg</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rl"</span>, <span class="st">"Rm"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-54-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-54-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-8b-increase-in-the-desire-to-hold-equities-that-is-offset-by-a-decline-in-the-desire-to-hold-bills-and-bonds" class="section level2">
@@ -1957,7 +1957,7 @@ Loan defaults
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">growthgb</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rl"</span>, <span class="st">"Rb"</span>, <span class="st">"Rm"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-56-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-56-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-9-an-increase-in-the-target-proportion-of-gross-investment-financed-by-retained-earnings" class="section level2">
@@ -1971,7 +1971,7 @@ Loan defaults
 <a href="#figure-11-10a" class="anchor"></a>Figure 11.10A</h3>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthh</span>, <span class="st">"phi"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-58-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-58-1.png" width="700"></p>
 </div>
 <div id="figure-11-10b" class="section level3">
 <h3 class="hasAnchor">
@@ -1979,21 +1979,21 @@ Loan defaults
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">growthh</span> <span class="op">%&gt;%</span> <span class="fu">do_plot</span><span class="op">(</span><span class="st">"wi"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-59-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-59-1.png" width="700"></p>
 </div>
 <div id="figure-11-10c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-10c" class="anchor"></a>Figure 11.10C</h3>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthh</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ER"</span>, <span class="st">"Ck"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ER"</span>, <span class="st">"Ck"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
 </div>
 <div id="figure-11-10d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-10d" class="anchor"></a>Figure 11.10D</h3>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthh</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="st">"PE"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="st">"PE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-61-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-61-1.png" width="700"></p>
 </div>
 <div id="figure-11-10e" class="section level3">
 <h3 class="hasAnchor">
@@ -2001,7 +2001,7 @@ Loan defaults
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthh</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"GRFfk"</span>, <span class="st">"GRPek"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-62-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-62-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-10-an-increase-in-non-performing-loans" class="section level2">
@@ -2015,14 +2015,14 @@ Loan defaults
 <a href="#figure-11-11a" class="anchor"></a>Figure 11.11A</h3>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthi</span>, <span class="st">"CAR"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-64-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-64-1.png" width="700"></p>
 </div>
 <div id="figure-11-11b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-11b" class="anchor"></a>Figure 11.11B</h3>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_cplot</span><span class="op">(</span><span class="va">growthi</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rm"</span>, <span class="st">"Rl"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rm"</span>, <span class="st">"Rl"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-65-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-65-1.png" width="700"></p>
 </div>
 </div>
 <div id="scenario-10b-an-increase-in-the-normal-adequacy-ratio" class="section level2">
@@ -2036,14 +2036,14 @@ Loan defaults
 <a href="#figure-11-11c" class="anchor"></a>Figure 11.11C</h3>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthib</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NCAR"</span>, <span class="st">"CAR"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-67-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-67-1.png" width="700"></p>
 </div>
 <div id="figure-11-11d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-11d" class="anchor"></a>Figure 11.11D</h3>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growthib</span>, <span class="st">"Rl"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-68-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-68-1.png" width="700"></p>
 </div>
 </div>
 </div>
@@ -2089,7 +2089,7 @@ Loan defaults
 <code class="sourceCode R"><span class="va">growth2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Uk"</span>, <span class="st">"Bsk"</span>, <span class="st">"VK"</span>, <span class="st">'GRk'</span>, <span class="st">"PI"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-70-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-70-1.png" width="700"></p>
 <div id="scenario-benchmark" class="section level3">
 <h3 class="hasAnchor">
 <a href="#scenario-benchmark" class="anchor"></a>Scenario benchmark</h3>
@@ -2121,14 +2121,14 @@ Loan defaults
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growth2a</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"GRy"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-73-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-73-1.png" width="700"></p>
 </div>
 <div id="figure-11-6b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-11-6b" class="anchor"></a>Figure 11.6B</h3>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">do_plot</span><span class="op">(</span><span class="va">growth2a</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rb"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-74-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-74-1.png" width="700"></p>
 </div>
 <div id="figure-11-6c" class="section level3">
 <h3 class="hasAnchor">
@@ -2136,7 +2136,7 @@ Loan defaults
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">growth2a</span> <span class="op">%&gt;%</span>
   <span class="fu">do_cplot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Gk"</span>, <span class="st">"ER"</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Gk"</span>, <span class="st">"ER"</span><span class="op">)</span>, m2 <span class="op">=</span> <span class="va">growthbl2</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-75-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-75-1.png" width="700"></p>
 </div>
 <div id="figure-11-6d" class="section level3">
 <h3 class="hasAnchor">
@@ -2144,7 +2144,7 @@ Loan defaults
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">growth2a</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rl"</span>, <span class="st">"Rb"</span>, <span class="st">"Rm"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="growth_files/figure-html/unnamed-chunk-76-1.png" width="700"></p>
+<p><img src="gl8-growth_files/figure-html/unnamed-chunk-76-1.png" width="700"></p>
 </div>
 </div>
 </div>

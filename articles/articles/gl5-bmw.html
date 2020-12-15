@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -112,8 +112,8 @@
       <h1 data-toc-skip>Chapter 7: Model BMW</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/bmw.Rmd"><code>vignettes/articles/bmw.Rmd</code></a></small>
-      <div class="hidden name"><code>bmw.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl5-bmw.Rmd"><code>vignettes/articles/gl5-bmw.Rmd</code></a></small>
+      <div class="hidden name"><code>gl5-bmw.Rmd</code></div>
 
     </div>
 
@@ -213,7 +213,7 @@
 <p>Let’s check the internal structure of this model with the <code><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot</a></span><span class="op">(</span><span class="va">bmw_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>First, let’s check that the model arrived to a steady state income level:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bmw</span> <span class="op">%&gt;%</span>
@@ -222,7 +222,7 @@
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Steady state GDP"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="matrices-of-model-bmw" class="section level2">
 <h2 class="hasAnchor">
@@ -298,13 +298,13 @@
 <code class="sourceCode R"><span class="va">bmw1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cd"</span>, <span class="st">"YD"</span><span class="op">)</span>, 
           title <span class="op">=</span> <span class="st">"BMW1: Evolution of consumption and disposable income"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <p>And the investment of firms?</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bmw1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Id"</span>, <span class="st">"AF"</span><span class="op">)</span>,
           title <span class="op">=</span> <span class="st">"BMW1: Investment of firms"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div id="increase-in-the-propensity-to-save" class="section level2">
 <h2 class="hasAnchor">
@@ -324,17 +324,17 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bmw2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cd"</span>, <span class="st">"YD"</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"BMW2: Decrease in the propensity to save"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-16-1.png" width="700"> As can be seen, a decrease in the propensity to save in this model leads to a permanent decrease in consumption and on disposable income.</p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-16-1.png" width="700"> As can be seen, a decrease in the propensity to save in this model leads to a permanent decrease in consumption and on disposable income.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bmw2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"YK"</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"BMW2: Decrease in the propensity to save"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-17-1.png" width="700"> As a note, it is possible to add <code>ggplot2</code> arguments to our helper function:</p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-17-1.png" width="700"> As a note, it is possible to add <code>ggplot2</code> arguments to our helper function:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bmw2</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"W"</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"BMW2: Decrease in the propensity to save"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>subtitle <span class="op">=</span> <span class="st">"Evolution of the real wage"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-bmwk" class="section level1">
@@ -378,7 +378,7 @@
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bmwk</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span>variables <span class="op">=</span> <span class="st">'Y'</span>, <span class="st">"BMWK: Steady state"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <p>Let’s see the impact of an increase on interest rates in this model:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">shock3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sfcr_shock.html">sfcr_shock</a></span><span class="op">(</span>
@@ -392,7 +392,7 @@
 <span class="va">bmwk1</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"BMWK1: Increase in the interest rate (rm)"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>subtitle <span class="op">=</span> <span class="st">"Evolution of Gross Domestic Income (Y)"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 <p>This model has a very interesting characteristic. If we don’t strive for numerical precision with a very small <code>tol</code> argument at the <code>bmw</code> model, the tiny differences in each period lead the model to explosion:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">shock3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sfcr_shock.html">sfcr_shock</a></span><span class="op">(</span>
@@ -406,7 +406,7 @@
 <span class="va">bmwk1_explode</span> <span class="op">%&gt;%</span>
   <span class="fu">do_plot</span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"BMWK1_EXP: Increase in the interest rate (rm)"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>subtitle <span class="op">=</span> <span class="st">"Explosion of Gross Domestic Income (Y)"</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 </div>
 <div id="stability-tests" class="section level1">
 <h1 class="hasAnchor">
@@ -431,7 +431,7 @@
      values <span class="op">=</span> <span class="fu">getPalette</span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2.6</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">name</span>, scales <span class="op">=</span> <span class="st">'free_y'</span><span class="op">)</span></code></pre></div>
-<p><img src="bmw_files/figure-html/unnamed-chunk-25-1.png" width="864"></p>
+<p><img src="gl5-bmw_files/figure-html/unnamed-chunk-25-1.png" width="864"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

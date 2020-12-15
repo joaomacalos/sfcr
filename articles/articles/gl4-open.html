@@ -54,31 +54,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/articles/bmw.html">Chapter 7: Model BMW</a>
+      <a href="../../articles/articles/gl1-sim.html">Chapter 3: Model SIM</a>
     </li>
     <li>
-      <a href="../../articles/articles/dis.html">Chapter 9: Model DIS and DISINF</a>
+      <a href="../../articles/articles/gl2-pc.html">Chapter 4: Model PC</a>
     </li>
     <li>
-      <a href="../../articles/articles/growth.html">Chapter 11: Model GROWTH</a>
+      <a href="../../articles/articles/gl3-lp.html">Chapter 5: Model LP</a>
     </li>
     <li>
-      <a href="../../articles/articles/insout.html">Chapter 10: Model INSOUT</a>
+      <a href="../../articles/articles/gl4-open.html">Chapter 6: Models REG and OPEN</a>
     </li>
     <li>
-      <a href="../../articles/articles/lp.html">Chapter 5: Model LP</a>
+      <a href="../../articles/articles/gl5-bmw.html">Chapter 7: Model BMW</a>
     </li>
     <li>
-      <a href="../../articles/articles/open.html">Chapter 6: Models REG and OPEN</a>
+      <a href="../../articles/articles/gl6-dis.html">Chapter 9: Model DIS and DISINF</a>
     </li>
     <li>
-      <a href="../../articles/articles/open12.html">Chapter 12: Model Advanced OPEN</a>
+      <a href="../../articles/articles/gl7-insout.html">Chapter 10: Model INSOUT</a>
     </li>
     <li>
-      <a href="../../articles/articles/pc.html">Chapter 4: Model PC</a>
+      <a href="../../articles/articles/gl8-growth.html">Chapter 11: Model GROWTH</a>
     </li>
     <li>
-      <a href="../../articles/articles/sim.html">Chapter 3: Model SIM</a>
+      <a href="../../articles/articles/gl9-open12.html">Chapter 12: Model Advanced OPEN</a>
     </li>
     <li>
       <a href="../../articles/sfcr_multis.html">sfcr_multis</a>
@@ -106,15 +106,15 @@
 
       
 
-      </header><script src="open_files/kePrint-0.0.1/kePrint.js"></script><link href="open_files/lightable-0.0.1/lightable.css" rel="stylesheet">
-<script src="open_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="open_files/d3-4.5.0/d3.min.js"></script><script src="open_files/sankey-1/sankey.js"></script><script src="open_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
+      </header><script src="gl4-open_files/kePrint-0.0.1/kePrint.js"></script><link href="gl4-open_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="gl4-open_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="gl4-open_files/d3-4.5.0/d3.min.js"></script><script src="gl4-open_files/sankey-1/sankey.js"></script><script src="gl4-open_files/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chapter 6: Models REG and OPEN</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/open.Rmd"><code>vignettes/articles/open.Rmd</code></a></small>
-      <div class="hidden name"><code>open.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/joaomacalos/sfcr/blob/master/vignettes/articles/gl4-open.Rmd"><code>vignettes/articles/gl4-open.Rmd</code></a></small>
+      <div class="hidden name"><code>gl4-open.Rmd</code></div>
 
     </div>
 
@@ -284,7 +284,7 @@ Bh_S
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">region</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>With this Figure we note that the model is correctly specified since the sector balances converge to equality as was expected from equations 6.30 to 6.32 from <span class="citation">Godley and Lavoie (2007, 177)</span>. Below I reproduce equation 6.32, an important result that will be used often in this notebook<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</p>
 <p><span class="math display">\[
 G_T^N - T^N = IM^N - X^N
@@ -338,8 +338,8 @@ G_T^N - T^N = IM^N - X^N
 <a href="#sankeys-diagram" class="anchor"></a>Sankey’s diagram</h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_reg</span>, <span class="va">reg</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-2c0c50644517d6831bb5" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2c0c50644517d6831bb5">{"x":{"links":{"source":[10,12,14,13,11,11,13,14,15,10,12,10,12,10,12,15,0,0,1,1,2,3,4,4,5,5,5,6,7,8,9],"target":[0,0,1,2,3,4,4,5,6,7,7,8,8,9,9,9,17,19,17,19,17,19,16,18,16,18,21,20,20,21,20],"value":[45.641786,45.641786,40,9.846268,9.846268,65.641786,65.641786,1.436521,0.496311,13.222378,13.222378,2.430499,2.430499,4.817228,4.817228,4.860998,45.641786,45.641786,20,20,9.846268,9.846268,65.641786,65.641786,0.470105,0.470105,0.496311,0.496311,26.444757,4.860998,14.495454]},"nodes":{"name":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank"],"group":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-86660cc0fb5865d5b027" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-86660cc0fb5865d5b027">{"x":{"links":{"source":[10,12,14,13,11,11,13,14,15,10,12,10,12,10,12,15,0,0,1,1,2,3,4,4,5,5,5,6,7,8,9],"target":[0,0,1,2,3,4,4,5,6,7,7,8,8,9,9,9,17,19,17,19,17,19,16,18,16,18,21,20,20,21,20],"value":[45.641786,45.641786,40,9.846268,9.846268,65.641786,65.641786,1.436521,0.496311,13.222378,13.222378,2.430499,2.430499,4.817228,4.817228,4.860998,45.641786,45.641786,20,20,9.846268,9.846268,65.641786,65.641786,0.470105,0.470105,0.496311,0.496311,26.444757,4.860998,14.495454]},"nodes":{"name":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank"],"group":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank","North_HH","North_Firms","South_HH","South_Firms","Government","Central Bank"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="scenario-1-an-increase-in-the-propensity-to-import-of-the-south" class="section level2">
@@ -368,14 +368,14 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>What would happen with the GDP in both regions?</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">reg_1long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y_N"</span>, <span class="st">"Y_S"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 <div id="scenario-2-an-increase-in-the-government-expenditures-of-the-south" class="section level2">
 <h2 class="hasAnchor">
@@ -396,14 +396,14 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Impact on regrional GDPs"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">reg_2long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"deltaV_S"</span>, <span class="st">"TB_S"</span>, <span class="st">"GB_S"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 </div>
 <div id="scenario-3-an-increase-in-the-propensity-to-save-of-the-southern-households" class="section level2">
 <h2 class="hasAnchor">
@@ -425,7 +425,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y_S"</span>, <span class="st">"Y_N"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 <p>Again we see that higher thriftiness lead to higher steady state output levels, although the short-run effect is markedly negative.</p>
 <p>The evolution of the sectoral balances and wealth of the South region is visualized next:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -434,7 +434,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <p>The interesting feature of this exercise is that it shows that it is possible to have government deficits (or surpluses) at the same time as trade surpluses (deficits), but only in the transitional period to the new steady state.</p>
 </div>
 <div id="scenario-4-a-change-in-the-liquidity-preference-of-southern-households" class="section level2">
@@ -456,7 +456,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Effects on GDP"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">reg_4long</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"deltaV_S"</span>, <span class="st">"TB_S"</span>, <span class="st">"GB_S"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -464,7 +464,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Effects on sectoral balances"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
 <p>As we can see, a decrease in liquidity preference leads to higher stationary output in both regions. The higher wealth in the form of bonds lead to more interest payments, which initially increases the government deficit but this effect dies out when consumption out of wealth picks up. The Southern region ends up with a twin deficit.</p>
 <p>It is also noteworthy that the size of this effect is rather small.</p>
 </div>
@@ -572,7 +572,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">country</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 <div id="matrices-of-model-open" class="section level2">
 <h2 class="hasAnchor">
 <a href="#matrices-of-model-open" class="anchor"></a>Matrices of model OPEN</h2>
@@ -624,8 +624,8 @@ G_T^N - T^N = IM^N - X^N
 <a href="#sankeys-diagram-1" class="anchor"></a>Sankey’s diagram</h2>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_open</span>, <span class="va">open</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-3359fb215d2f435ee19d" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3359fb215d2f435ee19d">{"x":{"links":{"source":[11,15,13,17,16,12,12,16,13,17,14,18,11,15,11,15,11,14,15,18,14,0,0,1,1,2,3,4,4,5,5,5,5,6,6,7,7,8,8,9,9,10],"target":[0,0,1,1,2,3,4,4,5,5,6,6,7,7,8,8,9,9,9,9,10,20,24,20,24,20,24,19,23,19,22,23,26,21,25,21,25,22,26,21,25,26],"value":[46.564532,48.709666,20,20,10.269323,10.021807,66.812047,68.46215,0.693173,0.628241,0.208845,0.250723,13.459275,13.767934,2.436568,2.128779,4.836001,2.189052,4.23329,2.376295,0.247515,46.564532,48.709666,20,20,10.269323,10.021807,66.812047,68.46215,0.484328,0.208845,0.377518,0.250723,0.208845,0.250723,13.459275,13.767934,2.436568,2.128779,7.025053,6.609585,0.247515]},"nodes":{"name":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","Ch. Gold","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank"],"group":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","Ch. Gold","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>Perfect. Now let’s play with scenarios.</p>
+<div id="htmlwidget-7496640be3a198d88457" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7496640be3a198d88457">{"x":{"links":{"source":[11,15,13,17,16,12,12,16,13,17,14,18,11,15,11,15,11,14,15,18,14,0,0,1,1,2,3,4,4,5,5,5,5,6,6,7,7,8,8,9,9,10],"target":[0,0,1,1,2,3,4,4,5,5,6,6,7,7,8,8,9,9,9,9,10,20,24,20,24,20,24,19,23,19,22,23,26,21,25,21,25,22,26,21,25,26],"value":[46.564532,48.709666,20,20,10.269323,10.021807,66.812047,68.46215,0.693173,0.628241,0.208845,0.250723,13.459275,13.767934,2.436568,2.128779,4.836001,2.189052,4.23329,2.376295,0.247515,46.564532,48.709666,20,20,10.269323,10.021807,66.812047,68.46215,0.484328,0.208845,0.377518,0.250723,0.208845,0.250723,13.459275,13.767934,2.436568,2.128779,7.025053,6.609585,0.247515]},"nodes":{"name":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","Ch. Gold","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank"],"group":["Consumption","Govt. Exp","North X to South","South X to North","GDP","Interest payments","CB Profits","Taxes","Ch. cash","Ch. bills","Ch. Gold","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank","N_Households","N_Firms","N_Govt","N_CentralBank","S_Households","S_Firms","S_Govt","S_CentralBank"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script><p>Perfect. Now let’s play with scenarios.</p>
 </div>
 <div id="scenario-1-ever-falling-gold-reserves" class="section level2">
 <h2 class="hasAnchor">
@@ -646,7 +646,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Evolution of GDP"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
 <p>We see that both economies arrive to a new stationary GDP, with the Southern economy being permanently below its initial GDP.</p>
 <p>What happen with the trade and government balances?</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
@@ -657,7 +657,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">country</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Twin deficits/surpluses"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 4 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
 <p>An increase in the propensity to consume leads to a permanent twin deficit in the South economy and a permanent twin surplus in the North economy. This situation makes one wonder: what happens with the gold reserves of both countries?</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open_1l</span> <span class="op">%&gt;%</span>
@@ -665,7 +665,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Ever falling gold reserves"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 <p>This situation is obviously unsustainable. A country cannot have a ever-falling gold reserves ad-infinitum. However, here it is nice to see what’s happening with the balance sheet of the Southern central bank:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open_1l</span> <span class="op">%&gt;%</span>
@@ -674,7 +674,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Evolution of the Balance sheet of South Central Bank"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <p>This graph shows the compensation thesis in action: the variation in the money stocks in the economy is equal to zero in the long-run. All the depletion of gold reserves is being compensated by the central bank by acquiring Bonds from the government.</p>
 <p>Yet, this model is unsustainable. A country cannot have ever-falling gold reserves (at least not in a gold standard system).</p>
 </div>
@@ -736,7 +736,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">country</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 4 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 </div>
 </div>
 <div id="model-open3-adjustment-through-interest-rates" class="section level1">
@@ -800,7 +800,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"r_N"</span>, <span class="st">"r_S"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 <p>It is even difficult to find a steady state for this model. Play as much as you want to see by yourself.</p>
 <p>Let’s try adding a buffer zone around the variation of the gold reserves that would trigger a interest rate increase:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
@@ -822,7 +822,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">country</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-47-1.png" width="700"> This is a steady state. However, its a very unstable model in which any shock blows it up. In the following experiment I include only 20 periods because the model does not run if I add much more than that.</p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-47-1.png" width="700"> This is a steady state. However, its a very unstable model in which any shock blows it up. In the following experiment I include only 20 periods because the model does not run if I add much more than that.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">shock1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sfcr_shock.html">sfcr_shock</a></span><span class="op">(</span>
   variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mu_S</span> <span class="op">~</span> <span class="fl">0.2</span><span class="op">)</span>,
@@ -837,17 +837,17 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"r_N"</span>, <span class="st">"r_S"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-49-1.png" width="700"> This model obviously explode and I had to use the Gauss-Seidel solver and decrease the number of periods to find some solution to it (as they do in the book).</p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-49-1.png" width="700"> This model obviously explode and I had to use the Gauss-Seidel solver and decrease the number of periods to find some solution to it (as they do in the book).</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open4_1l</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TB_N"</span>, <span class="st">"TB_S"</span>, <span class="st">"GB_S"</span>, <span class="st">"GB_N"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_dag_blocks_plot.html">sfcr_dag_blocks_plot</a></span><span class="op">(</span><span class="va">open4_eqs</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-51-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-51-1.png" width="700"></p>
 <div id="scenario-making-aggregate-income-dependent-on-interest-rates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scenario-making-aggregate-income-dependent-on-interest-rates" class="anchor"></a>Scenario: Making aggregate income dependent on interest rates</h2>
@@ -888,7 +888,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">period</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"No stationary state"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-53-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-53-1.png" width="700"></p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open4b_l</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"r_N"</span>, <span class="st">"r_S"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -897,7 +897,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">labs</span><span class="op">(</span>
     title <span class="op">=</span> <span class="st">"Model OPEN4B"</span>,
     subtitle <span class="op">=</span> <span class="st">"No stationary state"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-54-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-54-1.png" width="700"></p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open4b_l</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">name</span>, <span class="st">"TB|GB"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -908,7 +908,7 @@ G_T^N - T^N = IM^N - X^N
     title <span class="op">=</span> <span class="st">"Model OPEN4B"</span>,
     subtitle <span class="op">=</span> <span class="st">"No stationary state"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-55-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-55-1.png" width="700"></p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open4b_l</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">name</span>, <span class="st">"YD|V"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -919,7 +919,7 @@ G_T^N - T^N = IM^N - X^N
     title <span class="op">=</span> <span class="st">"Model OPEN4B"</span>,
     subtitle <span class="op">=</span> <span class="st">"No stationary state"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-56-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-56-1.png" width="700"></p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">open4b_l</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">name</span>, <span class="st">"Y_"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -929,7 +929,7 @@ G_T^N - T^N = IM^N - X^N
   <span class="fu">labs</span><span class="op">(</span>
     title <span class="op">=</span> <span class="st">"Model OPEN4B"</span>,
     subtitle <span class="op">=</span> <span class="st">"No stationary state"</span><span class="op">)</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-57-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-57-1.png" width="700"></p>
 </div>
 <div id="scenario-a-perverse-reaction-function-the-puzzling-effect-of-interest-rates-revisited" class="section level2">
 <h2 class="hasAnchor">
@@ -989,7 +989,7 @@ G_T^N - T^N = IM^N - X^N
     title <span class="op">=</span> <span class="st">"Model OPEN5"</span>,
     subtitle <span class="op">=</span> <span class="st">"The puzzling effect of interest rates"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span></code></pre></div>
-<p><img src="open_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
+<p><img src="gl4-open_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
 <p>Voilà, we found that in model OPEN a reaction function that decreases interest rates brings the model back to a stable equilibrium.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
