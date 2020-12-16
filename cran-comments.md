@@ -1,9 +1,26 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Added more details about the package functionality and implemented
+methods in the Description text.
+
+* Added references in the Description text.
+
+* Fixed a bug in the `sfcr_matrix_display()` function.
+
+* Added a validity check to the `sfcr_baseline()` function.
+
+* Added a new unit test to the `sfcr_baseline()` function.
+
+All tests and checks work as before.
+
+
 ## Test environments
 * local Ubuntu 20.04.1 LTS, R 4.0.3
 * local Windows 10 x64, R 4.0.3
 * Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.2
 
-## R CMC check results (Local Ubuntu 20.04.1)
+## R CMD check results (Local Ubuntu 20.04.1)
 There were no ERRORs or WARNINGs or NOTEs.
 
 ## R CMD check results (Local Windows 10x64)
