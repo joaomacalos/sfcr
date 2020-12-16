@@ -40,37 +40,37 @@
   # TODO: tryCatch only once as it damages performance
 
   for (.i in 2:periods) {
-    for (block in seq_along(blocks)) {
+    for (.block in seq_along(blocks)) {
 
-      id <- equations_id[[block]]
+      .id <- equations_id[[.block]]
 
       # If 1 variable in the block, it is deterministic and no iteration is required.
-      if (length(id) == 1) {
-        m[.i, id] <- eval(exprs[[id]])
-        m[.i, block_names[[block]]] <- 1
+      if (length(.id) == 1) {
+        m[.i, .id] <- eval(exprs[[.id]])
+        m[.i, block_names[[.block]]] <- 1
       }
 
       # If cyclical block, use Gauss-Seidel algorithm
       else {
 
-        for (ite in 1:max_ite) {
-          for (var in id) {
+        for (.ite in 1:max_ite) {
+          for (.v in .id) {
 
-            m[.i, var] <- suppressMessages(eval(exprs[[var]]))
+            m[.i, .v] <- suppressMessages(eval(exprs[[.v]]))
 
-            checks[[var]] <- suppressMessages(abs(m[.i, var] - holdouts[[var]])/(holdouts[[var]] + 1e-15))
+            checks[[.v]] <- suppressMessages(abs(m[.i, .v] - holdouts[[.v]])/(holdouts[[.v]] + 1e-15))
 
           }
 
-          m[.i, block_names[[block]]] <- ite
+          m[.i, block_names[[.block]]] <- .ite
 
-          if (any(!is.finite(checks[id]))) rlang::abort(message = "Gauss-Seidel algorithm failed to converge. Check the initial values to exclude any division by zero or other invalid operations. If the problem persists, try a different method.")
+          if (any(!is.finite(checks[.id]))) rlang::abort(message = "Gauss-Seidel algorithm failed to converge. Check the initial values to exclude any division by zero or other invalid operations. If the problem persists, try a different method.")
 
-          if (all(checks[id] < tol)) {
+          if (all(checks[.id] < tol)) {
             break
           } else {
-            for (var in id) {
-              holdouts[[var]] <- m[.i, var]
+            for (.v in .id) {
+              holdouts[[.v]] <- m[.i, .v]
             }
           }
 

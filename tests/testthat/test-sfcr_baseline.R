@@ -25,12 +25,12 @@ test_that("Number of columns equals to number of endogenous, exogenous, and para
 
 test_that("Error if random noise is included", {
   eqs$e11 <- H_s ~ G_d + TX_d + H_s[-1] + rnorm(1)
-  expect_error(sfcr_baseline(eqs, ext, periods = 10), 'Please define random variations as an external parameter.')
+  expect_error(sfcr_baseline(eqs, ext, periods = 5), 'Please define random variations as an external parameter.')
 })
 
 test_that("Error if lag > 2 is included", {
   eqs$e11 <- H_s ~ G_d + TX_d + H_s[-2]
-  expect_error(sfcr_baeline(eqs, exg, params, periods = 10))
+  expect_error(sfcr_baeline(eqs, exg, params, periods = 5))
 })
 
 test_that("No error if name overlap with leading '.' and '_'", {
@@ -41,7 +41,7 @@ test_that("No error if name overlap with leading '.' and '_'", {
   eqs$e8 <- G_s ~ bar_G_s
   eqs$e11 <- H_s ~ bar_G_s - TX_d + H_s[-1]
   ext <- list(bar_G_s ~ 20, W ~ 1, G_d ~ 20, alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
-  expect_s3_class(sfcr_baseline(eqs, ext, periods = 10), 'sfcr_tbl')
+  expect_s3_class(sfcr_baseline(eqs, ext, periods = 5), 'sfcr_tbl')
 })
 
 test_that("No error if name overlap with trailing '.' and '_'", {
@@ -52,5 +52,28 @@ test_that("No error if name overlap with trailing '.' and '_'", {
   eqs$e8 <- G_s ~ G_s_bar
   eqs$e11 <- H_s ~ G_s_bar - TX_d + H_s[-1]
   ext <- list(G_s_bar ~ 20, W ~ 1, alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
-  expect_s3_class(sfcr_baseline(eqs, ext, periods = 10), 'sfcr_tbl')
+  expect_s3_class(sfcr_baseline(eqs, ext, periods = 5, method = "Gauss"), 'sfcr_tbl')
+})
+
+
+test_that("Error if duplicated endogenous variables", {
+  eqs$e12 <- H_s ~ TX_d
+  expect_error(sfcr_baseline(eqs, ext, periods = 2), "The endogenous variable `H_s` was defined more than once. Please check your model and try again.")
+})
+
+test_that("Error if two duplicated endogenous variables", {
+  eqs$e12 <- H_s ~ TX_d
+  eqs$e13 <- N_d ~ Y
+  expect_error(sfcr_baseline(eqs, ext, periods = 2), "The endogenous variables `H_s, N_d` were defined more than once. Please check your model and try again.")
+})
+
+
+test_that("Error if invalid name .i in endogenous variables", {
+  eqs$e12 <- .i ~ TX_d
+  expect_error(sfcr_baseline(eqs, ext, periods = 2), "Invalid name detected! Please don't use \".i\" to name any variable.")
+})
+
+test_that("Error if invalid name .i in external variables", {
+  ext <- sfcr_set(ext, .i ~ 15)
+  expect_error(sfcr_baseline(eqs, ext, periods = 2), "Invalid name detected! Please don't use \".i\" to name any variable.")
 })
