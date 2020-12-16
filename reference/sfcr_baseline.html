@@ -257,7 +257,7 @@ package is used to implement the two consecutive depth-first searches.</p><ul>
 <p>The <code>sfcr</code> package provides three algorithms to solve the blocks of cyclical equations:
 the Gauss-Seidel algorithm, the Broyden algorithm, and the Newton-Raphson algorithm. The
 default method is "Broyden" as it tends to be fastest one.</p>
-<p>See (Kinsella and OShea 2011)
+<p>See (Kinsella and OShea 2010)
  for details on the Gauss-Seidel algorithm and
 (Peressini et al. 1988)
  for details on the Broyden and Newton-Raphson
@@ -265,7 +265,7 @@ algorithms.</p>
 <p>The "Broyden" algorithm uses the <code><a href='https://rdrr.io/pkg/rootSolve/man/jacobian.full.html'>rootSolve::jacobian.full()</a></code> function to get the
 initial Jacobian matrix, and compiled code from <code>RcppArmadillo</code> to invert the
 jacobians. See also https://www.math.usm.edu/lambers/mat419/lecture11.pdf.</p>
-<p>The Gauss Seidel algorithm is implemented as described by (Kinsella and OShea 2011)
+<p>The Gauss Seidel algorithm is implemented as described by (Kinsella and OShea 2010)
 .
 Finally, the "Newton" method uses the <code><a href='https://rdrr.io/pkg/rootSolve/man/multiroot.html'>rootSolve::multiroot()</a></code> function to solve the system.</p><ul>
 <li><p>Hidden equation:</p></li>
@@ -290,7 +290,7 @@ the following steps:</p><ol>
 The function will check that this proportion remains the same for all simulated periods.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Kinsella S, OShea T (2011).
+    <p>Kinsella S, OShea T (2010).
 &#8220;Solution and Simulation of Large Stock Flow Consistent Monetary Production Models via the Gauss Seidel Algorithm.&#8221;
 <em>SSRN Electronic Journal</em>.
 doi: <a href='https://doi.org/10.2139/ssrn.1729205'>10.2139/ssrn.1729205</a>
