@@ -90,6 +90,23 @@ sfcr_get_blocks <- function(sfcr_tbl) {
 }
 
 
+#' Abort if duplicated variables
+#'
+#' @param dups name(s) of offending variables
+#'
+#' @author João Macalós
+#'
+#' @keywords internal
+#'
+.abort_if_dup <- function(dups) {
+  if (length(dups) == 1) {
+    message = paste0("The endogenous variable `", dups, "` was defined more than once. Please check your model and try again.")
+  } else {
+    message = paste0("The endogenous variables `", paste0(dups, collapse = ", "), "` were defined more than once. Please check your model and try again.")
+  }
+  rlang::abort(message = message)
+}
+
 #' Simulate the baseline scenario of a stock-flow consistent model
 #'
 #' The \code{sfcr_baseline()} function is used to simulate a SFC model.
@@ -196,26 +213,41 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
 
   match.arg(method, c("Gauss", "Newton", "Broyden"))
 
-  #external <- dplyr::bind_rows(.eq_as_tb(exogenous), .eq_as_tb(parameters))
   external <- .eq_as_tb(external)
 
   s1 <- .sfcr_find_order(equations)
 
   # Checks:
 
-  # 1. Random vars not defined together with the endogenous variables
-  # If defined there, the random numbers will change at each iteration and not at each period.
+  # 1. Check for duplicates
 
-  if (mean(grepl('rnorm|rbinom|runif', s1$rhs)) > 0) {stop ("Please define random variations as an external parameter.")}
+  is_dup <- duplicated(s1$lhs)
+  if (any(is_dup)) {
+    dups <- s1$lhs[which(is_dup)]
+    .abort_if_dup(dups)
+  }
 
-  # 2. Check that a variable defined as external was not defined as endogenous:
+  # 2. Check for invalid variable name (.i)
+
+  is_invalid_name <- stringr::str_detect(paste0(c(s1$lhs, s1$rhs, external$lhs), collapse = " "), "(?<=[:blank:]|^).i(?=[:blank:]|$)")
+
+  if (isTRUE(is_invalid_name)) {
+    rlang::abort("Invalid name detected! Please don't use \".i\" to name any variable.")
+  }
+
+  # 3. Check that a variable defined as external was not defined as endogenous:
 
   if (mean(external$lhs %in% s1$lhs) > 0) {
     p1 <- which((external$lhs %in% s1$lhs) > 0)
     rlang::abort(paste0("The variable(s) in `", paste0(external$lhs[p1], collapse = ", "), "` was/were defined both as endogenous and external variable(s). Please check the equations and try again."))
   }
 
-  # 3. Check initial names are correct
+  # 4. Random vars not defined together with the endogenous variables
+  # If defined there, the random numbers will change at each iteration and not at each period.
+
+  if (mean(grepl('rnorm|rbinom|runif', s1$rhs)) > 0) {stop ("Please define random variations as an external parameter.")}
+
+  # 5. Check initial names are correct
 
   if (!is.null(initial)) {
     init_vars <- .eq_as_tb(initial)$lhs

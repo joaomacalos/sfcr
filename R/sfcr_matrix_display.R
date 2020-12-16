@@ -57,6 +57,7 @@
 
   matrix <- matrix %>%
     dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, "d\\((.*?)\\)", "\\(\\1 - \\1\\[-1\\]\\)"))) %>%
+    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, "_", "\\\\_"))) %>%
     dplyr::mutate(dplyr::across(-1, ~gsub(" ", "", .x))) %>%
     dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, purrr::imap_chr(words, function(x, y) y = x)))) %>%
     dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, purrr::imap_chr(v2, function(x, y) y = x)))) %>%
