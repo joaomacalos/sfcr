@@ -175,7 +175,7 @@
   method <span class="op">=</span> <span class="st">"Broyden"</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.214   0.017   0.231</span></code></pre></div>
+<span class="co">#&gt;   0.212   0.020   0.234</span></code></pre></div>
 <p>We can check that the model generates the same long-run results as the model presented in page 69 <span class="citation">Godley and Lavoie (2007)</span>..</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sim</span> <span class="op">%&gt;%</span>
@@ -302,8 +302,8 @@
 <p>Another benefit of having a transactions-flow matrix that is validated in the model is that we can confidently construct a Sankey’s representation of this matrix with the <code><a href="../../reference/sfcr_sankey.html">sfcr_sankey()</a></code> function:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/sfcr_sankey.html">sfcr_sankey</a></span><span class="op">(</span><span class="va">tfm_sim</span>, <span class="va">sim</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-9f85084ab00dde238f89" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9f85084ab00dde238f89">{"x":{"links":{"source":[5,7,6,5,5,0,1,2,3,4],"target":[0,1,2,3,4,9,9,8,10,10],"value":[42.718392,20,62.718392,12.543678,7.456322,42.718392,20,62.718392,12.543678,7.456322]},"nodes":{"name":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"],"group":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6c5efb5cf6a4694bba24" style="width:700px;height:432.632880098888px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6c5efb5cf6a4694bba24">{"x":{"links":{"source":[5,7,6,5,5,0,1,2,3,4],"target":[0,1,2,3,4,9,9,8,10,10],"value":[42.718392,20,62.718392,12.543678,7.456322,42.718392,20,62.718392,12.543678,7.456322]},"nodes":{"name":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"],"group":["Consumption","Govt. Exp.","Factor Income","Taxes","Ch. Money","Households","Firms","Government","Households","Firms","Government"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"dollars","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="dag-the-structure-of-the-model" class="section level2">
