@@ -229,7 +229,7 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
 
   # 2. Check for invalid variable name (.i)
 
-  is_invalid_name <- stringr::str_detect(paste0(c(s1$lhs, s1$rhs, external$lhs), collapse = " "), "(?<=[:blank:]|^).i(?=[:blank:]|$)")
+  is_invalid_name <- stringr::str_detect(paste0(c(s1$lhs, s1$rhs, external$lhs), collapse = " "), "(?<=[:blank:]|^)\\.i(?=[:blank:]|$)")
 
   if (isTRUE(is_invalid_name)) {
     rlang::abort("Invalid name detected! Please don't use \".i\" to name any variable.")
