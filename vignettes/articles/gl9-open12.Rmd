@@ -888,9 +888,7 @@ openflex_eqs <- sfcr_set(
   # UK Exchange rate - eq. 12.89FL
   xr_uk ~ b_ukus_s/b_ukus_d,           
   # 12.90G : Supply of UK bills to us
-  b_ukus_s ~ b_us_s - b_usus_s - b_cb_usus_d - b_cb_ukus_s,
-  # Hidden
-  b_cb_ukuk_sa ~ b_uk_s - b_ukuk_s - b_usuk_s
+  b_ukus_s ~ b_us_s - b_usus_s - b_cb_usus_d - b_cb_ukus_s
 )
 
 
