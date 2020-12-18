@@ -1,16 +1,7 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Added more details about the package functionality and implemented
-methods in the Description text.
-
-* Added references in the Description text.
-
-* Fixed a bug in the `sfcr_matrix_display()` function.
-
-* Added a validity check to the `sfcr_baseline()` function.
-
-* Added a new unit test to the `sfcr_baseline()` function.
+* Fixed typos in the description as requested.
 
 All tests and checks work as before.
 

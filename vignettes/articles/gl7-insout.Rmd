@@ -159,8 +159,8 @@ insout_ext <- sfcr_set(
   Nfe ~ 133.28, ## Zezza supplies this exogenous full employment value
   #Nfe ~ 142.75,
   
-  # In model DISING Nfe was defined as `s / pr` but it doesn't work here.
-  # I discuss this issue in experiment #2.
+  # In model DISINF Nfe was defined as `s / pr`, but it doesn't work here.
+  # I discuss this issue in the scenarios.
   
   # PARAMETERS
   
