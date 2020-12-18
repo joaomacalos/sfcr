@@ -897,7 +897,6 @@ openflex_ext <- sfcr_set(
   open12_ext,
   # Eq. 12.91R
   r_uk ~ 0.03,
-  #b_cb_ukuk_s ~ 0.02031,
   b_cb_ukus_s ~ 0.02031
 )
 ```
