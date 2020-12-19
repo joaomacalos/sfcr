@@ -125,9 +125,9 @@ lambda41 <- -(lambda44 + lambda42 + lambda43)
 
 # lambda21 = - (lambda22 + lambda23 + lambda24)
 lambda21 = -(lambda22 + lambda23 + lambda24)
-cat("lambda21: ", lambda21)
-cat("lambda31: ", lambda31)
-cat("lambda41: ", lambda41)
+cat("lambda21: ", lambda21, "\n")
+cat("lambda31: ", lambda31, "\n")
+cat("lambda41: ", lambda41, "\n")
 
 lambda12 = lambda21
 lambda13 = lambda31
@@ -143,7 +143,7 @@ new_lambdas <- c(lambda10 = lambda10,
                  lambda14 = lambda14, 
                  lambda15 = lambda15)
 
-iwalk(new_lambdas, ~cat(.y, " = ", .x, "\n"))
+iwalk(new_lambdas, ~cat(.y, ": ", .x, "\n"))
 ```
 
 With the new `lambda` values at hand, we can write down the external variables
