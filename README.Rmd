@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# sfcr
+# sfcr <img src='man/figures/sfcr.png' align="right" height="139" />
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=master)](https://travis-ci.com/joaomacalos/sfcr)

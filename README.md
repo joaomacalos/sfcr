@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sfcr
+# sfcr <img src='man/figures/sfcr.png' align="right" height="139" />
 
 <!-- badges: start -->
 
