@@ -91,22 +91,19 @@
     dplyr::mutate(rhs2 = paste0(.data$rhs, " - ", .data$lhs2)) %>%
     dplyr::mutate(lhs2 = stringr::str_replace_all(.data$lhs2, c("\\[" = "\\\\[", "\\]" = "\\\\]")))
 
-  # equations[, "id"][equations[, "block"] == x]
-  #blk <- purrr::map(blocks, ~dplyr::filter(eqs2, block == .x))
   blk <- purrr::map(blocks, ~eqs2[eqs2$block == .x,])
 
   blk <- purrr::map(blk, .prep_broyden)
 
   block_names <- purrr::map(blocks, ~paste0("block", .x))
 
-  ## Parsed non-linear expressions (for nleqslv)
+  ## Parsed non-linear expressions
   exs_nl <- purrr::map(blk, function(.X) purrr::map(.X$rhs2, ~rlang::parse_expr(.x)))
 
-  ## Parsed linear expressions (for Gauss Seidel)
+  ## Parsed linear expressions
   exs_l <- purrr::map(blk, function(.X) purrr::map(.X$rhs, ~rlang::parse_expr(.x)))
 
   block_foo <- function(.time, .x, parms) {
-  #block_foo <- function(.x) {
     .y <- numeric(length(exs))
     for (.id in seq_along(exs)) {
       .y[.id] <- eval(exs[[.id]])
@@ -128,7 +125,6 @@
 
       } else {
 
-        # If acyclical block --> Gauss-Seidel
         if (vctrs::vec_size(block) == 1) {
 
           m[.i, idvar_] <- eval(exs_l[[.b]][[1]])
