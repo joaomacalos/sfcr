@@ -1,0 +1,9 @@
+home:
+  title: Simulate Stock-Flow Consistent (SFC) models in R
+  description: An R package to simulate, validate, and visualize stock-flow consistent models in R.
+
+template:
+  opengraph:
+    twitter:
+      creator: "@jpmacalos"
+      site: "www.joaomacalos.com"
