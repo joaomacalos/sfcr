@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create shock(s) to add to a sfcr_scenario(). — sfcr_shock • sfcr</title>
+<title>Scan columns to fill whenever there's only one value missing. — .scan_cols • sfcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create shock(s) to add to a sfcr_scenario(). — sfcr_shock" />
-<meta property="og:description" content="Create shock(s) to add to a sfcr_scenario()." />
+<meta property="og:title" content="Scan columns to fill whenever there's only one value missing. — .scan_cols" />
+<meta property="og:description" content="Scan columns to fill whenever there's only one value missing." />
 
 
 
@@ -150,67 +150,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create shock(s) to add to a <code>sfcr_scenario()</code>.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_shock.R'><code>R/sfcr_shock.R</code></a></small>
-    <div class="hidden name"><code>sfcr_shock.Rd</code></div>
+    <h1>Scan columns to fill whenever there's only one value missing.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_portfolio.R'><code>R/sfcr_portfolio.R</code></a></small>
+    <div class="hidden name"><code>dot-scan_cols.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create shock(s) to add to a <code><a href='sfcr_scenario.html'>sfcr_scenario()</a></code>.</p>
+    <p>Scan columns to fill whenever there's only one value missing.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfcr_shock</span><span class='op'>(</span><span class='va'>variables</span>, <span class='va'>start</span>, <span class='va'>end</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.scan_cols</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>variables</th>
-      <td><p>A list with formula(e) containing the name of the variable(s)
-that will be shocked on the left-hand side and their new values on the right-
-hand side.</p></td>
-    </tr>
-    <tr>
-      <th>start</th>
-      <td><p>An integer indicating the period when the shock takes place.</p></td>
-    </tr>
-    <tr>
-      <th>end</th>
-      <td><p>An integer indicating the period when the shock ends.</p></td>
+      <th>m</th>
+      <td><p>A square matrix</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>João Macalós, <a href='mailto:joaomacalos@gmail.com'>joaomacalos@gmail.com</a></p>
+    <p>João Macalós</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>sfcr_shock</span><span class='op'>(</span>
- variables <span class='op'>=</span> <span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span><span class='va'>G_d</span> <span class='op'>~</span> <span class='fl'>30</span>, <span class='va'>W</span> <span class='op'>~</span> <span class='fl'>1.5</span><span class='op'>)</span>,
- start <span class='op'>=</span> <span class='fl'>5</span>,
- end <span class='op'>=</span> <span class='fl'>66</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $variables
-#&gt; [[1]]
-#&gt; G_d ~ 30
-#&gt; &lt;environment: 0xef5a3d8&gt;
-#&gt; 
-#&gt; [[2]]
-#&gt; W ~ 1.5
-#&gt; &lt;environment: 0xef5a3d8&gt;
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "sfcr_set" "list"    
-#&gt; 
-#&gt; $start
-#&gt; [1] 5
-#&gt; 
-#&gt; $end
-#&gt; [1] 66
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "sfcr_shock" "list"      </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

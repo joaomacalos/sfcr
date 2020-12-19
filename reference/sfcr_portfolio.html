@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create shock(s) to add to a sfcr_scenario(). — sfcr_shock • sfcr</title>
+<title>Find a valid matrix of portfolio parameters — sfcr_portfolio • sfcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Create shock(s) to add to a sfcr_scenario(). — sfcr_shock" />
-<meta property="og:description" content="Create shock(s) to add to a sfcr_scenario()." />
+<meta property="og:title" content="Find a valid matrix of portfolio parameters — sfcr_portfolio" />
+<meta property="og:description" content="The sfcr_portfolio() function calculates a valid matrix of portfolio
+parameters by applying the symmetry condition and then filling the missing
+rows accordingly to the vertical and horizontal adding-up constraints." />
 
 
 
@@ -150,66 +152,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create shock(s) to add to a <code>sfcr_scenario()</code>.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_shock.R'><code>R/sfcr_shock.R</code></a></small>
-    <div class="hidden name"><code>sfcr_shock.Rd</code></div>
+    <h1>Find a valid matrix of portfolio parameters</h1>
+    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_portfolio.R'><code>R/sfcr_portfolio.R</code></a></small>
+    <div class="hidden name"><code>sfcr_portfolio.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create shock(s) to add to a <code><a href='sfcr_scenario.html'>sfcr_scenario()</a></code>.</p>
+    <p>The <code>sfcr_portfolio()</code> function calculates a valid matrix of portfolio
+parameters by applying the symmetry condition and then filling the missing
+rows accordingly to the vertical and horizontal adding-up constraints.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfcr_shock</span><span class='op'>(</span><span class='va'>variables</span>, <span class='va'>start</span>, <span class='va'>end</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>sfcr_portfolio</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>known</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>variables</th>
-      <td><p>A list with formula(e) containing the name of the variable(s)
-that will be shocked on the left-hand side and their new values on the right-
-hand side.</p></td>
+      <th>m</th>
+      <td><p>A square matrix of parameter names</p></td>
     </tr>
     <tr>
-      <th>start</th>
-      <td><p>An integer indicating the period when the shock takes place.</p></td>
-    </tr>
-    <tr>
-      <th>end</th>
-      <td><p>An integer indicating the period when the shock ends.</p></td>
+      <th>known</th>
+      <td><p>A named vector of known parameters. One entry for each symmetry
+condition is enough to find a valid matrix.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function calculates only the values of the rates of return matrix, i.e.,
+the internal matrix. The adding-up constraint number 1, that calculates the
+share of assets in the net wealth and the impact of regular income to wealth
+ratio must be calculated separately.</p>
+<p>If supplied with insufficient parameters, the function will return a
+matrix with NA values.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>João Macalós, <a href='mailto:joaomacalos@gmail.com'>joaomacalos@gmail.com</a></p>
+    <p>João Macalós</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>sfcr_shock</span><span class='op'>(</span>
- variables <span class='op'>=</span> <span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span><span class='va'>G_d</span> <span class='op'>~</span> <span class='fl'>30</span>, <span class='va'>W</span> <span class='op'>~</span> <span class='fl'>1.5</span><span class='op'>)</span>,
- start <span class='op'>=</span> <span class='fl'>5</span>,
- end <span class='op'>=</span> <span class='fl'>66</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $variables
-#&gt; [[1]]
-#&gt; G_d ~ 30
-#&gt; &lt;environment: 0xef5a3d8&gt;
+    <pre class="examples"><div class='input'><span class='va'>j1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"lambda"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11</span><span class='op'>:</span><span class='fl'>14</span>, <span class='fl'>21</span><span class='op'>:</span><span class='fl'>24</span>, <span class='fl'>31</span><span class='op'>:</span><span class='fl'>34</span>, <span class='fl'>41</span><span class='op'>:</span><span class='fl'>44</span><span class='op'>)</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>4</span>, nrow <span class='op'>=</span> <span class='fl'>4</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>j2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>lambda12 <span class='op'>=</span> <span class='fl'>0</span>, lambda13 <span class='op'>=</span> <span class='fl'>0</span>, lambda14 <span class='op'>=</span> <span class='fl'>0</span>, lambda23 <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, lambda24 <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, lambda34 <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span><span class='op'>)</span>
+
+<span class='fu'>sfcr_portfolio</span><span class='op'>(</span><span class='va'>j1</span>, <span class='va'>j2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $lambdas
+#&gt; lambda11 lambda21 lambda22 lambda31 lambda32 lambda33 lambda41 lambda42 
+#&gt;        0        0       30        0      -15       30        0      -15 
+#&gt; lambda43 lambda44 
+#&gt;      -15       30 
 #&gt; 
-#&gt; [[2]]
-#&gt; W ~ 1.5
-#&gt; &lt;environment: 0xef5a3d8&gt;
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "sfcr_set" "list"    
-#&gt; 
-#&gt; $start
-#&gt; [1] 5
-#&gt; 
-#&gt; $end
-#&gt; [1] 66
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "sfcr_shock" "list"      </div><div class='input'>
+#&gt; $matrix
+#&gt;      [,1] [,2] [,3] [,4]
+#&gt; [1,]    0    0    0    0
+#&gt; [2,]    0   30  -15  -15
+#&gt; [3,]    0  -15   30  -15
+#&gt; [4,]    0  -15  -15   30
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
