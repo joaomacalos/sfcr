@@ -4,6 +4,8 @@ home:
 
 template:
   opengraph:
+    image:
+      src: man/figures/card.png
     twitter:
       creator: "@jpmacalos"
       site: "www.joaomacalos.com"
