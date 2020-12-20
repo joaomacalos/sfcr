@@ -27,8 +27,8 @@ new_sfcr_set <- function(list) {
 #'
 #' @details
 #'
-#' This function is a S3 generic that applicable to only two inputs: formulas and
-#' \code{sfcr_set}s. It is used to create a new set of equations or to modify an existing
+#' This function is a S3 generic that applicable to only two inputs: \code{formula} and
+#' \code{sfcr_set}. It is used to create a new set of equations or to modify an existing
 #' one.
 #'
 #' Therefore, the equations must be written using the R formula syntax, i.e., the left-hand
@@ -42,7 +42,8 @@ new_sfcr_set <- function(list) {
 #'   be recognized as a lagged variable.
 #'
 #' * If a variable is defined inside \code{d()}, the \code{sfcr} engines will transform
-#' them into a first difference equations.
+#' them into a first difference equation. For example, \code{d(Hh)} is internally transformed
+#' into \code{(Hh - Hh[-1])}.
 #'
 #'
 #' @param ... The formulas used to define the equations and external
