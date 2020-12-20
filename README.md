@@ -126,6 +126,25 @@ standard R syntax. Furthermore, their output is a `tibble`, meaning that
 it can be easily manipulated with `dplyr` and other `tidyverse` tools
 and plotted with `ggplot2`.
 
+### Acknowledgments
+
+I’m grateful to Severin Reissl for his very useful comments and for
+always pointing me in the right direction, to Marc Lavoie for answering
+all my questions about SFC modeling, and to Italo Pedrosa for our
+discussions about the state of the SFC field.
+
+I’d also like to acknowledge all the developers and academics that share
+their code and make the SFC field alive. In particular, many thanks to
+Antoine Godin for answering all my queries about the `PKSFC`
+[package](https://github.com/S120/PKSFC), from which I draw much
+inspiration, specially in the DAGs section of the package, to Gabriel
+Petrini da Silveira and Kenn Takara for their `pysolve3`
+[package](https://github.com/gpetrini/pysolve3), from which I found the
+references to implement the Broyden solver in R, and to Gennaro Zezza
+for his invaluable
+[macros](http://gennaro.zezza.it/software/eviews/gl2006.php) to simulate
+the models in Godley and Lavoie (2007).
+
 ### References
 
 <div id="refs" class="references hanging-indent">
