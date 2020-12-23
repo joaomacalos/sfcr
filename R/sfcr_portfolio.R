@@ -140,12 +140,19 @@
 #' share of assets in the net wealth and the impact of regular income to wealth
 #' ratio must be calculated separately.
 #'
-#' @param m A square matrix of parameter names
+#'
+#'
+#' @param m A matrix of parameter names
 #' @param known A named vector of known parameters. One entry for each symmetry
 #' condition is enough to find a valid matrix.
 #'
 #' @details If supplied with insufficient parameters, the function will return a
 #' matrix with NA values.
+#'
+#' This function requires at least (n^2 - n)/2 known parameters to find a valid portfolio
+#' matrix, where n is the number of rows/columns. This is achieved by setting known parameters
+#' outside the diagonal and not on symmetrical entries, i.e., not lambda12 and lambda21, for
+#' example.
 #'
 #' @author João Macalós
 #'
