@@ -19,8 +19,8 @@ external variables, initial values, and also to modify the variables inside
 the \code{sfcr_shock()} function.
 }
 \details{
-This function is a S3 generic that applicable to only two inputs: formulas and
-\code{sfcr_set}s. It is used to create a new set of equations or to modify an existing
+This function is a S3 generic that applicable to only two inputs: \code{formula} and
+\code{sfcr_set}. It is used to create a new set of equations or to modify an existing
 one.
 
 Therefore, the equations must be written using the R formula syntax, i.e., the left-hand
@@ -33,7 +33,8 @@ native to R language: \code{[-1]}, and \code{d()}.
 \item If a variable defined with \code{sfcr_set()} is followed by \code{[-1]}, it will
 be recognized as a lagged variable.
 \item If a variable is defined inside \code{d()}, the \code{sfcr} engines will transform
-them into a first difference equations.
+them into a first difference equation. For example, \code{d(Hh)} is internally transformed
+into \code{(Hh - Hh[-1])}.
 }
 }
 \examples{

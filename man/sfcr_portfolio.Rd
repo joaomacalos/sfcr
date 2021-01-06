@@ -7,7 +7,7 @@
 sfcr_portfolio(m, known)
 }
 \arguments{
-\item{m}{A square matrix of parameter names}
+\item{m}{A matrix of parameter names}
 
 \item{known}{A named vector of known parameters. One entry for each symmetry
 condition is enough to find a valid matrix.}
@@ -25,6 +25,11 @@ ratio must be calculated separately.
 
 If supplied with insufficient parameters, the function will return a
 matrix with NA values.
+
+This function requires at least (n^2 - n)/2 known parameters to find a valid portfolio
+matrix, where n is the number of rows/columns. This is achieved by setting known parameters
+outside the diagonal and not on symmetrical entries, i.e., not lambda12 and lambda21, for
+example.
 }
 \examples{
 j1 <- matrix(paste0("lambda", c(11:14, 21:24, 31:34, 41:44)), ncol = 4, nrow = 4, byrow = TRUE)
