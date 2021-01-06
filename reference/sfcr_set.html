@@ -185,8 +185,8 @@ correct indices can be found with <code><a href='sfcr_set_index.html'>sfcr_set_i
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is a S3 generic that applicable to only two inputs: formulas and
-<code>sfcr_set</code>s. It is used to create a new set of equations or to modify an existing
+    <p>This function is a S3 generic that applicable to only two inputs: <code>formula</code> and
+<code>sfcr_set</code>. It is used to create a new set of equations or to modify an existing
 one.</p>
 <p>Therefore, the equations must be written using the R formula syntax, i.e., the left-hand
 side of each equation is separated from the right-hand side with a <code><a href='https://rdrr.io/r/base/tilde.html'>~</a></code> ("twiddle")
@@ -196,7 +196,8 @@ native to R language: <code>[-1]</code>, and <code>d()</code>.</p><ul>
 <li><p>If a variable defined with <code>sfcr_set()</code> is followed by <code>[-1]</code>, it will
 be recognized as a lagged variable.</p></li>
 <li><p>If a variable is defined inside <code>d()</code>, the <code>sfcr</code> engines will transform
-them into a first difference equations.</p></li>
+them into a first difference equation. For example, <code>d(Hh)</code> is internally transformed
+into <code>(Hh - Hh[-1])</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>

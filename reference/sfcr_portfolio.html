@@ -173,7 +173,7 @@ rows accordingly to the vertical and horizontal adding-up constraints.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>m</th>
-      <td><p>A square matrix of parameter names</p></td>
+      <td><p>A matrix of parameter names</p></td>
     </tr>
     <tr>
       <th>known</th>
@@ -190,6 +190,10 @@ share of assets in the net wealth and the impact of regular income to wealth
 ratio must be calculated separately.</p>
 <p>If supplied with insufficient parameters, the function will return a
 matrix with NA values.</p>
+<p>This function requires at least (n^2 - n)/2 known parameters to find a valid portfolio
+matrix, where n is the number of rows/columns. This is achieved by setting known parameters
+outside the diagonal and not on symmetrical entries, i.e., not lambda12 and lambda21, for
+example.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>João Macalós</p>
