@@ -7,6 +7,8 @@
 
 [![Travis build
 status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://travis-ci.com/joaomacalos/sfcr)
+[![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version/sfcr)](https://CRAN.R-project.org/package=sfcr)
+[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/sfcr)](https://CRAN.R-project.org/package=sfcr)
 <!-- badges: end -->
 
 The goal of the `sfcr` package is to provide an intuitive and `tidy` way
@@ -14,8 +16,14 @@ to estimate stock-flow consistent (SFC) models with R.
 
 ## Installation
 
-You can install the development version from
-[GitHub](https://github.com/) with:
+`sfcr` is on CRAN and can be installed with:
+
+``` r
+install.packages("sfcr")
+```
+
+For the development version available on [GitHub](https://github.com/),
+use the `devtools` package for installation:
 
 ``` r
 # install.packages("devtools")
@@ -125,6 +133,10 @@ With `sfcr`, the models are written entirely within R and use the
 standard R syntax. Furthermore, their output is a `tibble`, meaning that
 it can be easily manipulated with `dplyr` and other `tidyverse` tools
 and plotted with `ggplot2`.
+
+Check the [notebooks](https://joaomacalos.github.io/sfcr/articles/) that
+replicate the models in Godley and Lavoie (2007) for more detailed
+examples on the usage of the package.
 
 ### Acknowledgments
 
