@@ -121,3 +121,47 @@ test_that("Test that mix of good and bad shock vars throw the correct error", {
     periods = 4
   ), "Shocked variable `Gd` is not included in the external variables of the model. Please check your shocks and try again.")
 })
+
+test_that("Test that the lenght of shock vars are either 1 or equal to the length of the shock", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(G_d ~ seq(30, 45)),
+    start = 3,
+    end = 10
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = shock1,
+    periods = 10
+  ), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")
+})
+
+test_that("Test that the lenght of shock vars are either 1 or equal to the length of the shock", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(G_d ~ 30),
+    start = -1,
+    end = 5
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = shock1,
+    periods = 10
+  ), "Please supply a non-negative start period for the shock.")
+})
+
+
+test_that("Test that the lenght of shock vars are either 1 or equal to the length of the shock", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(G_d ~ 30),
+    start = 3,
+    end = 15
+  )
+
+  expect_error(sfcr_scenario(
+    baseline = sim_model,
+    scenario = shock1,
+    periods = 10
+  ), "The end of the shock must be smaller or equal to the periods in the scenario.")
+})
+

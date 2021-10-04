@@ -69,6 +69,62 @@
 }
 
 
+#' Check shocks for length consistency and warn about risks of using exogenous series
+#'
+#' This function executes two checks and issues one warning.
+#'
+#' First, it checks that the start of the shock is not negative and that the end
+#' of the shock is not bigger than the number of periods in the scenario.
+#'
+#'
+#' Secondly, it checks for consistency on the length of the shocks added to the scenario.
+#' Only two types of exogenous variables are allowed:
+#'
+#' 1) The exogenous variable is a constant that is repeated over time;
+#' 2) The exogenous variable has exactly the same length as the shock.
+#'
+#' Furthermore, it throws a warning that using exogenous series in a shock can lead to unexpected
+#' behavior if the length of the shock is not the same as the periods in the scenario.
+#'
+#' @param shock A sfcr_shock object
+#'
+#' @author João Macalós
+#'
+#' @keywords internal
+#'
+.check_shock_consistency <- function(shock, periods=periods) {
+
+  # Parse vars
+  vars <- .eq_as_tb(shock$variables)
+  parse_vars <- purrr::map(vars$rhs, ~eval(parse(text=.x)))
+  vars_length <- purrr::map_dbl(parse_vars, length)
+
+  # Duration of the shock
+  start = shock$start
+  end = shock$end
+
+  if (start < 0) {
+    rlang::abort("Please supply a non-negative start period for the shock.")
+  }
+
+  if (end > periods) {
+    rlang::abort("The end of the shock must be smaller or equal to the periods in the scenario.")
+  }
+
+  length_shock = length(seq(start, end))
+
+  if (mean(vars_length) > 1) {
+    abortifnot(all(vars_length %in% c(1, length_shock)), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")
+
+    # Warning
+    rlang::warn("Passing exogenous series with a shock can lead to unexpected behavior if the length of the series is smaller than the periods to the end of the scenario. Be cautious when using this functionality.", .frequency_id = "scenario_warn", .frequency="once")
+
+  }
+
+}
+
+
+
 #' Add scenarios to a \code{sfcr} model.
 #'
 #' @param baseline A model generated with the \code{sfcr_baseline()} function.
@@ -95,7 +151,8 @@ sfcr_scenario <- function(baseline, scenario, periods, max_iter = 350, tol = 1e-
 
   match.arg(method, c("Gauss", "Newton", "Broyden"))
 
-  # Check inheritance
+  # Check inheritance because I need to work with a list of sfcr_shocks, even if this list
+  # has only one item
 
   if (inherits(scenario, "sfcr_shock")) {
     scenario <- list(scenario)
@@ -126,12 +183,20 @@ sfcr_scenario <- function(baseline, scenario, periods, max_iter = 350, tol = 1e-
   }
 
 
+  # Check shock consistency
+  if (!is.null(scenario)) {
+    purrr::map(scenario, ~.check_shock_consistency(.x, periods))
+
+  }
+
+
   # If scenario is NULL, extend baseline model
   if (is.null(scenario)) {
     m <- .extend_baseline_matrix(baseline, periods)
   } else {
     m <- .sfcr_make_scenario_matrix(baseline, scenario, periods)
   }
+
 
   if (method == "Gauss") {
     s1 <- .sfcr_gauss_seidel(m, eqs, periods, max_iter, tol)

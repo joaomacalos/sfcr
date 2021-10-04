@@ -257,6 +257,22 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
     }
   }
 
+  # 6. Check that exogenous variables passsed as a sequence/series and not as a constant
+  # have the same length as the periods supplied
+
+  check_length_exogenous1 = purrr::map(external$rhs, function(x) eval(parse(text=x)))
+  check_length_exogenous2 = purrr::map_dbl(check_length_exogenous1, length)
+
+  # 7. Check that periods are bigger than one
+  if (periods < 2) {
+    rlang::abort("The minimum periods required to simulate a model is 2.")
+
+  }
+
+  if (mean(check_length_exogenous2) > 1) {
+    rlang::abort("At the baseline construct level, exogenous variables can only be supplied as a constant.")
+    }
+
   s2 <- .prep_equations(s1, external)
 
   s3 <- .make_matrix(s2, external, periods, initial = initial)

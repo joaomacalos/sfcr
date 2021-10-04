@@ -118,6 +118,69 @@ With `sfcr`, the models are written entirely within R and use the standard R syn
 
 Check the [notebooks](https://joaomacalos.github.io/sfcr/articles/) that replicate the models in @godley2007monetary for more detailed examples on the usage of the package.
 
+### Frequently Asked Questions
+
+**Q: Can you add exogenous series to a `sfcr` model?**
+
+A: Since version 0.2, the `sfcr` package only allow the utilization of exogenous variables in the `sfcr_scenario()` function. This functionality was excluded from the `sfcr_baseline()` function because it led to unexpected behavior when calculating scenarios on the top of those baseline models.
+
+The exogenous series can be added to the model with the help of `sfcr_shock()` and `sfcr_set()` functions. It is further required that the lenght of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.
+
+For example, the code supplied above can be modified to make `Gd` increase from 30 to 40 between periods 5 and 60 of the scenario:
+
+```{r}
+shock <- sfcr_shock(
+  variables = sfcr_set(
+    Gd ~ seq(30, 40, length.out=56)
+  ),
+  start = 5,
+  end = 60
+)
+
+sim2 <- sfcr_scenario(
+  baseline = sim,
+  scenario = shock,
+  periods = 60
+  )
+
+sim2
+```
+
+**Q: Can you add endogenous variables with more than one lag?**
+
+A: Yes, you can, but you need to use auxiliary variables. 
+
+For example, say that you want to modify model SIM to have Consumption `Cd` in period `t` defined as function of the moving average of disposable income. In this situation, you would have to code the variables as:
+
+```{r}
+eqs <- sfcr_set(
+  TXs ~ TXd,
+  YD ~ W * Ns - TXs,
+  YDlag1 ~ YD[-1],
+  YDlag2 ~ YDlag1[-1],
+  YDlag3 ~ YDlag2[-1],
+  YDmav ~ (YD + YDlag1 + YDlag2 + YDlag3) / 4,
+  Cd ~ alpha1 * YDmav + alpha2 * Hh[-1],
+  Hh ~ YD - Cd + Hh[-1],
+  Ns ~ Nd,
+  Nd ~ Y / W,
+  Cs ~ Cd,
+  Gs ~ Gd,
+  Y ~ Cs + Gs,
+  TXd ~ theta * W * Ns,
+  Hs ~ Gd - TXd + Hs[-1]
+)
+```
+
+
+
+### Submitting your code to the package repository
+
+Everyone is invited to submit your published SFC models developed with the `sfcr` package to the package repository to be displayed together with the models of @godley2007monetary.
+
+To do so, please submit a pull request or send me an email.
+
+
 ### Acknowledgments
 
 I'm grateful to Severin Reissl for his very useful comments and for always pointing me in the right direction, to Marc Lavoie for answering all my questions about SFC modeling, and to Italo Pedrosa for our discussions about the state of the SFC field. 
