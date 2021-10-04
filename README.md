@@ -152,7 +152,7 @@ those baseline models.
 
 The exogenous series can be added to the model with the help of
 `sfcr_shock()` and `sfcr_set()` functions. It is further required that
-the lenght of the exogenous time series being supplied be either 1 or
+the length of the exogenous time series being supplied be either 1 or
 exactly equal to length of the shock.
 
 For example, the code supplied above can be modified to make `Gd`

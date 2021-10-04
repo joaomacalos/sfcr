@@ -4,7 +4,7 @@
 #'
 #' @keywords internal
 #'
-#' @author JOão Macalós
+#' @author João Macalós
 #'
 .check_symmetry <- function(m) {
 

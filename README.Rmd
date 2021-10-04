@@ -125,7 +125,7 @@ Check the [notebooks](https://joaomacalos.github.io/sfcr/articles/) that replica
 
 A: Since version 0.2, the `sfcr` package only allow the utilization of exogenous variables in the `sfcr_scenario()` function. This functionality was excluded from the `sfcr_baseline()` function because it led to unexpected behavior when calculating scenarios on the top of those baseline models.
 
-The exogenous series can be added to the model with the help of `sfcr_shock()` and `sfcr_set()` functions. It is further required that the lenght of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.
+The exogenous series can be added to the model with the help of `sfcr_shock()` and `sfcr_set()` functions. It is further required that the length of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.
 
 For example, the code supplied above can be modified to make `Gd` increase from 30 to 40 between periods 5 and 60 of the scenario:
 
