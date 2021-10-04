@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sfcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows how to simulate the “SIM” model from Godley and Lavoie (2007 ch. 3), as well as how to add scenarios to this baseline model.</p>
+<p>This is a basic example which shows how to simulate the “SIM” model from Godley and Lavoie (2007ch. 3), as well as how to add scenarios to this baseline model.</p>
 <p>The <code><a href="reference/sfcr_set.html">sfcr_set()</a></code> function is used to create define the equations and external variables of the model.</p>
 <p>These sets are used to simulate the baseline scenario of the model with the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -217,6 +217,72 @@
 <span class="co">#&gt; #   alpha2 &lt;dbl&gt;, theta &lt;dbl&gt;</span></code></pre></div>
 <p>With <code>sfcr</code>, the models are written entirely within R and use the standard R syntax. Furthermore, their output is a <code>tibble</code>, meaning that it can be easily manipulated with <code>dplyr</code> and other <code>tidyverse</code> tools and plotted with <code>ggplot2</code>.</p>
 <p>Check the <a href="https://joaomacalos.github.io/sfcr/articles/">notebooks</a> that replicate the models in Godley and Lavoie (2007) for more detailed examples on the usage of the package.</p>
+<div id="frequently-asked-questions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#frequently-asked-questions" class="anchor"></a>Frequently Asked Questions</h3>
+<p><strong>Q: Can you add exogenous series to a <code>sfcr</code> model?</strong></p>
+<p>A: Since version 0.2, the <code>sfcr</code> package only allow the utilization of exogenous variables in the <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code> function. This functionality was excluded from the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> function because it led to unexpected behavior when calculating scenarios on the top of those baseline models.</p>
+<p>The exogenous series can be added to the model with the help of <code><a href="reference/sfcr_shock.html">sfcr_shock()</a></code> and <code><a href="reference/sfcr_set.html">sfcr_set()</a></code> functions. It is further required that the length of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.</p>
+<p>For example, the code supplied above can be modified to make <code>Gd</code> increase from 30 to 40 between periods 5 and 60 of the scenario:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">shock</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sfcr_shock.html">sfcr_shock</a></span><span class="op">(</span>
+  variables <span class="op">=</span> <span class="fu"><a href="reference/sfcr_set.html">sfcr_set</a></span><span class="op">(</span>
+    <span class="va">Gd</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">40</span>, length.out<span class="op">=</span><span class="fl">56</span><span class="op">)</span>
+  <span class="op">)</span>,
+  start <span class="op">=</span> <span class="fl">5</span>,
+  end <span class="op">=</span> <span class="fl">60</span>
+<span class="op">)</span>
+
+<span class="va">sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sfcr_scenario.html">sfcr_scenario</a></span><span class="op">(</span>
+  baseline <span class="op">=</span> <span class="va">sim</span>,
+  scenario <span class="op">=</span> <span class="va">shock</span>,
+  periods <span class="op">=</span> <span class="fl">60</span>
+  <span class="op">)</span>
+
+<span class="va">sim2</span>
+<span class="co">#&gt; # A tibble: 60 x 17</span>
+<span class="co">#&gt;    period   TXs    YD    Cd    Hh    Ns    Nd    Cs    Gs     Y   TXd    Hs</span>
+<span class="co">#&gt;  *  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1      1  20.0  80.0  80.0  80.0  100.  100.  80.0  20    100.  20.0  80.0</span>
+<span class="co">#&gt;  2      2  20.0  80.0  80.0  80.0  100.  100.  80.0  20    100.  20.0  80.0</span>
+<span class="co">#&gt;  3      3  20.0  80.0  80.0  80.0  100.  100.  80.0  20    100.  20.0  80.0</span>
+<span class="co">#&gt;  4      4  20.0  80.0  80.0  80.0  100.  100.  80.0  20    100.  20.0  80.0</span>
+<span class="co">#&gt;  5      5  23.8  95.4  89.2  86.2  119.  119.  89.2  30    119.  23.8  86.2</span>
+<span class="co">#&gt;  6      6  24.9  99.4  94.1  91.5  124.  124.  94.1  30.2  124.  24.9  91.5</span>
+<span class="co">#&gt;  7      7  25.8 103.   98.4  96.1  129.  129.  98.4  30.4  129.  25.8  96.1</span>
+<span class="co">#&gt;  8      8  26.5 106.  102.  100.   133.  133. 102.   30.5  133.  26.5 100. </span>
+<span class="co">#&gt;  9      9  27.2 109.  105.  104.   136.  136. 105.   30.7  136.  27.2 104. </span>
+<span class="co">#&gt; 10     10  27.8 111.  108.  107.   139.  139. 108.   30.9  139.  27.8 107. </span>
+<span class="co">#&gt; # ... with 50 more rows, and 5 more variables: Gd &lt;dbl&gt;, W &lt;dbl&gt;, alpha1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   alpha2 &lt;dbl&gt;, theta &lt;dbl&gt;</span></code></pre></div>
+<p><strong>Q: Can you add endogenous variables with more than one lag?</strong></p>
+<p>A: Yes, you can, but you need to use auxiliary variables.</p>
+<p>For example, say that you want to modify model SIM to have Consumption <code>Cd</code> in period <code>t</code> defined as function of the moving average of disposable income. In this situation, you would have to code the variables as:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">eqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sfcr_set.html">sfcr_set</a></span><span class="op">(</span>
+  <span class="va">TXs</span> <span class="op">~</span> <span class="va">TXd</span>,
+  <span class="va">YD</span> <span class="op">~</span> <span class="va">W</span> <span class="op">*</span> <span class="va">Ns</span> <span class="op">-</span> <span class="va">TXs</span>,
+  <span class="va">YDlag1</span> <span class="op">~</span> <span class="va">YD</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+  <span class="va">YDlag2</span> <span class="op">~</span> <span class="va">YDlag1</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+  <span class="va">YDlag3</span> <span class="op">~</span> <span class="va">YDlag2</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+  <span class="va">YDmav</span> <span class="op">~</span> <span class="op">(</span><span class="va">YD</span> <span class="op">+</span> <span class="va">YDlag1</span> <span class="op">+</span> <span class="va">YDlag2</span> <span class="op">+</span> <span class="va">YDlag3</span><span class="op">)</span> <span class="op">/</span> <span class="fl">4</span>,
+  <span class="va">Cd</span> <span class="op">~</span> <span class="va">alpha1</span> <span class="op">*</span> <span class="va">YDmav</span> <span class="op">+</span> <span class="va">alpha2</span> <span class="op">*</span> <span class="va">Hh</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+  <span class="va">Hh</span> <span class="op">~</span> <span class="va">YD</span> <span class="op">-</span> <span class="va">Cd</span> <span class="op">+</span> <span class="va">Hh</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+  <span class="va">Ns</span> <span class="op">~</span> <span class="va">Nd</span>,
+  <span class="va">Nd</span> <span class="op">~</span> <span class="va">Y</span> <span class="op">/</span> <span class="va">W</span>,
+  <span class="va">Cs</span> <span class="op">~</span> <span class="va">Cd</span>,
+  <span class="va">Gs</span> <span class="op">~</span> <span class="va">Gd</span>,
+  <span class="va">Y</span> <span class="op">~</span> <span class="va">Cs</span> <span class="op">+</span> <span class="va">Gs</span>,
+  <span class="va">TXd</span> <span class="op">~</span> <span class="va">theta</span> <span class="op">*</span> <span class="va">W</span> <span class="op">*</span> <span class="va">Ns</span>,
+  <span class="va">Hs</span> <span class="op">~</span> <span class="va">Gd</span> <span class="op">-</span> <span class="va">TXd</span> <span class="op">+</span> <span class="va">Hs</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>
+<span class="op">)</span></code></pre></div>
+</div>
+<div id="submitting-your-code-to-the-package-repository" class="section level3">
+<h3 class="hasAnchor">
+<a href="#submitting-your-code-to-the-package-repository" class="anchor"></a>Submitting your code to the package repository</h3>
+<p>Everyone is invited to submit your published SFC models developed with the <code>sfcr</code> package to the package repository to be displayed together with the models of Godley and Lavoie (2007).</p>
+<p>To do so, please submit a pull request or send me an email.</p>
+</div>
 <div id="acknowledgments" class="section level3">
 <h3 class="hasAnchor">
 <a href="#acknowledgments" class="anchor"></a>Acknowledgments</h3>
@@ -226,9 +292,9 @@
 <div id="references" class="section level3">
 <h3 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h3>
-<div id="refs" class="references hanging-indent">
-<div id="ref-godley2007monetary">
-<p>Godley, Wynne, and Marc Lavoie. 2007. <em>Monetary Economics: An Integrated Approach to Credit, Money, Income, Production and Wealth</em>. Palgrave Macmillan.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-godley2007monetary" class="csl-entry">
+<p>Godley, Wynne, and Marc Lavoie. 2007. <em>Monetary Economics: An Integrated Approach To Credit, Money, Income, Production and Wealth</em>. Palgrave Macmillan.</p>
 </div>
 </div>
 </div>
@@ -268,6 +334,7 @@
 <li><a href="https://travis-ci.com/joaomacalos/sfcr"><img src="https://travis-ci.com/joaomacalos/sfcr.svg?branch=main" alt="Travis build status"></a></li>
 <li><a href="https://CRAN.R-project.org/package=sfcr"><img src="https://www.r-pkg.org/badges/version/sfcr" alt="CRAN_Release_Badge"></a></li>
 <li><a href="https://CRAN.R-project.org/package=sfcr"><img src="http://cranlogs.r-pkg.org/badges/sfcr" alt="CRAN_Download_Badge"></a></li>
+<li><a href="https://github.com/joaomacalos/sfcr/actions"><img src="https://github.com/joaomacalos/sfcr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 </div>

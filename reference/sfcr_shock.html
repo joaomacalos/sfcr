@@ -75,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -169,9 +169,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>variables</th>
-      <td><p>A list with formula(e) containing the name of the variable(s)
+      <td><p>A <code><a href='sfcr_set.html'>sfcr_set()</a></code> with formula(e) containing the name of the variable(s)
 that will be shocked on the left-hand side and their new values on the right-
-hand side.</p></td>
+hand side.</p>
+<p>It is possible to add exogenous series a shock instead of constant variables.
+However, the length of such series must be exactly the same as the period of the shock (i.e.,
+the difference between start and end).</p></td>
     </tr>
     <tr>
       <th>start</th>
@@ -196,11 +199,31 @@ hand side.</p></td>
 </div><div class='output co'>#&gt; $variables
 #&gt; [[1]]
 #&gt; G_d ~ 30
-#&gt; &lt;environment: 0xd9ea578&gt;
+#&gt; &lt;environment: 0x10ddcfd8&gt;
 #&gt; 
 #&gt; [[2]]
 #&gt; W ~ 1.5
-#&gt; &lt;environment: 0xd9ea578&gt;
+#&gt; &lt;environment: 0x10ddcfd8&gt;
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "sfcr_set" "list"    
+#&gt; 
+#&gt; $start
+#&gt; [1] 5
+#&gt; 
+#&gt; $end
+#&gt; [1] 66
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "sfcr_shock" "list"      </div><div class='input'>
+<span class='fu'>sfcr_shock</span><span class='op'>(</span>
+ variables <span class='op'>=</span> <span class='fu'><a href='sfcr_set.html'>sfcr_set</a></span><span class='op'>(</span><span class='va'>G_d</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>30</span>, <span class='fl'>40</span>, length.out<span class='op'>=</span><span class='fl'>62</span><span class='op'>)</span><span class='op'>)</span>,
+ start <span class='op'>=</span> <span class='fl'>5</span>,
+ end <span class='op'>=</span> <span class='fl'>66</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $variables
+#&gt; [[1]]
+#&gt; G_d ~ seq(30, 40, length.out = 62)
+#&gt; &lt;environment: 0x10ddcfd8&gt;
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "sfcr_set" "list"    

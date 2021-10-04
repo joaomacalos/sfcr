@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • sfcr</title>
+<title>Check shocks for length consistency and warn about risks of using exogenous series — .check_shock_consistency • sfcr</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Check shocks for length consistency and warn about risks of using exogenous series — .check_shock_consistency" />
+<meta property="og:description" content="This function executes two checks and issues one warning." />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@jpmacalos" />
 <meta name="twitter:site" content="www.joaomacalos.com" />
@@ -61,7 +62,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -74,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sfcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -152,32 +153,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Check shocks for length consistency and warn about risks of using exogenous series</h1>
+    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_scenario.R'><code>R/sfcr_scenario.R</code></a></small>
+    <div class="hidden name"><code>dot-check_shock_consistency.Rd</code></div>
     </div>
 
-    <div id="sfcr-0-1-1" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.1">
-<a href="#sfcr-0-1-1" class="anchor"></a>sfcr 0.1.1<small> 2021-01-08 </small>
-</h1>
-<ul>
-<li>Add <code><a href="../reference/sfcr_portfolio.html">sfcr_portfolio()</a></code> function that calculates the matrix of portfolio parameters from a limited vector of parameters by imposing the adding-up and symmetry constraints.</li>
-</ul>
-</div>
-    <div id="sfcr-0-1-0" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#sfcr-0-1-0" class="anchor"></a>sfcr 0.1.0<small> Unreleased </small>
-</h1>
-<p>First public release.</p>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>This function executes two checks and issues one warning.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>.check_shock_consistency</span><span class='op'>(</span><span class='va'>shock</span>, periods <span class='op'>=</span> <span class='va'>periods</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>shock</th>
+      <td><p>A sfcr_shock object</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>First, it checks that the start of the shock is not negative and that the end
+of the shock is not bigger than the number of periods in the scenario.</p>
+<p>Secondly, it checks for consistency on the length of the shocks added to the scenario.
+Only two types of exogenous variables are allowed:</p><ol>
+<li><p>The exogenous variable is a constant that is repeated over time;</p></li>
+<li><p>The exogenous variable has exactly the same length as the shock.</p></li>
+</ol>
+
+<p>Furthermore, it throws a warning that using exogenous series in a shock can lead to unexpected
+behavior if the length of the shock is not the same as the periods in the scenario.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>João Macalós</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
