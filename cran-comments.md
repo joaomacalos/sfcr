@@ -13,4 +13,4 @@ There was a NOTE being raised at https://cran.rstudio.com//web/checks/check_resu
 checking LazyData ... NOTE
   'LazyData' is specified without a 'data' directory
   
-I fixed this issue by removing the LazyData: true from the DESCRIPTION file since the sfcr package has no data/ directory.
+I fixed this issue by removing the line `LazyData: true` from the DESCRIPTION file since the sfcr package has no data/ directory.
