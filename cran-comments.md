@@ -8,3 +8,9 @@ There were no ERRORs or WARNINGs or NOTEs.
 ## R CMD check results (Local Windows 10x64)
 There were no ERRORs or WARNINGs. 
   
+## Existing CRAN checks issues:
+There was a NOTE being raised at https://cran.rstudio.com//web/checks/check_results_sfcr.html:
+checking LazyData ... NOTE
+  'LazyData' is specified without a 'data' directory
+  
+I fixed this issue by removing the LazyData: true from the DESCRIPTION file since the sfcr package has no data/ directory.
