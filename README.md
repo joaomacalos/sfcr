@@ -9,6 +9,8 @@
 status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://travis-ci.com/joaomacalos/sfcr)
 [![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version/sfcr)](https://CRAN.R-project.org/package=sfcr)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/sfcr)](https://CRAN.R-project.org/package=sfcr)
+[![R build
+status](https://github.com/joaomacalos/sfcr/workflows/R-CMD-check/badge.svg)](https://github.com/joaomacalos/sfcr/actions)
 <!-- badges: end -->
 
 The goal of the `sfcr` package is to provide an intuitive and `tidy` way

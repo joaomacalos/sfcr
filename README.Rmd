@@ -32,6 +32,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://travis-ci.com/joaomacalos/sfcr)
 [![CRAN_Release_Badge](https://www.r-pkg.org/badges/version/sfcr)](https://CRAN.R-project.org/package=sfcr)
 [![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/sfcr)](https://CRAN.R-project.org/package=sfcr)
+[![R build status](https://github.com/joaomacalos/sfcr/workflows/R-CMD-check/badge.svg)](https://github.com/joaomacalos/sfcr/actions)
 <!-- badges: end -->
 
 The goal of the `sfcr` package is to provide an intuitive and `tidy` way to estimate stock-flow consistent (SFC) models with R. 
