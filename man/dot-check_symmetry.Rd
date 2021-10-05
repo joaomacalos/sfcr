@@ -13,6 +13,6 @@
 Check that symmetry condition is valid and fulfill missing entries
 }
 \author{
-JOão Macalós
+João Macalós
 }
 \keyword{internal}
