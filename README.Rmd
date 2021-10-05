@@ -127,14 +127,16 @@ A: Since version 0.2, the `sfcr` package only allow the utilization of exogenous
 
 The exogenous series can be added to the model with the help of `sfcr_shock()` and `sfcr_set()` functions. It is further required that the length of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.
 
-For example, the code supplied above can be modified to make `Gd` increase from 30 to 40 between periods 5 and 60 of the scenario:
+For example, the code supplied above can be modified to make `Gd` increase from 30 to 40 between periods 1 and 60 of the scenario:
 
-```{r}
+```{r, message=FALSE}
+library(dplyr) # for select() and everything() functions
+
 shock <- sfcr_shock(
   variables = sfcr_set(
-    Gd ~ seq(30, 40, length.out=56)
+    Gd ~ seq(30, 40, length.out=60)
   ),
-  start = 5,
+  start = 1,
   end = 60
 )
 
@@ -144,7 +146,8 @@ sim2 <- sfcr_scenario(
   periods = 60
   )
 
-sim2
+select(sim2, period, Gd, everything())
+
 ```
 
 **Q: Can you add endogenous variables with more than one lag?**
