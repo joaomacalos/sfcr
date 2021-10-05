@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 # sfcr <img src='man/figures/sfcr.png' align="right" height="139" />
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://travis-ci.com/joaomacalos/sfcr)
+[![Travis Build Status](https://app.travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://app.travis-ci.com/joaomacalos/sfcr)
 [![CRAN_Release_Badge](https://www.r-pkg.org/badges/version/sfcr)](https://CRAN.R-project.org/package=sfcr)
 [![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/sfcr)](https://CRAN.R-project.org/package=sfcr)
 [![R build status](https://github.com/joaomacalos/sfcr/workflows/R-CMD-check/badge.svg)](https://github.com/joaomacalos/sfcr/actions)

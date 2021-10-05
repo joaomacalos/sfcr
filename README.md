@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://travis-ci.com/joaomacalos/sfcr)
+[![Travis Build
+Status](https://app.travis-ci.com/joaomacalos/sfcr.svg?branch=main)](https://app.travis-ci.com/joaomacalos/sfcr)
 [![CRAN\_Release\_Badge](https://www.r-pkg.org/badges/version/sfcr)](https://CRAN.R-project.org/package=sfcr)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/sfcr)](https://CRAN.R-project.org/package=sfcr)
 [![R build
@@ -78,20 +78,20 @@ sim <- sfcr_baseline(
 
 sim
 #> # A tibble: 60 x 17
-#>    period      TXs       YD       Cd       Hh       Ns       Nd       Cs
-#>  *  <int>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
-#>  1      1 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15 1.00e-15
-#>  2      2 7.69e+ 0 3.08e+ 1 1.85e+ 1 1.23e+ 1 3.85e+ 1 3.85e+ 1 1.85e+ 1
-#>  3      3 9.59e+ 0 3.83e+ 1 2.79e+ 1 2.27e+ 1 4.79e+ 1 4.79e+ 1 2.79e+ 1
-#>  4      4 1.12e+ 1 4.48e+ 1 3.59e+ 1 3.15e+ 1 5.59e+ 1 5.59e+ 1 3.59e+ 1
-#>  5      5 1.25e+ 1 5.02e+ 1 4.27e+ 1 3.90e+ 1 6.27e+ 1 6.27e+ 1 4.27e+ 1
-#>  6      6 1.37e+ 1 5.48e+ 1 4.85e+ 1 4.53e+ 1 6.85e+ 1 6.85e+ 1 4.85e+ 1
-#>  7      7 1.47e+ 1 5.86e+ 1 5.33e+ 1 5.06e+ 1 7.33e+ 1 7.33e+ 1 5.33e+ 1
-#>  8      8 1.55e+ 1 6.19e+ 1 5.74e+ 1 5.52e+ 1 7.74e+ 1 7.74e+ 1 5.74e+ 1
-#>  9      9 1.62e+ 1 6.47e+ 1 6.09e+ 1 5.90e+ 1 8.09e+ 1 8.09e+ 1 6.09e+ 1
-#> 10     10 1.68e+ 1 6.71e+ 1 6.38e+ 1 6.22e+ 1 8.38e+ 1 8.38e+ 1 6.38e+ 1
-#> # ... with 50 more rows, and 9 more variables: Gs <dbl>, Y <dbl>, TXd <dbl>,
-#> #   Hs <dbl>, Gd <dbl>, W <dbl>, alpha1 <dbl>, alpha2 <dbl>, theta <dbl>
+#>    period      TXs       YD       Cd       Hh       Ns       Nd       Cs    Gs
+#>  *  <int>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl> <dbl>
+#>  1      1 1   e-15 1   e-15 1   e-15 1   e-15 1   e-15 1   e-15 1   e-15 1e-15
+#>  2      2 7.69e+ 0 3.08e+ 1 1.85e+ 1 1.23e+ 1 3.85e+ 1 3.85e+ 1 1.85e+ 1 2e+ 1
+#>  3      3 9.59e+ 0 3.83e+ 1 2.79e+ 1 2.27e+ 1 4.79e+ 1 4.79e+ 1 2.79e+ 1 2e+ 1
+#>  4      4 1.12e+ 1 4.48e+ 1 3.59e+ 1 3.15e+ 1 5.59e+ 1 5.59e+ 1 3.59e+ 1 2e+ 1
+#>  5      5 1.25e+ 1 5.02e+ 1 4.27e+ 1 3.90e+ 1 6.27e+ 1 6.27e+ 1 4.27e+ 1 2e+ 1
+#>  6      6 1.37e+ 1 5.48e+ 1 4.85e+ 1 4.53e+ 1 6.85e+ 1 6.85e+ 1 4.85e+ 1 2e+ 1
+#>  7      7 1.47e+ 1 5.86e+ 1 5.33e+ 1 5.06e+ 1 7.33e+ 1 7.33e+ 1 5.33e+ 1 2e+ 1
+#>  8      8 1.55e+ 1 6.19e+ 1 5.74e+ 1 5.52e+ 1 7.74e+ 1 7.74e+ 1 5.74e+ 1 2e+ 1
+#>  9      9 1.62e+ 1 6.47e+ 1 6.09e+ 1 5.90e+ 1 8.09e+ 1 8.09e+ 1 6.09e+ 1 2e+ 1
+#> 10     10 1.68e+ 1 6.71e+ 1 6.38e+ 1 6.22e+ 1 8.38e+ 1 8.38e+ 1 6.38e+ 1 2e+ 1
+#> # … with 50 more rows, and 8 more variables: Y <dbl>, TXd <dbl>, Hs <dbl>,
+#> #   Gd <dbl>, W <dbl>, alpha1 <dbl>, alpha2 <dbl>, theta <dbl>
 ```
 
 With the steady state values at hand, we can use the `sfcr_scenario()`
@@ -127,7 +127,7 @@ sim2
 #>  8      8  26.3 105.  101.   99.5  131.  131. 101.     30  131.  26.3  99.5
 #>  9      9  26.8 107.  104.  103.   134.  134. 104.     30  134.  26.8 103. 
 #> 10     10  27.3 109.  107.  105.   137.  137. 107.     30  137.  27.3 105. 
-#> # ... with 50 more rows, and 5 more variables: Gd <dbl>, W <dbl>, alpha1 <dbl>,
+#> # … with 50 more rows, and 5 more variables: Gd <dbl>, W <dbl>, alpha1 <dbl>,
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 
@@ -187,7 +187,7 @@ sim2
 #>  8      8  26.5 106.  102.  100.   133.  133. 102.   30.5  133.  26.5 100. 
 #>  9      9  27.2 109.  105.  104.   136.  136. 105.   30.7  136.  27.2 104. 
 #> 10     10  27.8 111.  108.  107.   139.  139. 108.   30.9  139.  27.8 107. 
-#> # ... with 50 more rows, and 5 more variables: Gd <dbl>, W <dbl>, alpha1 <dbl>,
+#> # … with 50 more rows, and 5 more variables: Gd <dbl>, W <dbl>, alpha1 <dbl>,
 #> #   alpha2 <dbl>, theta <dbl>
 ```
 

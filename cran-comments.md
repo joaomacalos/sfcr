@@ -1,3 +1,20 @@
+## Resubmission
+This is a resubmission.
+
+Change requested:
+  
+*  Thanks, we see:
+  
+     Found the following (possibly) invalid URLs:
+       URL: https://app.travis-ci.com/joaomacalos/sfcr.svg?branch=main
+  (moved to https://api.travis-ci.com/joaomacalos/sfcr.svg?branch=main)
+         From: README.md
+         Status: 301
+         Message: Moved Permanently
+         
+Problem fixed.
+
+
 ## Test environments
 * local Ubuntu 20.04.1 LTS, R 4.0.3
 * local Windows 10 x64, R 4.0.3
