@@ -1,6 +1,7 @@
 ## Test environments
 * local Ubuntu 20.04.1 LTS, R 4.0.3
 * local Windows 10 x64, R 4.0.3
+* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.2
 
 ## R CMD check results (Local Ubuntu 20.04.1)
 There were no ERRORs or WARNINGs or NOTEs.
