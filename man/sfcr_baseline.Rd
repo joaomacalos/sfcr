@@ -23,7 +23,7 @@ sfcr_baseline(
 must be written with the R formula syntax, with the left-hand side separated from the right-hand side
 by a twiddle \code{~}.}
 
-\item{external, initial}{List of external variables (exogenous and parameters) or of initial
+\item{external, initial}{A \code{sfcr_set} of external variables (exogenous and parameters) or of initial
 values. They should be written as equations using the R syntax.}
 
 \item{periods}{A number specifying the total number of periods of the model to be simulated.}

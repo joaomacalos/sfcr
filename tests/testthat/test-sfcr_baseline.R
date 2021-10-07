@@ -79,10 +79,10 @@ test_that("Error if invalid name .i in external variables", {
 })
 
 
-test_that("Error if length of exogenous variables is more than one", {
-  ext <- sfcr_set(G_d ~ 20, W ~ seq(1, 10), alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
-  expect_error(sfcr_baseline(eqs, ext, periods = 5), "At the baseline construct level, exogenous variables can only be supplied as a constant.")
-})
+# test_that("Error if length of exogenous variables is more than one", {
+#   ext <- sfcr_set(G_d ~ 20, W ~ seq(1, 10), alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)
+#   expect_error(sfcr_baseline(eqs, ext, periods = 5), "At the baseline construct level, exogenous variables can only be supplied as a constant.")
+# })
 
 test_that("Periods cannot be smaller than 2", {
   ext <- sfcr_set(G_d ~ 20, W ~ 1, alpha1 ~ 0.6, alpha2 ~ 0.4, theta ~ 0.2)

@@ -115,7 +115,7 @@ sfcr_get_blocks <- function(sfcr_tbl) {
 #' must be written with the R formula syntax, with the left-hand side separated from the right-hand side
 #' by a twiddle \code{~}.
 #' @param periods A number specifying the total number of periods of the model to be simulated.
-#' @param external,initial List of external variables (exogenous and parameters) or of initial
+#' @param external,initial A \code{sfcr_set} of external variables (exogenous and parameters) or of initial
 #' values. They should be written as equations using the R syntax.
 #' @param hidden Named object that identify the two variables that make the hidden equality
 #' in the SFC model, e.g., \code{c("H_h" = "H_s")}. Defaults to NULL.
@@ -260,8 +260,8 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
   # 6. Check that exogenous variables passsed as a sequence/series and not as a constant
   # have the same length as the periods supplied
 
-  check_length_exogenous1 = purrr::map(external$rhs, function(x) eval(parse(text=x)))
-  check_length_exogenous2 = purrr::map_dbl(check_length_exogenous1, length)
+  # check_length_exogenous1 = purrr::map(external$rhs, function(x) eval(parse(text=x)))
+  # check_length_exogenous2 = purrr::map_dbl(check_length_exogenous1, length)
 
   # 7. Check that periods are bigger than one
   if (periods < 2) {
@@ -269,9 +269,9 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
 
   }
 
-  if (mean(check_length_exogenous2) > 1) {
-    rlang::abort("At the baseline construct level, exogenous variables can only be supplied as a constant.")
-    }
+  # if (mean(check_length_exogenous2) > 1) {
+  #   rlang::abort("At the baseline construct level, exogenous variables can only be supplied as a constant.")
+  #  }
 
   s2 <- .prep_equations(s1, external)
 
