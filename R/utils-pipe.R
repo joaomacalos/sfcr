@@ -24,3 +24,14 @@ abortifnot <- function(cnd, message = NULL) {
   if (isFALSE(cnd)) rlang::abort(message)
 
 }
+
+#'
+#' @keywords internal
+#'
+release_questions <- function() {
+  c(
+    "Have you check that all models are running without errors? The best way to check it is to \n
+    wait for Travis to build and check the package's webpage. If there's an error in any model,\n
+    the page will return a 404 error."
+  )
+}
