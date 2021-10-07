@@ -342,7 +342,7 @@ sfcr_validate <- function(matrix, baseline, which, tol = 1, rtol = FALSE) {
   match.arg(which, c("tfm", "bs"))
 
   bl1 <- attr(baseline, "calls")
-  bl2 <- attr(baseline, "external")
+  bl2 <- attr(baseline, "external")$lhs
   m <- attr(baseline, "matrix")
 
   # If TFM

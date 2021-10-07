@@ -22,7 +22,7 @@ sfcr_sankey <- function(tfm, baseline, when = "start") {
   when <- match.arg(when, c("start", "end"))
 
   bl1 <- attr(baseline, "calls")
-  bl2 <- attr(baseline, "external")
+  bl2 <- attr(baseline, "external")$lhs
   bl3 <- attr(baseline, "matrix")
 
   if (when == "start") {

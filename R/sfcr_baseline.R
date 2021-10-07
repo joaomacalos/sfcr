@@ -45,7 +45,7 @@ new_sfcr_tbl <- function(tbl, matrix, calls, external) {
   stopifnot(inherits(tbl, "tbl_df"))
   stopifnot(inherits(matrix, "matrix"))
   stopifnot(inherits(calls, "tbl_df"), names(calls) == c("lhs", "rhs", "block", "id"))
-  stopifnot(inherits(external, "character"))
+  stopifnot(inherits(external, "tbl_df"))
 
   structure(tbl,
             class = c("sfcr_tbl", "tbl_df", "tbl", "data.frame"),
@@ -106,6 +106,42 @@ sfcr_get_blocks <- function(sfcr_tbl) {
   }
   rlang::abort(message = message)
 }
+
+
+#' Check shocks for length consistency and warn about risks of using exogenous series
+#'
+#'
+#' This function makes two checks:
+#'
+#' 1) The exogenous variable is a constant that is repeated over time;
+#' 2) The exogenous variable has exactly the same length as the shock.
+#'
+#' Furthermore, it throws a warning that using exogenous series in a shock can lead to unexpected
+#' behavior if the length of the shock is not the same as the periods in the scenario.
+#'
+#' @param external An .eq_as_tb() tibble with external variables.
+#' @param periods The periods of the baseline model.
+#'
+#' @author João Macalós
+#'
+#' @keywords internal
+#'
+.check_external_consistency <- function(external, periods=periods) {
+
+  # Parse vars
+  parse_vars <- purrr::map(external$rhs, ~eval(parse(text=.x)))
+  vars_length <- purrr::map_dbl(parse_vars, length)
+
+  if (mean(vars_length) > 1) {
+    abortifnot(all(vars_length %in% c(1, periods)), "The exogenous variables must have either length 1 or exactly the same length as the baseline model.")
+
+    # Warning
+    rlang::warn("Passing exogenous series with a baseline model can lead to unexpected behavior at the scenario level. Be cautious when using this functionality.", .frequency_id = "scenario_warn", .frequency="once")
+
+  }
+
+}
+
 
 #' Simulate the baseline scenario of a stock-flow consistent model
 #'
@@ -215,6 +251,9 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
 
   external <- .eq_as_tb(external)
 
+  # Check for external length consistency:
+  .check_external_consistency(external, periods)
+
   s1 <- .sfcr_find_order(equations)
 
   # Checks:
@@ -309,7 +348,7 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
   s5 <- dplyr::select(s5, -tidyselect::contains("block"))
   s5 <- dplyr::select(s5, .data$period, tidyselect::everything())
 
-  x <- new_sfcr_tbl(tbl = s5, matrix = s4, calls = s2, external = external$lhs)
+  x <- new_sfcr_tbl(tbl = s5, matrix = s4, calls = s2, external = external)
 
   return(x)
 }
