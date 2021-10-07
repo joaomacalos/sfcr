@@ -54,8 +54,34 @@
   return(x)
 }
 
-#' Make the underlying matrix that will be modified in place with the Gauss Seidel
-#' algorithm
+
+#' Generate random sequences inside \code{sfcr_set()}
+#'
+#' This function can only be used inside \code{sfcr_set()} when generating variables.
+#' It smartly guesses the length of the \code{sfcr_baseline()} model or of the
+#' \code{sfcr_shock()} that it is inserted.
+#'
+#' @param .f The \code{stats} built-in function to generate the random sequence.
+#' Examples are: \code{rnorm()}, \code{rbinom()}, \code{runif()}
+#' @param ... Extra arguments to be passed to the \code{stats} generator functions
+#'
+#' @examples
+#' # Create a random normal series to pass along an endogenous series
+#' # Example taken from model PC EXT 2.
+#' sfcr_set(
+#'     Ra ~ sfcr_random(rnorm, mean=0, sd=0.05)
+#' )
+#'
+#' @author João Macalós
+#'
+#' @export
+#'
+sfcr_random <- function(.f, ...) {
+  print("This function only returns an output when supplied inside `sfcr_set()`")
+}
+
+
+#' Make the underlying matrix that will be modified in place by the solvers
 #'
 #' @param equations Prepared equations.
 #' @param external Exogenous and parameters as tibble.
@@ -87,6 +113,11 @@
 
   # Matrix with variables (operating on rows)
   m1 <- matrix(c(ends, exgs, lblocks), nrow = periods, ncol = mcols, dimnames = list(1:periods, mnames), byrow = T)
+
+  sfcr_random <- function(.f, ...) {
+    do.call(.f, list(periods, ...))
+    }
+
 
   for (var in seq_along(exgs_names)) {
     m1[, exgs_names[[var]]] <- eval(exg_exprs[[var]])

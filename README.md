@@ -144,11 +144,11 @@ examples on the usage of the package.
 
 **Q: Can you add exogenous series to a `sfcr` model?**
 
-A: Since version 0.2, the `sfcr` package only allow the utilization of
-exogenous variables in the `sfcr_scenario()` function. This
-functionality was excluded from the `sfcr_baseline()` function because
-it led to unexpected behavior when calculating scenarios on the top of
-those baseline models.
+A: Since version 0.2, the `sfcr` package recommends the utilization of
+exogenous variables only in the `sfcr_scenario()` function. This
+functionality is going to be excluded from `sfcr_baseline()` function in
+the future because it led to unexpected behavior when calculating
+scenarios on the top of those baseline models.
 
 The exogenous series can be added to the model with the help of
 `sfcr_shock()` and `sfcr_set()` functions. It is further required that
@@ -174,6 +174,8 @@ sim2 <- sfcr_scenario(
   scenario = shock,
   periods = 60
   )
+#> Warning: Passing exogenous series with a shock can lead to unexpected behavior if the length of the series is smaller than the periods to the end of the scenario. Be cautious when using this functionality.
+#> This warning is displayed once per session.
 
 select(sim2, period, Gd, everything())
 #> # A tibble: 60 x 17
@@ -191,6 +193,69 @@ select(sim2, period, Gd, everything())
 #> 10     10  31.5  29.4 118.  115.  114.   147.  147. 115.   31.5  147.  29.4
 #> # ... with 50 more rows, and 5 more variables: Hs <dbl>, W <dbl>, alpha1 <dbl>,
 #> #   alpha2 <dbl>, theta <dbl>
+```
+
+**Q: How to add random variation to endogenous variables?**
+
+A: The recommended way to add random variation to endogenous variables
+is with the `sfcr_random()` function. This function can only be used
+inside `sfcr_set()`, be it when you’re creating a set of exogenous
+variables or when defining the variables inside a `sfcr_shock()`. The
+advantage of utilizing this function is that it smartly guesses the
+length of the models, avoiding any unwanted mistake.
+
+The `sfcr_random()` function accepts a random series generator function
+from the built-in package `stats` as its first argument (e.g.,
+`rnorm()`), and any additional arguments to these functions can be
+passed in the sequence.
+
+Snippet:
+
+``` r
+sfcr_set(
+  Ra ~ sfcr_random(rnorm, sd=0.05)
+)
+#> [[1]]
+#> Ra ~ sfcr_random(rnorm, sd = 0.05)
+#> 
+#> attr(,"class")
+#> [1] "sfcr_set" "list"
+```
+
+An utilization of this functionality in practice is provided in the
+article replicating the Portfolio Choice model from Godley and Lavoie
+(2007ch. 4).
+
+Alternatively, the direct utilization of the random generator functions
+from `stats` are still allowed to ensure the compatibility with the
+v0.1.1 of the package. Nonetheless, the user must be careful when using
+this functionality at the `sfcr_baseline()` since this expression is
+going to be evaluated again at the `sfcr_scenario()` level. The safest
+way to use these functions is by passing `periods` instead of an integer
+as their first argument.
+
+Snippet:
+
+``` r
+# Not recommended but work:
+sfcr_set(
+  Ra ~ rnorm(periods, sd=0.05)
+)
+#> [[1]]
+#> Ra ~ rnorm(periods, sd = 0.05)
+#> 
+#> attr(,"class")
+#> [1] "sfcr_set" "list"
+
+# NOT RECOMMENDED!
+sfcr_set(
+  Ra ~ rnorm(60, sd=0.05)
+)
+#> [[1]]
+#> Ra ~ rnorm(60, sd = 0.05)
+#> 
+#> attr(,"class")
+#> [1] "sfcr_set" "list"
 ```
 
 **Q: Can you add endogenous variables with more than one lag?**

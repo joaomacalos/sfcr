@@ -125,6 +125,8 @@ sfcr_set.sfcr_set <- function(..., exclude = NULL) {
 #' This function aims to facilitate locating a specific equation in the list in order to
 #' modify the list of equations.
 #'
+#' To add random variation to endogenous variables, use \code{sfcr_random()}.
+#'
 #' @param eqs A list of equations created with \code{sfcr_set()}
 #'
 #' @export

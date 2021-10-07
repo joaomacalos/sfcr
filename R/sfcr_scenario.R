@@ -14,9 +14,22 @@
 #'
 .sfcr_make_scenario_matrix <- function(baseline, scenario, periods) {
 
+  sfcr_random <- function(.f, ...) {
+    do.call(.f, list(periods, ...))
+  }
+
   steady <- utils::tail(attributes(baseline)$matrix, n = 1)
 
   m <- steady[rep(seq_len(nrow(steady)), periods), ]
+
+  # TODO: evaluate external vars here (and so add sfcr_random())
+  external <- attr(baseline, "external")
+  exgs_names <- external$lhs
+  exg_exprs <- purrr::map(external$rhs, function(x) parse(text=x))
+
+  for (var in seq_along(exgs_names)) {
+    m[, exgs_names[[var]]] <- eval(exg_exprs[[var]])
+  }
 
   scenario_eqs <- purrr::map(scenario, function(x) .eq_as_tb(x[[1]]))
 
@@ -54,8 +67,25 @@
 #' @keywords internal
 #'
 .extend_baseline_matrix <- function(baseline, periods) {
+
   steady <- utils::tail(attributes(baseline)$matrix, n = 1)
+
   m <- steady[rep(seq_len(nrow(steady)), periods), ]
+
+  # TODO : evaluate external vars here
+
+  sfcr_random <- function(.f, ...) {
+    do.call(.f, list(periods, ...))
+  }
+
+  external <- attr(baseline, "external")
+  exgs_names <- external$lhs
+  exg_exprs <- purrr::map(external$rhs, function(x) parse(text=x))
+
+  for (var in seq_along(exgs_names)) {
+    m[, exgs_names[[var]]] <- eval(exg_exprs[[var]])
+  }
+
 }
 
 .abort_wrong_shock_var <- function(wrong_var) {
@@ -94,6 +124,8 @@
 #'
 .check_shock_consistency <- function(shock, periods=periods) {
 
+  # TODO : add sfcr_random() here with different periods name (shock_period)
+
   # Parse vars
   vars <- .eq_as_tb(shock$variables)
   parse_vars <- purrr::map(vars$rhs, ~eval(parse(text=.x)))
@@ -112,6 +144,11 @@
   }
 
   length_shock = length(seq(start, end))
+
+  # sfcr_random() at this level must have the length of the shock.
+  sfcr_random <- function(.f, ...) {
+    do.call(.f, list(length_shock, ...))
+  }
 
   if (mean(vars_length) > 1) {
     abortifnot(all(vars_length %in% c(1, length_shock)), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")

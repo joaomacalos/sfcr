@@ -220,16 +220,16 @@ Let's see how to add a shock to expected disposable income, following equation 4
 
 First, we add the random shock, that we will call `Ra`, to the list of exogenous variables from the model `pc`. 
 
-To make a normal random shock in R, we use the `rnorm()` function from the `stats` package that is built together with base R. This function accepts three arguments:
+To add a normal random shock in R, the common way is to use the `rnorm()` function from the built-in `stats` package. This function accepts three arguments:
 
 1. Number of observations;
 2. Mean (default is 0);
 3. Standard deviation (default is 1).
 
-The user must set the same number of observations as the number of periods supplied to `sfcr_baseline()` or `sfcr_scenario()`. The other two arguments are optional.
+The recommended way to use this function in the `sfcr` package is through the `sfcr_random()` function, a wrapper that automatically detect the correct number of periods supplied to `sfcr_baseline()` or `sfcr_scenario()`. The `sfcr_random()` function requires as its first argument the generator function from the `stats` built-in package, and pass any extra argument to these functions.
 
 ```{r}
-pc_ext2 <- c(pc_ext, Ra ~ rnorm(60, sd = 0.05))
+pc_ext2 <- c(pc_ext, Ra ~ sfcr_random(rnorm, sd = 0.05))
 ```
 
 Next, we rewrite the equations, adding the expectations to the model:

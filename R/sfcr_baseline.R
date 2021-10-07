@@ -128,6 +128,17 @@ sfcr_get_blocks <- function(sfcr_tbl) {
 #'
 .check_external_consistency <- function(external, periods=periods) {
 
+  # This function needs to be in the local scope of every function
+  # that parses and evaluates the strings to fill the matrices
+  sfcr_random <- function(.f, ...) {
+    do.call(.f, list(periods, ...))
+  }
+
+  # We remove `sfcr_random` and `rnorm()` from sanity checks because it is certain that it will not lead
+  # to mistakes.
+
+  external <- dplyr::filter(external, stringr::str_detect(.data$rhs, "sfcr_random", negate=TRUE))
+
   # Parse vars
   parse_vars <- purrr::map(external$rhs, ~eval(parse(text=.x)))
   vars_length <- purrr::map_dbl(parse_vars, length)
@@ -136,7 +147,7 @@ sfcr_get_blocks <- function(sfcr_tbl) {
     abortifnot(all(vars_length %in% c(1, periods)), "The exogenous variables must have either length 1 or exactly the same length as the baseline model.")
 
     # Warning
-    rlang::warn("Passing exogenous series with a baseline model can lead to unexpected behavior at the scenario level. Be cautious when using this functionality.", .frequency_id = "scenario_warn", .frequency="once")
+    rlang::warn("The utilization exogenous series within a baseline model is not recommended and will be disallowed in the future. Be careful when using this functionality.", .frequency_id = "scenario_warn", .frequency = "once")
 
   }
 
@@ -349,6 +360,11 @@ sfcr_baseline <- function(equations, external, periods, initial = NULL, hidden =
   s5 <- dplyr::select(s5, .data$period, tidyselect::everything())
 
   x <- new_sfcr_tbl(tbl = s5, matrix = s4, calls = s2, external = external)
+
+  # Raise message to suggest the utilization of `sfcr_random()` instead of `rnorm()` and related functions
+  if (any(purrr::map_lgl(external$rhs, ~stringr::str_detect(.x, "rnorm\\(|rbinom\\(|runif\\(")))) {
+    rlang::inform("The utilization of `rnorm()` and related functions to add random variation to endogenous variables will be disallowed in the future. Use `sfcr_random()` instead.")
+  }
 
   return(x)
 }
