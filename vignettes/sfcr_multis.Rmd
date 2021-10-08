@@ -142,4 +142,5 @@ mlt_sim1 %>%
   theme(legend.position = "bottom")
 
 ```
+
 As can be seen in this example, the `alpha1` parameter affects how fast the model arrives to the steady state but does not change the steady state itself.

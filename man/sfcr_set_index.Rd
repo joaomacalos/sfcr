@@ -17,6 +17,8 @@ and their position in the equations list.
 \details{
 This function aims to facilitate locating a specific equation in the list in order to
 modify the list of equations.
+
+To add random variation to endogenous variables, use \code{sfcr_random()}.
 }
 \author{
 João Macalós

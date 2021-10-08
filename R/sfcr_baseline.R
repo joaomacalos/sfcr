@@ -128,16 +128,14 @@ sfcr_get_blocks <- function(sfcr_tbl) {
 #'
 .check_external_consistency <- function(external, periods=periods) {
 
-  # This function needs to be in the local scope of every function
-  # that parses and evaluates the strings to fill the matrices
-  sfcr_random <- function(.f, ...) {
-    do.call(.f, list(periods, ...))
-  }
-
-  # We remove `sfcr_random` and `rnorm()` from sanity checks because it is certain that it will not lead
+  # We remove `sfcr_random` from sanity checks because it is certain that it will not lead
   # to mistakes.
 
   external <- dplyr::filter(external, stringr::str_detect(.data$rhs, "sfcr_random", negate=TRUE))
+
+  if (is.null(external$rhs)) {
+    return()
+  }
 
   # Parse vars
   parse_vars <- purrr::map(external$rhs, ~eval(parse(text=.x)))

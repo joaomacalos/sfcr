@@ -28,7 +28,7 @@
 #' @author João Macalós, \email{joaomacalos@@gmail.com}
 #
 sfcr_shock <- function(variables, start, end) {
-  if (!rlang::is_list(variables)) rlang::abort("Please define the variables in a list.")
+  if (!rlang::is_list(variables)) rlang::abort("Please define the variables in a `sfcr_shock()`.")
 
   if (all(vapply(variables, rlang::is_formula, logical(1)) != 1)) rlang::abort("Please use R equations syntax to define the values of the variables.")
 

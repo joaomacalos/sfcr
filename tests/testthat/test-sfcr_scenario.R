@@ -136,7 +136,7 @@ test_that("Test that the lenght of shock vars are either 1 or equal to the lengt
   ), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")
 })
 
-test_that("Test that the lenght of shock vars are either 1 or equal to the length of the shock", {
+test_that("Test that the start of the shock is not negative", {
   shock1 <- sfcr_shock(
     variables = sfcr_set(G_d ~ 30),
     start = -1,
@@ -163,5 +163,40 @@ test_that("Test that the lenght of shock vars are either 1 or equal to the lengt
     scenario = shock1,
     periods = 10
   ), "The end of the shock must be smaller or equal to the periods in the scenario.")
+})
+
+test_that("Test that `sfcr_random()` correctly evaluates the size of the shock", {
+  shock1 <- sfcr_shock(
+    variables = sfcr_set(
+      G_d ~ sfcr_random("rnorm", mean=40, sd=1)
+      ),
+    start = 3,
+    end = 6
+  )
+
+  shock2 <- sfcr_shock(
+    variables = sfcr_set(
+      G_d ~ sfcr_random("rnorm", mean=60, sd=1)
+    ),
+    start = 9,
+    end = 12
+  )
+
+  scen <- sfcr_scenario(
+    baseline = sim_model,
+    scenario = list(shock1, shock2),
+    periods = 15
+  )
+
+  expect_gt(mean(scen[, "G_d"]$G_d), 20)
+
+  expect_gt(mean(scen[3:6, "G_d"]$G_d), 35)
+
+  expect_lt(mean(scen[7:8, "G_d"]$G_d), 35)
+
+  expect_gt(mean(scen[9:12, "G_d"]$G_d), 55)
+
+  expect_lt(mean(scen[13:15, "G_d"]$G_d), 25)
+
 })
 

@@ -15,7 +15,15 @@
 .sfcr_make_scenario_matrix <- function(baseline, scenario, periods) {
 
   sfcr_random <- function(.f, ...) {
-    do.call(.f, list(periods, ...))
+    match.arg(.f, c("rnorm", "rbinom", "runif"))
+
+    args <- list(...)
+    # Make sure that periods are read as n
+    args$n <- NULL
+    n <- list(n=periods)
+    args <- c(n, args)
+    # Call the function
+    do.call(eval(parse(text=.f)), args)
   }
 
   steady <- utils::tail(attributes(baseline)$matrix, n = 1)
@@ -39,8 +47,22 @@
   scenario_start <- purrr::map(scenario, function(x) x[[2]])
   scenario_end <- purrr::map(scenario, function(x) x[[3]])
 
+  # Re-define here to extend shock
+  sfcr_random <- function(.f, ...) {
+   match.arg(.f, c("rnorm", "rbinom", "runif"))
+
+   args <- list(...)
+  # Make sure that periods are read as n
+   args$n <- NULL
+   n <- list(n=shock_length)
+   args <- c(n, args)
+  # Call the function
+   do.call(eval(parse(text=.f)), args)
+  }
+
 
   for (scenario in seq_len(vctrs::vec_size(scenario_eqs))) {
+    shock_length <- length(seq(scenario_start[[scenario]], scenario_end[[scenario]]))
     scenario_nms <- scenario_names[[scenario]]
     scenario_xprs <- scenario_exprs[[scenario]]
 
@@ -73,9 +95,16 @@
   m <- steady[rep(seq_len(nrow(steady)), periods), ]
 
   # TODO : evaluate external vars here
-
   sfcr_random <- function(.f, ...) {
-    do.call(.f, list(periods, ...))
+   match.arg(.f, c("rnorm", "rbinom", "runif"))
+
+   args <- list(...)
+  # Make sure that periods are read as n
+   args$n <- NULL
+   n <- list(n=periods)
+   args <- c(n, args)
+  # Call the function
+   do.call(eval(parse(text=.f)), args)
   }
 
   external <- attr(baseline, "external")
@@ -124,12 +153,8 @@
 #'
 .check_shock_consistency <- function(shock, periods=periods) {
 
-  # TODO : add sfcr_random() here with different periods name (shock_period)
-
-  # Parse vars
-  vars <- .eq_as_tb(shock$variables)
-  parse_vars <- purrr::map(vars$rhs, ~eval(parse(text=.x)))
-  vars_length <- purrr::map_dbl(parse_vars, length)
+  # We remove `sfcr_random` from sanity checks because it is certain that it will not lead
+  # to mistakes.
 
   # Duration of the shock
   start = shock$start
@@ -145,10 +170,17 @@
 
   length_shock = length(seq(start, end))
 
-  # sfcr_random() at this level must have the length of the shock.
-  sfcr_random <- function(.f, ...) {
-    do.call(.f, list(length_shock, ...))
+  # Parse vars
+  vars <- .eq_as_tb(shock$variables)
+  vars <- dplyr::filter(vars, stringr::str_detect(.data$rhs, "sfcr_random", negate=TRUE))
+
+  if (is.null(nrow(vars$rhs))) {
+    return()
   }
+
+  parse_vars <- purrr::map(vars$rhs, ~eval(parse(text=.x)))
+  vars_length <- purrr::map_dbl(parse_vars, length)
+
 
   if (mean(vars_length) > 1) {
     abortifnot(all(vars_length %in% c(1, length_shock)), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")

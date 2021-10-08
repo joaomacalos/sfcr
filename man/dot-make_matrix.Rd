@@ -2,8 +2,7 @@
 % Please edit documentation in R/utils-solvers.R
 \name{.make_matrix}
 \alias{.make_matrix}
-\title{Make the underlying matrix that will be modified in place with the Gauss Seidel
-algorithm}
+\title{Make the underlying matrix that will be modified in place by the solvers}
 \usage{
 .make_matrix(equations, external, periods, initial = NULL)
 }
@@ -17,8 +16,7 @@ algorithm}
 \item{initial}{Initial values, if supplied.}
 }
 \description{
-Make the underlying matrix that will be modified in place with the Gauss Seidel
-algorithm
+Make the underlying matrix that will be modified in place by the solvers
 }
 \author{
 João Macalós

@@ -204,19 +204,22 @@ variables or when defining the variables inside a `sfcr_shock()`. The
 advantage of utilizing this function is that it smartly guesses the
 length of the models, avoiding any unwanted mistake.
 
-The `sfcr_random()` function accepts a random series generator function
-from the built-in package `stats` as its first argument (e.g.,
-`rnorm()`), and any additional arguments to these functions can be
-passed in the sequence.
+The `sfcr_random()` function can accept three arguments as its first
+`.f` argument: `"rnorm"`, `"rbinom"`, and `"runif"`. These arguments
+implement wrappers around the built-in functions `rnorm()`, `rbinom()`,
+and `runif()` – random series generator function – but guessing the
+correct length of the `sfcr_baseline()`, `sfcr_scenario()`, or
+`sfcr_shock()` from where they are called. The `sfcr_random()` function
+also accepts any extra argument that can be passed to these functions.
 
 Snippet:
 
 ``` r
 sfcr_set(
-  Ra ~ sfcr_random(rnorm, sd=0.05)
+  Ra ~ sfcr_random("rnorm", sd=0.05)
 )
 #> [[1]]
-#> Ra ~ sfcr_random(rnorm, sd = 0.05)
+#> Ra ~ sfcr_random("rnorm", sd = 0.05)
 #> 
 #> attr(,"class")
 #> [1] "sfcr_set" "list"
