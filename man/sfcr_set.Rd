@@ -36,10 +36,13 @@ be recognized as a lagged variable.
 them into a first difference equation. For example, \code{d(Hh)} is internally transformed
 into \code{(Hh - Hh[-1])}.
 }
+
+Random variables can be created using the \code{sfcr_random()} function. See
+\code{\link{sfcr_random}} for further details.
 }
 \examples{
 # Endogenous set
-set1 <- eqs <- sfcr_set(
+equations <- sfcr_set(
   TXs ~ TXd,
   YD ~ W * Ns - TXs,
   Cd ~ alpha1 * YD + alpha2 * Hh[-1],
@@ -54,10 +57,13 @@ set1 <- eqs <- sfcr_set(
   )
 
 # Exogenous set
-set2 <- sfcr_set(alpha1 ~ 0.8, alpha2 ~ 0.15)
+exogenous <- sfcr_set(alpha1 ~ 0.8, alpha2 ~ 0.15)
 
 # Modify an existing set
-set2 <- sfcr_set(set1, Hh ~ Hh[-1] + d(Hs), exclude = 4)
+equations2 <- sfcr_set(equations, Hh ~ Hh[-1] + d(Hs), exclude = 4)
+
+# Add normal random variable
+sfcr_set(Ra ~ sfcr_random("rnorm", mean=10, sd=2))
 
 }
 \author{
