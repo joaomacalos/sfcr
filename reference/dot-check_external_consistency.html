@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Place the equations in the correct order for estimation — .sfcr_find_order • sfcr</title>
+<title>Check shocks for length consistency and warn about risks of using exogenous series — .check_external_consistency • sfcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Place the equations in the correct order for estimation — .sfcr_find_order" />
-<meta property="og:description" content="Place the equations in the correct order for estimation" />
+<meta property="og:title" content="Check shocks for length consistency and warn about risks of using exogenous series — .check_external_consistency" />
+<meta property="og:description" content="This function makes two checks:" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@jpmacalos" />
 <meta name="twitter:site" content="www.joaomacalos.com" />
@@ -153,31 +153,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Place the equations in the correct order for estimation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_find_order.R'><code>R/sfcr_find_order.R</code></a></small>
-    <div class="hidden name"><code>dot-sfcr_find_order.Rd</code></div>
+    <h1>Check shocks for length consistency and warn about risks of using exogenous series</h1>
+    <small class="dont-index">Source: <a href='https://github.com/joaomacalos/sfcr/blob/master/R/sfcr_baseline.R'><code>R/sfcr_baseline.R</code></a></small>
+    <div class="hidden name"><code>dot-check_external_consistency.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Place the equations in the correct order for estimation</p>
+    <p>This function makes two checks:</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.sfcr_find_order</span><span class='op'>(</span><span class='va'>equations</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.check_external_consistency</span><span class='op'>(</span><span class='va'>external</span>, periods <span class='op'>=</span> <span class='va'>periods</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>equations</th>
-      <td><p>Equations supplied by the user.</p></td>
+      <th>external</th>
+      <td><p>An .eq_as_tb() tibble with external variables.</p></td>
+    </tr>
+    <tr>
+      <th>periods</th>
+      <td><p>The periods of the baseline model.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Create an adjacency matrix and apply
-<code><a href='.find_blocks.html'>.find_blocks()</a></code> function to identify the blocks
-of independent equations.</p>
+    
+<ol>
+<li><p>The exogenous variable is a constant that is repeated over time;</p></li>
+<li><p>The exogenous variable has exactly the same length as the shock.</p></li>
+</ol>
+
+<p>Furthermore, it throws a warning that using exogenous series in a shock can lead to unexpected
+behavior if the length of the shock is not the same as the periods in the scenario.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>João Macalós</p>

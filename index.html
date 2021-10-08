@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sfcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.0</span>
       </span>
     </div>
 
@@ -221,7 +221,7 @@
 <h3 class="hasAnchor">
 <a href="#frequently-asked-questions" class="anchor"></a>Frequently Asked Questions</h3>
 <p><strong>Q: Can you add exogenous series to a <code>sfcr</code> model?</strong></p>
-<p>A: Since version 0.2, the <code>sfcr</code> package only allow the utilization of exogenous variables in the <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code> function. This functionality was excluded from the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> function because it led to unexpected behavior when calculating scenarios on the top of those baseline models.</p>
+<p>A: Since version 0.2, the <code>sfcr</code> package recommends the utilization of exogenous variables only in the <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code> function. This functionality is going to be excluded from <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> function in the future because it led to unexpected behavior when calculating scenarios on the top of those baseline models.</p>
 <p>The exogenous series can be added to the model with the help of <code><a href="reference/sfcr_shock.html">sfcr_shock()</a></code> and <code><a href="reference/sfcr_set.html">sfcr_set()</a></code> functions. It is further required that the length of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.</p>
 <p>For example, the code supplied above can be modified to make <code>Gd</code> increase from 30 to 40 between periods 1 and 60 of the scenario:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -240,6 +240,8 @@
   scenario <span class="op">=</span> <span class="va">shock</span>,
   periods <span class="op">=</span> <span class="fl">60</span>
   <span class="op">)</span>
+<span class="co">#&gt; Warning: Passing exogenous series with a shock can lead to unexpected behavior if the length of the series is smaller than the periods to the end of the scenario. Be cautious when using this functionality.</span>
+<span class="co">#&gt; This warning is displayed once per session.</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span><span class="op">(</span><span class="va">sim2</span>, <span class="va">period</span>, <span class="va">Gd</span>, <span class="fu"><a href="https://rdrr.io/pkg/tidyselect/man/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 60 x 17</span>
@@ -257,10 +259,46 @@
 <span class="co">#&gt; 10     10  31.5  29.4 118.  115.  114.   147.  147. 115.   31.5  147.  29.4</span>
 <span class="co">#&gt; # ... with 50 more rows, and 5 more variables: Hs &lt;dbl&gt;, W &lt;dbl&gt;, alpha1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   alpha2 &lt;dbl&gt;, theta &lt;dbl&gt;</span></code></pre></div>
+<p><strong>Q: How to add random variation to endogenous variables?</strong></p>
+<p>A: The recommended way to add random variation to endogenous variables is with the <code><a href="reference/sfcr_random.html">sfcr_random()</a></code> function. This function can only be used inside <code><a href="reference/sfcr_set.html">sfcr_set()</a></code>, be it when you’re creating a set of exogenous variables or when defining the variables inside a <code><a href="reference/sfcr_shock.html">sfcr_shock()</a></code>. The advantage of utilizing this function is that it smartly guesses the length of the models, avoiding any unwanted mistake.</p>
+<p>The <code><a href="reference/sfcr_random.html">sfcr_random()</a></code> function can accept three arguments as its first <code>.f</code> argument: <code>"rnorm"</code>, <code>"rbinom"</code>, and <code>"runif"</code>. These arguments implement wrappers around the built-in functions <code><a href="https://rdrr.io/r/stats/Normal.html">rnorm()</a></code>, <code><a href="https://rdrr.io/r/stats/Binomial.html">rbinom()</a></code>, and <code><a href="https://rdrr.io/r/stats/Uniform.html">runif()</a></code> – random series generator function – but guessing the correct length of the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code>, <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code>, or <code><a href="reference/sfcr_shock.html">sfcr_shock()</a></code> from where they are called. The <code><a href="reference/sfcr_random.html">sfcr_random()</a></code> function also accepts any extra argument that can be passed to these functions.</p>
+<p>Snippet:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/sfcr_set.html">sfcr_set</a></span><span class="op">(</span>
+  <span class="va">Ra</span> <span class="op">~</span> <span class="fu"><a href="reference/sfcr_random.html">sfcr_random</a></span><span class="op">(</span><span class="st">"rnorm"</span>, sd<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; Ra ~ sfcr_random("rnorm", sd = 0.05)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,"class")</span>
+<span class="co">#&gt; [1] "sfcr_set" "list"</span></code></pre></div>
+<p>An utilization of this functionality in practice is provided in the article replicating the Portfolio Choice model from Godley and Lavoie (2007ch. 4).</p>
+<p>Alternatively, the direct utilization of the random generator functions from <code>stats</code> are still allowed to ensure the compatibility with the v0.1.1 of the package. Nonetheless, the user must be careful when using this functionality at the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> since this expression is going to be evaluated again at the <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code> level. The safest way to use these functions is by passing <code>periods</code> instead of an integer as their first argument.</p>
+<p>Snippet:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Not recommended but work:</span>
+<span class="fu"><a href="reference/sfcr_set.html">sfcr_set</a></span><span class="op">(</span>
+  <span class="va">Ra</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">periods</span>, sd<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; Ra ~ rnorm(periods, sd = 0.05)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,"class")</span>
+<span class="co">#&gt; [1] "sfcr_set" "list"</span>
+
+<span class="co"># NOT RECOMMENDED!</span>
+<span class="fu"><a href="reference/sfcr_set.html">sfcr_set</a></span><span class="op">(</span>
+  <span class="va">Ra</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">60</span>, sd<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; Ra ~ rnorm(60, sd = 0.05)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,"class")</span>
+<span class="co">#&gt; [1] "sfcr_set" "list"</span></code></pre></div>
 <p><strong>Q: Can you add endogenous variables with more than one lag?</strong></p>
 <p>A: Yes, you can, but you need to use auxiliary variables.</p>
 <p>For example, say that you want to modify model SIM to have Consumption <code>Cd</code> in period <code>t</code> defined as function of the moving average of disposable income. In this situation, you would have to code the variables as:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">eqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sfcr_set.html">sfcr_set</a></span><span class="op">(</span>
   <span class="va">TXs</span> <span class="op">~</span> <span class="va">TXd</span>,
   <span class="va">YD</span> <span class="op">~</span> <span class="va">W</span> <span class="op">*</span> <span class="va">Ns</span> <span class="op">-</span> <span class="va">TXs</span>,
