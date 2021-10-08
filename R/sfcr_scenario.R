@@ -174,19 +174,24 @@
   vars <- .eq_as_tb(shock$variables)
   vars <- dplyr::filter(vars, stringr::str_detect(.data$rhs, "sfcr_random", negate=TRUE))
 
-  if (is.null(nrow(vars$rhs))) {
-    return()
-  }
+  if (vctrs::vec_is_empty(vars)) {
+    # pass
 
-  parse_vars <- purrr::map(vars$rhs, ~eval(parse(text=.x)))
-  vars_length <- purrr::map_dbl(parse_vars, length)
+  } else {
+
+    parse_vars <- purrr::map(vars$rhs, ~eval(parse(text=.x)))
+    vars_length <- purrr::map_dbl(parse_vars, length)
 
 
-  if (mean(vars_length) > 1) {
-    abortifnot(all(vars_length %in% c(1, length_shock)), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")
+    if (mean(vars_length) > 1) {
 
-    # Warning
-    rlang::warn("Passing exogenous series with a shock can lead to unexpected behavior if the length of the series is smaller than the periods to the end of the scenario. Be cautious when using this functionality.", .frequency_id = "scenario_warn", .frequency="once")
+      abortifnot(all(vars_length %in% c(1, length_shock)), "All exogenous variables supplied as a shock must have either length 1 or exactly the same length as the shock.")
+
+      # Warning
+      rlang::warn("Passing exogenous series with a shock can lead to unexpected behavior if the length of the series is smaller than the periods to the end of the scenario. Be cautious when using this functionality.", .frequency_id = "scenario_warn", .frequency="once")
+
+
+    }
 
   }
 
