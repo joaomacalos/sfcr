@@ -115,6 +115,8 @@
     m[, exgs_names[[var]]] <- eval(exg_exprs[[var]])
   }
 
+  return(m)
+
 }
 
 .abort_wrong_shock_var <- function(wrong_var) {
