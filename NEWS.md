@@ -1,10 +1,13 @@
 # sfcr 0.2.1
-## Major changes
-* The `sfcr_random()` function that smartly allows the user to include random variables in the models was introduced in this version. This function is a wrapper around the built-in `rnorm()`, `rbinom()`, and `runif()` functions. The main benefit of using `sfcr_random()` is that it smartly guesses the size of the `sfcr_baseline()` and `sfcr_scenario()` models they're inserted, as well as the size of the `sfcr_shock()`.
 
-The `sfcr_random()` function should only be used inside `sfcr_set()`s. If used outside this function, it will only print a message saying that it should not be used in this way.
+## Major changes
+
+* The `sfcr_random()` function to facilitate the inclusion of random variation in the models was introduced in this version. This function is a wrapper around the built-in `rnorm()`, `rbinom()`, and `runif()` functions. The main benefit of using `sfcr_random()` is that it smartly guesses the size of the `sfcr_baseline()` and `sfcr_scenario()` models they're inserted, as well as the size of the `sfcr_shock()`.
+
+* The `sfcr_random()` function should only be used inside `sfcr_set()`s. If used outside this function, it will only print a message saying that it should not be used in this way.
 
 ## Bug fixes
+
 * The disallowance of exogenous series introduced in v0.2.0 broke the models that used functions like `rnorm()` to add random variation. This version undo this change, allowing exogenous series to be passed along `sfcr_baseline()` again. Nonetheless, this utilization is discouraged since it generates unexpected behavior at the `sfcr_scenario()` level. Warning messages are raised about these issues.
 
 * Prior to v0.2.1, the inclusion of exogenous series at the `sfcr_baseline()` level would not be transmitted to the `sfcr_scenario()` level since the previous infrastructure of the model only replicated the final values of the `sfcr_baseline()` object to fill in the matrix used to generate the initial values at the `sfcr_scenario()` level. 
@@ -15,7 +18,9 @@ Note that if an exogenous series is passed to the `sfcr_baseline()` function, it
 
 
 # sfcr 0.2.0
+
 ## Major changes
+
 Constrained the utilization of exogenous series to avoid unexpected behavior and undetected bugs in the models.
 
 More specifically:
@@ -23,6 +28,7 @@ More specifically:
 * constrained the utilization of exogenous series in the `sfcr_scenario()` to make sure that the length of the series matches with the length of the shock.
 
 # sfcr 0.1.1
+
 * Add `sfcr_portfolio()` function that calculates the matrix of portfolio parameters from a limited vector of parameters by imposing the adding-up and symmetry constraints.
 
 # sfcr 0.1.0
