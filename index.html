@@ -273,7 +273,7 @@
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "sfcr_set" "list"</span></code></pre></div>
 <p>An utilization of this functionality in practice is provided in the article replicating the Portfolio Choice model from Godley and Lavoie (2007ch. 4).</p>
-<p>Alternatively, the direct utilization of the random generator functions from <code>stats</code> are still allowed to ensure the compatibility with the v0.1.1 of the package. Nonetheless, the user must be careful when using this functionality at the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> since this expression is going to be evaluated again at the <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code> level. The safest way to use these functions is by passing <code>periods</code> instead of an integer as their first argument.</p>
+<p>Alternatively, the direct utilization of the random generator functions from <code>stats</code> are still allowed to ensure the compatibility with the v0.1.1 of the package. Nonetheless, the user must be careful when using this functionality at the <code><a href="reference/sfcr_baseline.html">sfcr_baseline()</a></code> level since this expression is going to be evaluated again at the <code><a href="reference/sfcr_scenario.html">sfcr_scenario()</a></code> level. The safest way to use these functions is by passing <code>periods</code> instead of an integer as their first argument.</p>
 <p>Snippet:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Not recommended but work:</span>
