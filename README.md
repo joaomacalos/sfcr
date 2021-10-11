@@ -232,10 +232,10 @@ article replicating the Portfolio Choice model from Godley and Lavoie
 Alternatively, the direct utilization of the random generator functions
 from `stats` are still allowed to ensure the compatibility with the
 v0.1.1 of the package. Nonetheless, the user must be careful when using
-this functionality at the `sfcr_baseline()` since this expression is
-going to be evaluated again at the `sfcr_scenario()` level. The safest
-way to use these functions is by passing `periods` instead of an integer
-as their first argument.
+this functionality at the `sfcr_baseline()` level since this expression
+is going to be evaluated again at the `sfcr_scenario()` level. The
+safest way to use these functions is by passing `periods` instead of an
+integer as their first argument.
 
 Snippet:
 

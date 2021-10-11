@@ -1,18 +1,5 @@
-## Resubmission
-This is a resubmission.
-
-Change requested:
-  
-*  Thanks, we see:
-  
-     Found the following (possibly) invalid URLs:
-       URL: https://app.travis-ci.com/joaomacalos/sfcr.svg?branch=main
-  (moved to https://api.travis-ci.com/joaomacalos/sfcr.svg?branch=main)
-         From: README.md
-         Status: 301
-         Message: Moved Permanently
-         
-Problem fixed.
+## Patch to previous release
+This submission is a patch to fix a bug that broke some code in v0.2.0 release.
 
 
 ## Test environments
