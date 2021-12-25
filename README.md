@@ -142,10 +142,10 @@ examples on the usage of the package.
 
 ### Frequently Asked Questions
 
-**Q: Can you add exogenous series to a `sfcr` model?**
+**Q: Can you add exogenous time series to a `sfcr` model?**
 
 A: Since version 0.2, the `sfcr` package recommends the utilization of
-exogenous variables only in the `sfcr_scenario()` function. This
+exogenous time series only in the `sfcr_scenario()` function. This
 functionality is going to be excluded from `sfcr_baseline()` function in
 the future because it led to unexpected behavior when calculating
 scenarios on the top of those baseline models.

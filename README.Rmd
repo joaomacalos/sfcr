@@ -121,9 +121,9 @@ Check the [notebooks](https://joaomacalos.github.io/sfcr/articles/) that replica
 
 ### Frequently Asked Questions
 
-**Q: Can you add exogenous series to a `sfcr` model?**
+**Q: Can you add exogenous time series to a `sfcr` model?**
 
-A: Since version 0.2, the `sfcr` package recommends the utilization of exogenous variables only in the `sfcr_scenario()` function. This functionality is going to be excluded from `sfcr_baseline()` function in the future because it led to unexpected behavior when calculating scenarios on the top of those baseline models.
+A: Since version 0.2, the `sfcr` package recommends the utilization of exogenous time series only in the `sfcr_scenario()` function. This functionality is going to be excluded from `sfcr_baseline()` function in the future because it led to unexpected behavior when calculating scenarios on the top of those baseline models.
 
 The exogenous series can be added to the model with the help of `sfcr_shock()` and `sfcr_set()` functions. It is further required that the length of the exogenous time series being supplied be either 1 or exactly equal to length of the shock.
 
