@@ -13,7 +13,8 @@
 sfcr_sankey <- function(tfm, baseline, when = "start") {
   if (!requireNamespace("networkD3", quietly = TRUE)) {
     stop("Packages \"networkD3\" needed for this function to work. Please install it.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   abortifnot(inherits(baseline, "sfcr_tbl"), "Please supply a valid baseline model.")
@@ -29,7 +30,7 @@ sfcr_sankey <- function(tfm, baseline, when = "start") {
     m <- bl3[4:5, ]
   } else {
     nr <- nrow(bl3)
-    m <- bl3[(nr-1):nr, ]
+    m <- bl3[(nr - 1):nr, ]
     rownames(m) <- NULL
   }
 
@@ -40,25 +41,27 @@ sfcr_sankey <- function(tfm, baseline, when = "start") {
 
   # Convert entries to valid expressions
   tfm <- tfm %>%
-    dplyr::mutate(dplyr::across(-1, ~stringr::str_replace_all(.x, "d\\((.*?)\\)", "\\(\\1 - \\1\\[-1\\]\\)"))) %>%
-    dplyr::mutate(dplyr::across(-1, ~.add_time2(.x))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvar(bl1$lhs), "m\\[2,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvar(bl2), "m\\[2,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvarlag(bl1$lhs), "m\\[1,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub(.pvarlag(bl2), "m\\[1,'\\1'\\]", .x, perl = T))) %>%
-    dplyr::mutate(dplyr::across(-1, ~gsub("___", "", .x)))
+    dplyr::mutate(dplyr::across(-1, ~ stringr::str_replace_all(.x, "d\\((.*?)\\)", "\\(\\1 - \\1\\[-1\\]\\)"))) %>%
+    dplyr::mutate(dplyr::across(-1, ~ .add_time2(.x))) %>%
+    dplyr::mutate(dplyr::across(-1, ~ gsub(.pvar(bl1$lhs), "m\\[2,'\\1'\\]", .x, perl = T))) %>%
+    dplyr::mutate(dplyr::across(-1, ~ gsub(.pvar(bl2), "m\\[2,'\\1'\\]", .x, perl = T))) %>%
+    dplyr::mutate(dplyr::across(-1, ~ gsub(.pvarlag(bl1$lhs), "m\\[1,'\\1'\\]", .x, perl = T))) %>%
+    dplyr::mutate(dplyr::across(-1, ~ gsub(.pvarlag(bl2), "m\\[1,'\\1'\\]", .x, perl = T))) %>%
+    dplyr::mutate(dplyr::across(-1, ~ gsub("___", "", .x)))
 
   .eval_matrices <- function(x) {
-    purrr::modify(x, function(y) if (stringr::str_length(y) == 0) {
-      NA_real_
-    } else {
-      eval(str2expression(y))
-    }
-    )
+    purrr::map(x, function(y) {
+      if (stringr::str_length(y) == 0) {
+        NA_real_
+      } else {
+        eval(str2expression(y))
+      }
+    })
   }
 
   # Evaluate values
-  tfm <- tfm %>% dplyr::mutate(dplyr::across(-1, ~.eval_matrices(.x)))
+  tfm <- tfm %>%
+    dplyr::mutate(dplyr::across(-1, ~ .eval_matrices(.x)))
 
   # Reshape
   tfm <- tfm %>%
@@ -73,9 +76,11 @@ sfcr_sankey <- function(tfm, baseline, when = "start") {
 
   # Nodes tibble
   nodes <- tibble::tibble(
-    name = c(unique(tfm$name),
-             unique(tfm$sector),
-             paste0(unique(tfm$sector), "1")),
+    name = c(
+      unique(tfm$name),
+      unique(tfm$sector),
+      paste0(unique(tfm$sector), "1")
+    ),
     node = 0:(length(.data$name) - 1)
   )
 
@@ -99,13 +104,14 @@ sfcr_sankey <- function(tfm, baseline, when = "start") {
   nodes <- nodes %>%
     dplyr::mutate(name = gsub("1", "", .data$name))
 
-  networkD3::sankeyNetwork(Links = as.data.frame(links),
-                           Nodes = as.data.frame(nodes),
-                           Source = 'source',
-                           Target = 'target',
-                           Value = 'value',
-                           NodeID = 'name',
-                           units = 'dollars',
-                           fontSize = 14)
-
+  networkD3::sankeyNetwork(
+    Links = as.data.frame(links),
+    Nodes = as.data.frame(nodes),
+    Source = "source",
+    Target = "target",
+    Value = "value",
+    NodeID = "name",
+    units = "dollars",
+    fontSize = 14
+  )
 }
